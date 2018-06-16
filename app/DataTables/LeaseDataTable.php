@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Lease;
+use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
@@ -18,7 +19,23 @@ class LeaseDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'leases.datatables_actions');
+        return $dataTable
+            ->editColumn('start_date',function($lease){
+                return Carbon::parse($lease->start_date)->toFormattedDateString();
+            })
+            ->editColumn('status',function($lease){
+                if($lease->status){
+                    return '<label class="label label-success">Active</label>';
+                }
+                return '<label class="label label-danger">Terminated</label>';
+            })
+            ->addColumn('action', function($lease){
+                if($lease->status){
+                    return 'leases.datatables_actions';
+                }
+                return '<label class="label label-danger">Terminated</label>';
+            })
+            ->rawColumns(['action','status']);
     }
 
     /**
@@ -29,7 +46,10 @@ class LeaseDataTable extends DataTable
      */
     public function query(Lease $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()
+            ->select('leases.*')
+            ->with(['masterfile','unit','property'])->orderByDesc('leases.id')
+            ;
     }
 
     /**
@@ -64,8 +84,16 @@ class LeaseDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'unit_id',
-            'tenant_id',
+            'property.name',
+            'unit.unit_number'=>[
+                'title'=>'House Number'
+            ],
+            'masterfile.full_name'=>[
+                'title'=>'Tenant'
+            ],
+            'masterfile.phone_number'=>[
+                'title'=>'Phone Number'
+            ],
             'start_date',
             'status',
 //            'created_by',

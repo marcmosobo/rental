@@ -1,6 +1,6 @@
 @extends('layouts.app')
- @section("pageTitle",'Leases')
- @section("pageSubtitle",'create, edit, delete Leases')
+ @section("pageTitle",'All Leases')
+ @section("pageSubtitle",'create, terminate leases')
   @section("breadcrumbs")
          <li>Home</li> <li>Leases</li>
          @endsection
@@ -198,14 +198,14 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title">Delete Lease</h4>
+                            <h4 class="modal-title">Terminate Lease</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete this Lease?</p>
+                            <p>Are you sure you want to terminate this Lease?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
-                            <button type="submit" class="btn btn-primary">Yes</button>
+                            <button type="submit" class="btn btn-danger">Yes</button>
                         </div>
                     </div>
                 </div>
@@ -276,7 +276,7 @@
                                 html += '<option value="'+data[i].id+'">'+data[i].unit_number+'</option>';
                             }
                         }else{
-                            html = '<option value="">Please units to this property first</option>';
+                            html = '<option value="">Please add more units to this property first</option>';
                         }
                         $('#house_number').html(html);
                     }

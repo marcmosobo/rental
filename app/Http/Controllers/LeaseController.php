@@ -6,6 +6,9 @@ use App\DataTables\LeaseDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateLeaseRequest;
 use App\Http\Requests\UpdateLeaseRequest;
+use App\Models\Bill;
+use App\Models\BillDetail;
+use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\Property;
@@ -69,9 +72,41 @@ class LeaseController extends AppBaseController
         $input = $request->all();
         $input['unit_id'] = $request->house_number;
         $input['property_id'] = $request->property;
+        $unitBills = UnitServiceBill::where('unit_id',$input['unit_id'])->where('status',true)->get();
+        if(!count($unitBills)){
+            Flash::error('Failed! You must attach atleast one service bill(rent) to this house.');
 
-        DB::transaction(function()use ($input){
+            return redirect(route('leases.index'));
+        }
+
+        DB::transaction(function()use ($input,$unitBills){
             $lease = $this->leaseRepository->create($input);
+
+            $bill = Bill::create([
+               'lease_id'=>$lease->id,
+               'tenant_id'=>$input['tenant_id'],
+               'property_id'=> $input['property_id'],
+               'description'=> 'Lease Creation',
+                'total'=>$unitBills->sum('amount')
+            ]);
+            if(count($unitBills)){
+                foreach ($unitBills as $unitBill){
+                    $billDetail = BillDetail::create([
+                        'bill_id'=> $bill->id,
+                        'service_bill_id'=> $unitBill->service_bill_id,
+                        'amount'=>$unitBill->amount
+                    ]);
+                }
+            }
+
+            $customerAccount = CustomerAccount::create([
+                'tenant_id'=>$input['tenant_id'],
+                'lease_id'=>$lease->id,
+                'unit_id'=> $input['unit_id'],
+                'bill_id'=>$bill->id,
+                'transaction_type'=>credit,
+                'amount'=>$unitBills->sum('amount')
+            ]);
         });
 
 
@@ -155,7 +190,7 @@ class LeaseController extends AppBaseController
      */
     public function destroy($id)
     {
-        $lease = $this->leaseRepository->findWithoutFail($id);
+        $lease = Lease::find($id);
 
         if (empty($lease)) {
             Flash::error('Lease not found');
@@ -163,9 +198,10 @@ class LeaseController extends AppBaseController
             return redirect(route('leases.index'));
         }
 
-        $this->leaseRepository->delete($id);
+        $lease->status = false;
+        $lease->save();
 
-        Flash::success('Lease deleted successfully.');
+        Flash::success('Lease terminated successfully.');
 
         return redirect(route('leases.index'));
     }

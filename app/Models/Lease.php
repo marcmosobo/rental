@@ -75,16 +75,18 @@ class Lease extends Model
      **/
     public function masterfile()
     {
-        return $this->belongsTo(\App\Models\Masterfile::class);
+        return $this->belongsTo(\App\Models\Masterfile::class,'tenant_id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function propertyUnit()
+    public function unit()
     {
-        return $this->belongsTo(\App\Models\PropertyUnit::class);
+        return $this->belongsTo(\App\Models\PropertyUnit::class,'unit_id');
     }
 
-//    public function prope
+    public function property(){
+        return $this->belongsTo(Property::class);
+    }
 }
