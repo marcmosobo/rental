@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class MasterfileSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        \App\Models\Masterfile::create([
+            'full_name' =>'Admin Admin',
+            'national_id'=> 10000000,
+            'gender'=> 'Male',
+            'email'=>'admin@localhost.com',
+            'phone_number'=> '0715862938',
+            'created_by'=> 1,
+            'client_id'=>1,
+            'b_role'=> 'Admin'
+        ]);
+    }
+}
