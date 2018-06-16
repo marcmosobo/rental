@@ -101,3 +101,5 @@ Route::resource('payments', 'PaymentController');
 Route::resource('customerAccounts', 'CustomerAccountController');
 
 Route::resource('cashPayments', 'CashPaymentController');
+
+Route::resource('payBills', 'PayBillController');
