@@ -31,6 +31,7 @@ class CreatePaymentsTable extends Migration
             $table->dateTime('received_on')->nullable();
             $table->integer('client_id')->nullable();
             $table->integer('created_by')->nullable();
+            $table->boolean('status')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

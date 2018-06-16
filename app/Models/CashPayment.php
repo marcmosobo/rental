@@ -6,9 +6,9 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Payment
+ * Class CashPayment
  * @package App\Models
- * @version June 16, 2018, 1:39 pm EAT
+ * @version June 16, 2018, 8:25 pm EAT
  *
  * @property \Illuminate\Database\Eloquent\Collection leases
  * @property \Illuminate\Database\Eloquent\Collection roleRoute
@@ -32,7 +32,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer client_id
  * @property integer created_by
  */
-class Payment extends Model
+class CashPayment extends Model
 {
     use SoftDeletes;
 

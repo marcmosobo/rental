@@ -99,3 +99,5 @@ Route::resource('billDetails', 'BillDetailController');
 Route::resource('payments', 'PaymentController');
 
 Route::resource('customerAccounts', 'CustomerAccountController');
+
+Route::resource('cashPayments', 'CashPaymentController');

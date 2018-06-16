@@ -2,11 +2,11 @@
 
 namespace App\DataTables;
 
-use App\Models\Payment;
+use App\Models\CashPayment;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class PaymentDataTable extends DataTable
+class CashPaymentDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -18,7 +18,7 @@ class PaymentDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'payments.datatables_actions');
+        return $dataTable->addColumn('action', 'cash_payments.datatables_actions');
     }
 
     /**
@@ -27,7 +27,7 @@ class PaymentDataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Payment $model)
+    public function query(CashPayment $model)
     {
         return $model->newQuery();
     }
@@ -42,7 +42,7 @@ class PaymentDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-//            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px'])
             ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
@@ -64,20 +64,21 @@ class PaymentDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'BillRefNumber',
-            'phone_number',
-            'FirstName',
-            'received_on',
-            'payment_mode',
-//            'house_number',
-//            'tenant_id',
-//            'ref_number',
-//            'amount',
+//            'payment_mode',
+
+            'tenant_id',
+            'house_number',
+            'ref_number',
+            'amount',
 //            'paybill',
+//            'phone_number',
+//            'BillRefNumber',
 //            'TransID',
 //            'TransTime',
+//            'FirstName',
 //            'middleName',
 //            'LastName',
+//            'received_on',
 //            'client_id',
 //            'created_by'
         ];
@@ -90,6 +91,6 @@ class PaymentDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'paymentsdatatable_' . time();
+        return 'cash_paymentsdatatable_' . time();
     }
 }

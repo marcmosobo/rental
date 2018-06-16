@@ -1,13 +1,13 @@
 @extends('layouts.app')
- @section("pageTitle",'Payments')
- @section("pageSubtitle",'create, edit, delete Payments')
+ @section("pageTitle",'Cash Payments')
+ @section("pageSubtitle",'create, edit, delete CashPayments')
   @section("breadcrumbs")
-         <li>Home</li> <li>Payments</li>
+         <li>Home</li> <li>CashPayments</li>
          @endsection
 @section('content')
     <section class="content-header">
         <h1 class="pull-right">
-           {{--<a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>--}}
+           <a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>
         </h1>
     </section>
     <div class="content">
@@ -18,7 +18,7 @@
         <div class="clearfix"></div>
         <div class="box box-primary">
             <div class="box-body">
-                    @include('payments.table')
+                    @include('cash_payments.table')
             </div>
         </div>
         <div class="text-center">
@@ -29,18 +29,18 @@
 
 @section('modals')
     <div class="modal fade" id="create-modal" role="dialog">
-            {!! Form::open(['route' => 'payments.store']) !!}
+            {!! Form::open(['route' => 'cashPayments.store']) !!}
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Create Payment</h4>
+                        <h4 class="modal-title">Create Cash Payment</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            @include('payments.fields')
+                            @include('cash_payments.fields')
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -64,15 +64,15 @@
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                            <span aria-hidden="true">&times;</span>
                        </button>
-                       <h4 class="modal-title">Edit Payment</h4>
+                       <h4 class="modal-title">Edit Cash Payment</h4>
                    </div>
                    <div class="modal-body">
                         <div class="row">
-                           @include('payments.fields')
+                           @include('cash_payments.fields')
                         </div>
                    </div>
                    <div class="modal-footer">
-                       <input type="hidden" id="editDetails" value="{{ url("/payments") }}">
+                       <input type="hidden" id="editDetails" value="{{ url("/cashPayments") }}">
                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
                        <button type="submit" class="btn btn-primary">Save</button>
                    </div>
@@ -93,10 +93,10 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title">Delete Payment</h4>
+                            <h4 class="modal-title">Delete Cash Payment</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete this Payment?</p>
+                            <p>Are you sure you want to delete this Cash Payment?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>

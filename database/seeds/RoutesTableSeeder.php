@@ -109,6 +109,28 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($admin);
 
 
+        ####### Bills and payments
+        $parent = Route::create([
+            'route_name'=> 'Payments & Bills',
+            'icon'=> 'fa-money',
+            'sequence'=>5,
+        ]);
+
+        $child = Route::create([
+            'route_name'=>'Cash Payments',
+            'parent_route' => $parent->id,
+            'url'=>'cashPayments'
+        ]);
+        $child->roles()->attach($admin);
+
+        $child = Route::create([
+            'route_name'=>'Mpesa Payments',
+            'parent_route' => $parent->id,
+            'url'=>'payments'
+        ]);
+        $child->roles()->attach($admin);
+
+
         #### user management
         $user_mngt = new Route();
         $user_mngt->route_name = 'User Manager';
