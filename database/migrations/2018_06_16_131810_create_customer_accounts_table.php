@@ -23,6 +23,7 @@ class CreateCustomerAccountsTable extends Migration
             $table->integer('payment_id')->nullable();
             $table->string('ref_number')->nullable();
             $table->string('transaction_type');
+            $table->double('balance')->nullable();
 //            $table->integer('service_bill_id')->nullable();
             $table->double('amount');
             $table->softDeletes();

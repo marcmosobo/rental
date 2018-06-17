@@ -96,5 +96,12 @@ class CashPayment extends Model
         
     ];
 
+    public function masterfile(){
+        return $this->belongsTo(Masterfile::class,'tenant_id');
+    }
+
+    public function unit(){
+        return $this->belongsTo(PropertyUnit::class,'house_number');
+    }
     
 }

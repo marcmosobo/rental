@@ -38,7 +38,8 @@ class BillDetail extends Model
         'bill_id',
         'service_bill_id',
         'amount',
-        'status'
+        'status',
+        'balance'
     ];
 
     /**
@@ -51,7 +52,8 @@ class BillDetail extends Model
         'bill_id' => 'integer',
         'service_bill_id' => 'integer',
         'amount' => 'float',
-        'status' => 'boolean'
+        'status' => 'boolean',
+        'balance' => 'float',
     ];
 
     /**

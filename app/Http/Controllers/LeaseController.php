@@ -94,7 +94,9 @@ class LeaseController extends AppBaseController
                     $billDetail = BillDetail::create([
                         'bill_id'=> $bill->id,
                         'service_bill_id'=> $unitBill->service_bill_id,
-                        'amount'=>$unitBill->amount
+                        'amount'=>$unitBill->amount,
+                        'balance'=>$unitBill->amount,
+                        'status'=>false
                     ]);
                 }
             }
@@ -105,7 +107,8 @@ class LeaseController extends AppBaseController
                 'unit_id'=> $input['unit_id'],
                 'bill_id'=>$bill->id,
                 'transaction_type'=>credit,
-                'amount'=>$unitBills->sum('amount')
+                'amount'=>$unitBills->sum('amount'),
+                'balance'=>$unitBills->sum('amount')
             ]);
         });
 

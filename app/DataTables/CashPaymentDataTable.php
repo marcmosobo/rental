@@ -29,7 +29,11 @@ class CashPaymentDataTable extends DataTable
      */
     public function query(CashPayment $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->where('payment_mode',cash)
+            ->orWhere('payment_mode','Bank slip')
+            ->orderByDesc('payments.id')
+            ->with(['masterfile','unit'])
+            ;
     }
 
     /**
@@ -42,7 +46,7 @@ class CashPaymentDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['width' => '80px'])
+//            ->addAction(['width' => '80px'])
             ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
@@ -66,8 +70,8 @@ class CashPaymentDataTable extends DataTable
         return [
 //            'payment_mode',
 
-            'tenant_id',
-            'house_number',
+            'masterfile.full_name',
+            'unit.unit_number',
             'ref_number',
             'amount',
 //            'paybill',

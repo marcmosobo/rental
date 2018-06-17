@@ -19,6 +19,7 @@ class CreateBillDetailsTable extends Migration
             $table->foreign('bill_id')->references('id')->on('bills')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('service_bill_id');
             $table->double('amount');
+            $table->double('balance')->nullable();
             $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();

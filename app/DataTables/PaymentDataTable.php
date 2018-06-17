@@ -29,7 +29,7 @@ class PaymentDataTable extends DataTable
      */
     public function query(Payment $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->where('payment_mode',mpesa);
     }
 
     /**

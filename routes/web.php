@@ -103,3 +103,4 @@ Route::resource('customerAccounts', 'CustomerAccountController');
 Route::resource('cashPayments', 'CashPaymentController');
 
 Route::resource('payBills', 'PayBillController');
+Route::any('searchBills', 'PayBillController@searchBills');

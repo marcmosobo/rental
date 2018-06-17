@@ -46,7 +46,8 @@ class CustomerAccount extends Model
         'payment_id',
         'ref_number',
         'transaction_type',
-        'amount'
+        'amount',
+        'balance'
     ];
 
     /**
@@ -62,7 +63,8 @@ class CustomerAccount extends Model
         'payment_id' => 'integer',
         'ref_number' => 'string',
         'transaction_type' => 'string',
-        'amount' => 'float'
+        'amount' => 'float',
+        'balance'=>'float'
     ];
 
     /**

@@ -31,7 +31,7 @@ class LeaseDataTable extends DataTable
             })
             ->addColumn('action', function($lease){
                 if($lease->status){
-                    return 'leases.datatables_actions';
+                    return '<a href="#delete-modal" data-toggle="modal" action="'.url('leases/'.$lease->id).'" class="btn btn-danger btn-xs delete-common"><i class="fa fa-close"></i> terminate</a>';
                 }
                 return '<label class="label label-danger">Terminated</label>';
             })
