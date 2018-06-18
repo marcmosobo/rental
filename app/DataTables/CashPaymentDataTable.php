@@ -18,7 +18,7 @@ class CashPaymentDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', function($payment){
+        return $dataTable->editColumn('action', function($payment){
             return '<a href="'.url('receipt/'.$payment->id).'" class="btn btn-xs btn-primary">view/print receipt</a>';
         });
     }
@@ -31,7 +31,9 @@ class CashPaymentDataTable extends DataTable
      */
     public function query(CashPayment $model)
     {
-        return $model->newQuery()->where('payment_mode',cash)
+        return $model->newQuery()
+            ->select(['payments.*'])
+            ->where('payment_mode',cash)
             ->orWhere('payment_mode','Bank slip')
             ->orderByDesc('payments.id')
             ->with(['masterfile','unit'])
