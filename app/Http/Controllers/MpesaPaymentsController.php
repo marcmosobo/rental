@@ -91,16 +91,12 @@ class MpesaPaymentController extends Controller
 
     public function simulate(){
         $mpesa= new Mpesa();
-        $c2bTransaction= $mpesa->c2b(600243, 'CustomerPayBillOnline', 1000, 254715862938, '21844232' );
+        $c2bTransaction= $mpesa->c2b(600000, 'CustomerPayBillOnline', 1000, 254715862938, '21844232' );
         var_dump($c2bTransaction);
     }
 
     public function generateToken(){
-
-
-
         return $this->configs['AccessToken'] =  Mpesa::generateLiveToken();
-
     }
 
     public function registerUrls(){
@@ -129,7 +125,7 @@ class MpesaPaymentController extends Controller
             'ValidationURL' => 'https://mariteenterprisesltd.co.ke/getPaymentValidation',
             'ConfirmationURL' => 'https://mariteenterprisesltd.co.ke/getPayment',
             'ResponseType' => 'Completed',
-            'ShortCode' => '600243',
+            'ShortCode' => '600000',
         );
 
         $data_string = json_encode($curl_post_data);

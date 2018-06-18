@@ -47,11 +47,12 @@ class RoleDataTable extends DataTable
         if(LoggedUserController::isSystemAdmin()){
             $query = $model->newQuery();
         }else{
-            if(LoggedUserController::isAllAccessGranted()){
-                $query = $model->newQuery()->where('tenant_id',Auth::user()->tenant_id);
-            }else{
-                $query = $model->newQuery()->where([['tenant_id',Auth::user()->tenant_id],['created_by',Auth::id()]]);
-            }
+            $query = $model->newQuery()->where('code','<>',sys_admin);
+//            if(LoggedUserController::isAllAccessGranted()){
+//                $query = $model->newQuery()->where('tenant_id',Auth::user()->client);
+//            }else{
+//                $query = $model->newQuery()->where([['tenant_id',Auth::user()->tenant_id],['created_by',Auth::id()]]);
+//            }
         }
 //        dd($query);
         return $query

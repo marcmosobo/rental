@@ -78,6 +78,13 @@ class RoutesTableSeeder extends Seeder
         ]);
         $child->roles()->attach($admin);
 
+        $child = Route::create([
+            'route_name'=>'All Staff',
+            'parent_route' => $parent->id,
+            'url'=>'staff'
+        ]);
+        $child->roles()->attach($admin);
+
         ####### property manager
 
         $parent = Route::create([

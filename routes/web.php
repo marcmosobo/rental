@@ -111,3 +111,5 @@ Route::post('getPaymentValidation',"MpesaPaymentController@getPaymentValidation"
 Route::post('getPayment',"MpesaPaymentController@getPayment");
 Route::get('registerUrls',"MpesaPaymentController@registerUrls");
 Route::get('simulate',"MpesaPaymentController@simulate");
+
+Route::resource('staff', 'StaffController');

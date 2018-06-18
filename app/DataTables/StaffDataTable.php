@@ -2,12 +2,11 @@
 
 namespace App\DataTables;
 
-use App\Models\Payment;
-use Carbon\Carbon;
+use App\Models\Staff;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class PaymentDataTable extends DataTable
+class StaffDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -19,11 +18,7 @@ class PaymentDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable
-            ->editColumn('received_on',function($payment){
-                return Carbon::parse($payment->received_on)->toDayDateTimeString();
-            })
-            ->addColumn('action', 'payments.datatables_actions');
+        return $dataTable->addColumn('action', 'staff.datatables_actions');
     }
 
     /**
@@ -32,10 +27,10 @@ class PaymentDataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Payment $model)
+    public function query(Staff $model)
     {
-        return $model->newQuery()->where('payment_mode',mpesa)
-            ->orderByDesc('payments.id')
+        return $model->newQuery()->where('b_role',\staff)
+            ->orderByDesc('id')
             ;
     }
 
@@ -49,7 +44,7 @@ class PaymentDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-//            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px'])
             ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
@@ -71,26 +66,14 @@ class PaymentDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'ref_number',
-            'BillRefNumber'=>[
-                'title'=>'Account'
-            ],
+            'full_name',
+            'national_id',
+            'gender',
             'phone_number',
-            'FirstName',
-            'LastName',
-            'received_on',
-            'payment_mode',
-//            'house_number',
-//            'tenant_id',
-//
-            'amount',
-//            'paybill',
-//            'TransID',
-//            'TransTime',
-//            'middleName',
-
-//            'client_id',
-//            'created_by'
+            'email',
+            'b_role',
+            'created_by',
+            'client_id'
         ];
     }
 
@@ -101,6 +84,6 @@ class PaymentDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'paymentsdatatable_' . time();
+        return 'staffdatatable_' . time();
     }
 }

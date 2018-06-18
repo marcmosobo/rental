@@ -9,3 +9,4 @@ const debit = "DEBIT";
 const credit = 'CREDIT';
 const cash = 'CASH';
 const mpesa = 'MPESA';
+const staff = 'STAFF';
