@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Payment;
+use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
@@ -18,7 +19,11 @@ class PaymentDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'payments.datatables_actions');
+        return $dataTable
+            ->editColumn('received_on',function($payment){
+                return Carbon::parse($payment->received_on)->toDayDateTimeString();
+            })
+            ->addColumn('action', 'payments.datatables_actions');
     }
 
     /**
@@ -29,7 +34,9 @@ class PaymentDataTable extends DataTable
      */
     public function query(Payment $model)
     {
-        return $model->newQuery()->where('payment_mode',mpesa);
+        return $model->newQuery()->where('payment_mode',mpesa)
+            ->orderByDesc('payments.id')
+            ;
     }
 
     /**
@@ -64,15 +71,18 @@ class PaymentDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'BillRefNumber',
+            'ref_number',
+            'BillRefNumber'=>[
+                'title'=>'Account'
+            ],
             'phone_number',
             'FirstName',
             'received_on',
             'payment_mode',
 //            'house_number',
 //            'tenant_id',
-//            'ref_number',
-//            'amount',
+//
+            'amount',
 //            'paybill',
 //            'TransID',
 //            'TransTime',
