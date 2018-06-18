@@ -76,6 +76,7 @@ class PropertyDataTable extends DataTable
             'code',
             'location',
             'property_type',
+            'commission',
             'units'=>[
                 'title'=>'Number of Units'
             ],

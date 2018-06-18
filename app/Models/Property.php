@@ -47,6 +47,7 @@ class Property extends Model
         'landlord_id',
         'created_by',
         'client_id',
+        'commission',
         'status'
     ];
 
@@ -63,6 +64,7 @@ class Property extends Model
         'property_type' => 'string',
         'units' => 'integer',
         'created_by' => 'integer',
+        'commission' => 'float',
         'client_id' => 'integer',
         'status' => 'boolean'
     ];

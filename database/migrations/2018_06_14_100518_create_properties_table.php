@@ -20,7 +20,7 @@ class CreatePropertiesTable extends Migration
             $table->string('location')->nullable();
             $table->string('property_type')->nullable();
             $table->integer('units')->nullable();
-//            $table->double('commission')->nullable();
+            $table->double('commission')->nullable();
             $table->integer('month_billing_day')->default(5);
             $table->bigInteger('landlord_id')->unsigned()->nullable();
             $table->foreign('landlord_id')->references('id')->on('masterfiles')->onUpdate('cascade')->onDelete('no action');

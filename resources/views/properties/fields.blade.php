@@ -45,10 +45,10 @@
 </div>
 
 {{--<!-- Created By Field -->--}}
-{{--<div class="form-group col-sm-12">--}}
-    {{--{!! Form::label('created_by', 'Created By:') !!}--}}
-    {{--{!! Form::number('created_by', null, ['class' => 'form-control']) !!}--}}
-{{--</div>--}}
+<div class="form-group col-sm-12">
+    {!! Form::label('commission', 'Revenue Collection Commission Percentage:') !!}
+    {!! Form::number('commission', null, ['class' => 'form-control','required']) !!}
+</div>
 
 {{--<!-- Client Id Field -->--}}
 {{--<div class="form-group col-sm-12">--}}
