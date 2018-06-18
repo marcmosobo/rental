@@ -56,6 +56,13 @@ class RoutesTableSeeder extends Seeder
         ]);
         $child->roles()->attach($admin);
 
+        $child = Route::create([
+            'route_name'=>'Event Messages',
+            'parent_route' => $parent->id,
+            'url'=>'eventMessages'
+        ]);
+        $child->roles()->attach($admin);
+
         ####### crm
 
         $parent = Route::create([

@@ -113,3 +113,5 @@ Route::get('registerUrls',"MpesaPaymentController@registerUrls");
 Route::get('simulate',"MpesaPaymentController@simulate");
 
 Route::resource('staff', 'StaffController');
+
+Route::resource('eventMessages', 'EventMessageController');
