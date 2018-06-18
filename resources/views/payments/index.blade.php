@@ -1,6 +1,6 @@
 @extends('layouts.app')
- @section("pageTitle",'Payments')
- @section("pageSubtitle",'create, edit, delete Payments')
+ @section("pageTitle",'Mpesa Payments')
+ @section("pageSubtitle",'View mpesa payments')
   @section("breadcrumbs")
          <li>Home</li> <li>Payments</li>
          @endsection

@@ -104,3 +104,10 @@ Route::resource('cashPayments', 'CashPaymentController');
 
 Route::resource('payBills', 'PayBillController');
 Route::any('searchBills', 'PayBillController@searchBills');
+
+##############mpesa
+
+Route::any('getPaymentValidation',"MpesaPaymentController@getPaymentValidation");
+Route::any('getPayment',"MpesaPaymentController@getPayment");
+Route::get('registerUrls',"MpesaPaymentController@registerUrls");
+Route::get('simulate',"MpesaPaymentController@simulate");

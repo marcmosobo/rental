@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0a10261d718b0c72abfc12aad1d8f69",
+    "content-hash": "128ba270b5e13b6f8b4886f5ea042f32",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -2674,6 +2674,42 @@
                 "uuid"
             ],
             "time": "2018-01-20T00:28:24+00:00"
+        },
+        {
+            "name": "safaricom/mpesa",
+            "version": "1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/safaricom/mpesa-php-sdk.git",
+                "reference": "14c41910edecb653bd383bc94345899cceb93702"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/safaricom/mpesa-php-sdk/zipball/14c41910edecb653bd383bc94345899cceb93702",
+                "reference": "14c41910edecb653bd383bc94345899cceb93702",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "package",
+            "autoload": {
+                "psr-4": {
+                    "Safaricom\\Mpesa\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "mit"
+            ],
+            "authors": [
+                {
+                    "name": "Moses Nandwa",
+                    "email": "mnandwa@safaricom.co.ke"
+                }
+            ],
+            "description": "A PHP package for Mpesa API",
+            "time": "2018-02-22T06:23:16+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -5786,9 +5822,9 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "edwinmugendi/sapamapay": 20,
+        "infobip/infobip-api-php-client": 20,
         "infyomlabs/adminlte-templates": 20,
-        "infyomlabs/laravel-generator": 20,
-        "infobip/infobip-api-php-client": 20
+        "infyomlabs/laravel-generator": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
