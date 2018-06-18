@@ -11,6 +11,7 @@ use App\Models\BillDetail;
 use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\Masterfile;
+use App\Models\Payment;
 use App\Models\Tenant;
 use App\Repositories\PayBillRepository;
 use Flash;
@@ -72,7 +73,7 @@ class PayBillController extends AppBaseController
 
         $mf = Masterfile::find($input['tenant_id']);
 //        print_r($input);die;
-        DB::transaction(function()use($input,$mf){
+        $payment = DB::transaction(function()use($input,$mf){
             $lease = Lease::where('tenant_id',$input['tenant_id'])->first();
 
             $input['phone_number'] = $mf->phone_number;
@@ -130,14 +131,24 @@ class PayBillController extends AppBaseController
                     }
                 }
             }
-
+                return $payBill;
         });
 
 
 
         Flash::success('Bill paid successfully.');
 
-        return redirect(route('payBills.index'));
+        return redirect('receipt/'.$payment->id);
+    }
+
+    public function receipt(PayBillDataTable $payBillDataTable,$id)
+    {
+        $payment = Payment::find($id);
+//        print_r($payment->toArray());die;
+        return $payBillDataTable->render('pay_bills.index',[
+            'tenants'=>Tenant::where('b_role',\tenant)->get(),
+            'payment' =>$payment
+        ]);
     }
 
     /**

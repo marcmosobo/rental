@@ -18,7 +18,9 @@ class CashPaymentDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'cash_payments.datatables_actions');
+        return $dataTable->addColumn('action', function($payment){
+            return '<a href="'.url('receipt/'.$payment->id).'" class="btn btn-xs btn-primary">view/print receipt</a>';
+        });
     }
 
     /**
@@ -46,7 +48,7 @@ class CashPaymentDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-//            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px'])
             ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],

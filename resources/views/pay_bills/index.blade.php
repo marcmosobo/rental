@@ -4,6 +4,102 @@
   @section("breadcrumbs")
          <li>Home</li> <li>PayBills</li>
          @endsection
+
+@section('css')
+    {{--<style>--}}
+        {{--﻿table thead--}}
+        {{--{--}}
+            {{--background-color:#ddd;--}}
+        {{--}--}}
+        {{--.product {--}}
+            {{--height: 120px;--}}
+            {{--padding:0px 2px 2px 0px;--}}
+            {{--margin-bottom:2px;--}}
+            {{--text-align: center;--}}
+            {{--background-size: cover;--}}
+            {{--color: #fff;--}}
+            {{--overflow: hidden;--}}
+            {{---webkit-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{---moz-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{---o-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{---ms-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{--transition: all 0.3s ease-in-out 0.1s;--}}
+        {{--}--}}
+        {{--.waves-effect {--}}
+            {{--position: relative;--}}
+            {{--display: inline-block;--}}
+            {{--overflow: hidden;--}}
+            {{---webkit-user-select: none;--}}
+            {{---moz-user-select: none;--}}
+            {{---ms-user-select: none;--}}
+            {{--user-select: none;--}}
+            {{---webkit-tap-highlight-color: transparent;--}}
+        {{--}--}}
+        {{--.product h3--}}
+        {{--{--}}
+            {{--position: absolute;--}}
+            {{--width: 100%;--}}
+            {{--text-align: center;--}}
+            {{--color: #000;--}}
+            {{--display: block;--}}
+            {{--font-weight: 700;--}}
+            {{--font-size: 0.9em;--}}
+            {{--text-transform: uppercase;--}}
+            {{---webkit-transition: all 0.1s ease-in-out 0.1s;--}}
+            {{---moz-transition: all 0.1s ease-in-out 0.1s;--}}
+            {{---o-transition: all 0.1s ease-in-out 0.1s;--}}
+            {{---ms-transition: all 0.1s ease-in-out 0.1s;--}}
+            {{--transition: all 0.1s ease-in-out 0.1s;--}}
+        {{--}--}}
+        {{--.product .btn{--}}
+            {{--position: absolute;--}}
+            {{--top: 77px;--}}
+            {{--text-align: center;--}}
+            {{--left: 35px;--}}
+            {{--cursor: pointer;--}}
+            {{--z-index:9;--}}
+        {{--}--}}
+
+        {{--.product img {--}}
+            {{--width: 100%;--}}
+            {{--height: 120px;--}}
+            {{--opacity: 0.3;--}}
+            {{---webkit-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{---moz-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{---o-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{---ms-transition: all 0.3s ease-in-out 0.1s;--}}
+            {{--transition: all 0.3s ease-in-out 0.1s;--}}
+        {{--}--}}
+
+        {{--.product:hover h3 {--}}
+            {{--opacity: 1;--}}
+        {{--}--}}
+        {{--.mask h3 {--}}
+            {{--margin-top: 50px;--}}
+        {{--}--}}
+        {{--.delete--}}
+        {{--{--}}
+            {{--color:Red;--}}
+            {{--cursor:pointer;--}}
+        {{--}--}}
+        {{--#productList th,#productList td{text-align:right;padding:5px}--}}
+        {{--#productList th.name,#productList td.name{text-align:left;}--}}
+        {{--#productList input.qty {--}}
+            {{--text-align:center;height: 23px;padding-right: 1px;padding-left: 2px;--}}
+        {{--}--}}
+        {{--#ticketModal{width:380px}--}}
+        {{--#printSection table td,#printSection table th{font-size:14px;padding:2px}--}}
+
+        {{--#OpenBill .bill--}}
+        {{--{--}}
+            {{--background-color: #834f50;--}}
+            {{--color: #FFF;--}}
+            {{--margin: 7px 20px;--}}
+            {{--padding-top: 10px;--}}
+            {{--padding-bottom: 10px;--}}
+        {{--}--}}
+    {{--</style>--}}
+    @endsection
 @section('content')
     <section class="content-header">
         <h1 class="pull-right">
@@ -57,13 +153,119 @@
             </div>
         </section>
 
+        @if(isset($payment))
         <section class="invoice">
             <div class="row invoice-info no-print">
 
-                @include('flash::message')
-                @include('adminlte-templates::common.errors')
+                {{--@include('flash::message')--}}
+                {{--@include('adminlte-templates::common.errors')--}}
+            </div>
+
+            <div class="modal-dialog" role="document" id="ticketModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="ticket">
+                            Receipt #{{ $payment->id }}
+                        </h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div id="printSection">
+                            <div class="row invoice-info">
+                                <div class="col-sm-4 invoice-col">
+
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col text-center">
+                                    <address>
+                                        <strong>Marite Enterprises Limited</strong><br>
+                                        Lentile House, 2<sup>nd</sup> Floor Rm 213<br>
+                                        P.O Box 1440 - 10400<br>
+                                        Nanyuki<br>
+                                        <br>
+                                        Phone number: 0700634000
+                                        Email: info@mariteenterprises.co.ke
+                                    </address>
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-4 invoice-col">
+
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <div class="">
+                                <div style="clear: both;">
+                                    <h4 class="text-center">
+                                        Payment receipt
+                                    </h4>
+                                    <span><strong>Ref Number: {{ $payment->ref_number }} </strong></span>
+                                    {{--<hr style="border-top: 1px solid #000; padding-top: 2px;margin-bottom: 2px;">--}}
+                                    <table class="table" cellspacing="0" border="0" style="margin-bottom: 8px; border-top: 1px solid #000;">
+                                        <thead style="background-color: #ffffff;">
+                                        <tr>
+                                            <td>Date</td>
+                                            <td></td>
+                                            <td style="text-align: right">{{ \Carbon\Carbon::parse($payment->received_on)->toFormattedDateString() }}</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td style="text-align: left; padding-top: 5px;">
+                                                Tenant
+                                            </td>
+                                            <td style="padding-top: 5px; text-align: right;"></td>
+                                            <td style="padding-top: 5px; text-align: right;">
+                                                {{ \App\Models\Masterfile::find($tenant->id)->full_name }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left; padding-top: 5px;">
+                                                House Number
+                                            </td>
+                                            <td style="padding-top: 5px; text-align: right;"></td>
+                                            <td style="padding-top: 5px; text-align: right;">
+                                                {{ \App\Models\PropertyUnit::find($payment->house_number)->unit_number }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left; padding-top: 5px;">
+                                                Amount Received
+                                            </td>
+                                            <td style="padding-top: 5px; text-align: right;"></td>
+                                            <td style="padding-top: 5px; text-align: right;">
+                                                <strong>{{ number_format($payment->amount) }} Ksh</strong>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div style="clear: both;">
+                                        <div style="clear: both;">
+                                            <div style="border-top: 1px solid #000; padding-top: 10px;">
+                                                <span class="float-right">
+                                                    Served by: {{\Illuminate\Support\Facades\Auth::user()->name}}
+                                                </span>
+                                                <div style="clear: both;margin-top: 20px">
+                                                    <p class="text-center" style="margin: 0 auto; margin-top: 10px;">
+                                                    </p>
+                                                    {{--<div class="text-center" style="background-color: #000; padding: 5px; width: 85%;color: #fff; margin: 0 auto; border-radius: 3px; margin-top: 20px;">--}}
+                                                        {{--Thank you for your business--}}
+                                                    {{--</div>--}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer no-print">
+                        <button type="button" class="btn btn-primary" onclick="PrintTicket()">
+                            print
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
+        @endif
 
 
         @if(isset($bills))
@@ -192,5 +394,34 @@
 @push('js')
     <script>
         $('a#payBills').parent('li').addClass('active').parent('ul').parent().addClass('active');
+
+        function PrintTicket() {
+            //            $('.modal-body').removeAttr('id');
+            //            $('.modal-header').html('');
+            //            window.print();
+            //            $('.modal-body').attr('id', 'modal-body');
+            var divElements = document.getElementById('modal-body').innerHTML;
+            //Get the HTML of whole page
+            var oldPage = document.body.innerHTML;
+
+            //Reset the page's HTML with div's HTML only
+            // document.body.innerHTML =
+            //     "<html><head><title>Print Copy</title></head><body style=\"width:380px\"><center>" +
+            //     divElements + "</center></body>";
+            //printWindow.document.write('<html><head><title>Report Print</title>');
+            //Print Page
+            window.print();
+
+            //Restore orignal HTML
+            // document.body.innerHTML = oldPage;
+        }
     </script>
     @endpush
+
+{{--@section Scripts--}}
+{{--{--}}
+{{--<script type="text/javascript">--}}
+
+{{--</script>--}}
+{{--}--}}
+

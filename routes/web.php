@@ -104,6 +104,7 @@ Route::resource('cashPayments', 'CashPaymentController');
 
 Route::resource('payBills', 'PayBillController');
 Route::any('searchBills', 'PayBillController@searchBills');
+Route::get('receipt/{id}', 'PayBillController@receipt');
 
 ##############mpesa
 

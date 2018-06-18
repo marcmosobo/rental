@@ -143,9 +143,14 @@ class EventMessageController extends AppBaseController
             return redirect(route('eventMessages.index'));
         }
 
-        $this->eventMessageRepository->delete($id);
+        if($eventMessage->code== lease_creation){
+            Flash::error('Cannot delete this message since its being used by the system.');
+        }else{
+            $this->eventMessageRepository->delete($id);
+            Flash::success('Event Message deleted successfully.');
+        }
 
-        Flash::success('Event Message deleted successfully.');
+
 
         return redirect(route('eventMessages.index'));
     }

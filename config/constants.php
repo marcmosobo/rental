@@ -10,3 +10,4 @@ const credit = 'CREDIT';
 const cash = 'CASH';
 const mpesa = 'MPESA';
 const staff = 'STAFF';
+const lease_creation = "LEASE CREATION";
