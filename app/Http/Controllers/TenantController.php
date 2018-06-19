@@ -81,7 +81,7 @@ class TenantController extends AppBaseController
             return redirect(route('tenants.index'));
         }
 
-        return view('tenants.show')->with('tenant', $tenant);
+        return response()->json($tenant);
     }
 
     /**

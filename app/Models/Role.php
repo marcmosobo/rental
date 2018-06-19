@@ -30,7 +30,7 @@ class Role extends Model
         'code',
         'access_level_id',
         'created_by',
-//        'tenant_id'
+        'client_id'
     ];
 
     /**
@@ -44,7 +44,7 @@ class Role extends Model
         'name' => 'string',
         'code' => 'string',
         'created_by' => 'integer',
-        'tenant_id' => 'integer',
+        'client_id' => 'integer',
     ];
 
     /**
