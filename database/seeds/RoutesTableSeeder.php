@@ -151,6 +151,26 @@ class RoutesTableSeeder extends Seeder
         ]);
         $child->roles()->attach($admin);
 
+        ####### Reports
+        $parent = Route::create([
+            'route_name'=> 'Reports',
+            'icon'=> 'fa-search',
+            'sequence'=>5,
+        ]);
+
+        $child = Route::create([
+            'route_name'=>'Tenant Statement',
+            'parent_route' => $parent->id,
+            'url'=>'tenantStatement'
+        ]);
+        $child->roles()->attach($admin);
+
+        $child = Route::create([
+            'route_name'=>'Property Statement',
+            'parent_route' => $parent->id,
+            'url'=>'propertyStatement'
+        ]);
+        $child->roles()->attach($admin);
 
         #### user management
         $user_mngt = new Route();

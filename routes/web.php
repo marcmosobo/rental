@@ -116,3 +116,8 @@ Route::get('simulate',"MpesaPaymentController@simulate");
 Route::resource('staff', 'StaffController');
 
 Route::resource('eventMessages', 'EventMessageController');
+
+#### Reports
+
+Route::get('tenantStatement','ReportController@tenantStatement');
+Route::get('propertyStatement','ReportController@propertyStatement');

@@ -1,9 +1,9 @@
 @extends('layouts.app')
- @section("pageTitle",'Payments Report')
+ @section("pageTitle",'Tenant Statement Report')
  {{--@section("pageSubtitle",'create, edit, delete Claims')--}}
   @section("breadcrumbs")
             <li>Reports</li>
-            <li>Payments report</li>
+            <li>Tenant Statement</li>
          @endsection
 @section('content')
     {{--<div class="col-md-12">--}}
@@ -21,17 +21,18 @@
             <div class="col-md-12">
                 <form action="{{ url('getPaymentsReport') }}" id="policies-form" method="post">
                     {{ csrf_field() }}
-                <div class="col-md-3 col-md-offset-2">
-                    <label>From</label>
-                    <input type="date" required class="form-control" id="date-from" name="from">
+                <div class="col-md-5 col-md-offset-3">
+                    <label>Tenant</label>
+                    <select name="tenant" class="form-control select2">
+                        <option value="">Select tenant</option>
+                        @if(count($tenants))
+                            @foreach($tenants as $tenant)
+                                <option value="{{ $tenant->id }}">{{ $tenant->full_name }}</option>
+                                @endforeach
+                            @endif
+                    </select>
                 </div>
-                <div class="col-md-3">
-                    <label>To</label>
-                    <input type="date" required class="form-control" id="date-to" name="from">
-                </div>
-                <div class="col-md-1 ">
-                    <button type="submit" class="btn btn-primary " style="margin-top: 25px;">Search</button>
-                </div>
+
                 </form>
             </div>
         </div>
@@ -46,13 +47,13 @@
             </div>
             <!-- /.col -->
             <div class="col-sm-4 invoice-col text-center">
-
                 <address>
-                    <strong>Abiria Insurance Agency</strong><br>
-                    {{--795 Folsom Ave, Suite 600<br>--}}
-                    {{--San Francisco, CA 94107<br>--}}
-                    {{--Phone: (555) 539-1037<br>--}}
-                    {{--Email: john.doe@example.com--}}
+                    <h3>Marite Enterprises Limited</h3>
+                    Lentile House, 2<sup>nd</sup> Floor Rm 213<br>
+                    P.O Box 1440 - 10400 Nanyuki<br>
+                    {{--<br>--}}
+                    Phone number: 0700634000<br>
+                    Email: info@mariteenterprises.co.ke
                 </address>
             </div>
             <!-- /.col -->
@@ -68,14 +69,16 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Policy Number</th>
-                            <th>Payment Mode</th>
-                            <th>Reference</th>
-                            <th>Amount Paid</th>
+                            <th>Date</th>
+                            <th>Bill Type</th>
+                            <th>Debit</th>
+                            <th>Debit</th>
                         </tr>
                     </thead>
-                    <tbody id="tbody">
-
+                    <tbody>
+                        <tr>
+                            <td class="text-center" colspan="4">Select tenant</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
