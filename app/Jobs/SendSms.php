@@ -23,7 +23,7 @@ class SendSms implements ShouldQueue
 
     protected $_sms;
     public $tries = 2;
-    protected  $password = 'k1nuthia';
+    protected  $password = 'k1nuth1a';
     protected $username = 'OpenPath';
     protected $_message;
     protected $to;

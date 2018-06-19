@@ -48,7 +48,7 @@ class User extends Model
         'account_status',
         'remember_token',
         'mf_id',
-        'tenant_id',
+        'client_id',
         'created_by'
     ];
 
@@ -65,7 +65,7 @@ class User extends Model
         'role_id' => 'integer',
         'mf_id' => 'integer',
         'created_by' => 'integer',
-        'tenant_id' => 'integer',
+        'client_id' => 'integer',
         'password_changed' => 'boolean',
         'email_confirmed' => 'boolean',
         'account_status' => 'boolean',
