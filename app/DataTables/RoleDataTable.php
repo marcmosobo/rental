@@ -44,20 +44,22 @@ class RoleDataTable extends DataTable
      */
     public function query(Role $model){
 
-        if(LoggedUserController::isSystemAdmin()){
-            $query = $model->newQuery();
-        }else{
-            $query = $model->newQuery()->where('code','<>',sys_admin);
-//            if(LoggedUserController::isAllAccessGranted()){
-//                $query = $model->newQuery()->where('tenant_id',Auth::user()->client);
-//            }else{
-//                $query = $model->newQuery()->where([['tenant_id',Auth::user()->tenant_id],['created_by',Auth::id()]]);
-//            }
-        }
+//        if(LoggedUserController::isSystemAdmin()){
+//            $query = $model->newQuery();
+//        }else{
+//            $query = $model->newQuery()->where('code','<>',sys_admin);
+////            if(LoggedUserController::isAllAccessGranted()){
+////                $query = $model->newQuery()->where('tenant_id',Auth::user()->client);
+////            }else{
+////                $query = $model->newQuery()->where([['tenant_id',Auth::user()->tenant_id],['created_by',Auth::id()]]);
+////            }
+//        }
 //        dd($query);
+
+        $query = $model->newQuery();
         return $query
             ->orderByDesc('id')
-            ->with('accessLevel');
+            ->with('level');
     }
 
     /**
@@ -109,7 +111,7 @@ class RoleDataTable extends DataTable
         return [
             'code',
             'name',
-            'access_level.name'=>[
+            'level.name'=>[
                 'title'=>'Access Level'
             ]
         ];

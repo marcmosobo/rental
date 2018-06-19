@@ -63,9 +63,9 @@ class Role extends Model
     {
         return $this->belongsToMany(\App\Models\Route::class, 'role_route');
     }
-    public function accessLevel()
+    public function level()
     {
-        return $this->belongsTo(\App\Models\AccessLevel::class);
+        return $this->belongsTo(\App\Models\AccessLevel::class,'access_level_id');
     }
 
     /**

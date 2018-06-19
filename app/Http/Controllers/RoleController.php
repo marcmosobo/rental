@@ -7,7 +7,6 @@ use App\Http\Requests;
 use App\Http\Requests\CreateRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\AccessLevel;
-use App\Models\Role;
 use App\Models\RoleRoute;
 use App\Models\Route;
 use App\Repositories\RoleRepository;
@@ -64,14 +63,10 @@ class RoleController extends AppBaseController
      */
     public function store(CreateRoleRequest $request)
     {
-
         $input = $request->all();
         $input['created_by'] = Auth::id();
         $input["client_id"] = Auth::user()->client_id;
-//        print_r($input);die;
-//        $role = Role::create([
-//
-//        ]);
+        $role = $this->roleRepository->create($input);
 
         Flash::success('Role saved successfully.');
 
