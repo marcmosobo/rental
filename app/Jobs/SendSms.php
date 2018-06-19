@@ -23,8 +23,8 @@ class SendSms implements ShouldQueue
 
     protected $_sms;
     public $tries = 2;
-    protected  $password = 'joenjeru2018';
-    protected $username = 'JOENJERU';
+    protected  $password = 'k1nuthia';
+    protected $username = 'OpenPath';
     protected $_message;
     protected $to;
     protected $message_id;
@@ -53,7 +53,7 @@ class SendSms implements ShouldQueue
         $destination->setTo($this->to);
 
         $message = new infobip\api\model\sms\mt\send\Message();
-        $message->setFrom("JEMMAMICRO");
+        $message->setFrom("VOOMSMS");
         $message->setDestinations([$destination]);
         $message->setText($this->_message);
 //        $message->setNotifyUrl(url('infobip-callback/'.$this->message_id));

@@ -75,7 +75,7 @@ class StaffController extends AppBaseController
                 'created_by'=>$input['created_by'],
                 'password_changed'=>false,
                 'email_confirmed'=>false,
-                'client-id'=>$input['client_id']
+                'client_id'=>$input['client_id']
             ]);
         });
 
@@ -102,7 +102,7 @@ class StaffController extends AppBaseController
             return redirect(route('staff.index'));
         }
 
-        return view('staff.show')->with('staff', $staff);
+        return response()->json($staff);
     }
 
     /**

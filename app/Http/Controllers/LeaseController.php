@@ -6,6 +6,7 @@ use App\DataTables\LeaseDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateLeaseRequest;
 use App\Http\Requests\UpdateLeaseRequest;
+use App\Jobs\SendSms;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
@@ -111,7 +112,9 @@ class LeaseController extends AppBaseController
                 'balance'=>$unitBills->sum('amount')
             ]);
         });
-
+        $mf = Masterfile::find($input['tenant_id']);
+        $unit = PropertyUnit::find($input['unit_id']);
+        SendSms::dispatch("Dear ".explode(' ',$mf->full_name)[0].', you have been assigned house number '.$unit->unit_number.'. Use paybill 196094 to pay your rent',$mf->phone_number);
 
 
         Flash::success('Lease saved successfully.');

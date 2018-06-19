@@ -72,8 +72,8 @@ class StaffDataTable extends DataTable
             'phone_number',
             'email',
             'b_role',
-            'created_by',
-            'client_id'
+//            'created_by',
+//            'client_id'
         ];
     }
 
