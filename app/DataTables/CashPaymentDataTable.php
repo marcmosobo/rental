@@ -74,8 +74,12 @@ class CashPaymentDataTable extends DataTable
         return [
 //            'payment_mode',
 
-            'masterfile.full_name',
-            'unit.unit_number',
+            'masterfile.full_name'=>[
+                'title'=>'Tenant Name'
+            ],
+            'unit.unit_number'=>[
+                'title'=>'Unit Number'
+            ],
             'ref_number',
             'amount',
 //            'paybill',

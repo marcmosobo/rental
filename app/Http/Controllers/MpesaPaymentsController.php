@@ -124,7 +124,6 @@ class MpesaPaymentController extends Controller
                 });
             }
             SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
-
         }
 
 //        SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);

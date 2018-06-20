@@ -23,6 +23,13 @@ class PaymentDataTable extends DataTable
             ->editColumn('received_on',function($payment){
                 return Carbon::parse($payment->received_on)->toDayDateTimeString();
             })
+            ->editColumn('status',function ($payment){
+                if($payment->processed){
+                    return '<label class="label label-success">Processed</label>';
+                }
+                return '<label class="label label-warning">Legacy Client</label>';
+            })
+            ->rawColumns(['status'])
             ->addColumn('action', 'payments.datatables_actions');
     }
 
@@ -84,7 +91,7 @@ class PaymentDataTable extends DataTable
 //            'tenant_id',
 //
             'amount',
-//            'paybill',
+            'status',
 //            'TransID',
 //            'TransTime',
 //            'middleName',
