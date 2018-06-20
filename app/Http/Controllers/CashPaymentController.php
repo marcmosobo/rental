@@ -18,6 +18,7 @@ class CashPaymentController extends AppBaseController
 
     public function __construct(CashPaymentRepository $cashPaymentRepo)
     {
+        $this->middleware('auth');
         $this->cashPaymentRepository = $cashPaymentRepo;
     }
 

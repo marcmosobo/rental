@@ -19,11 +19,11 @@
     <section class="invoice no-print">
         <div class="row">
             <div class="col-md-12">
-                <form action="{{ url('getPaymentsReport') }}" id="policies-form" method="post">
+                <form action="{{ url('getTenantStatement') }}" id="policies-form" method="post">
                     {{ csrf_field() }}
-                <div class="col-md-5 col-md-offset-3">
+                <div class="col-md-5 col-md-offset-2">
                     <label>Tenant</label>
-                    <select name="tenant" class="form-control select2">
+                    <select name="tenant" class="form-control select2" required>
                         <option value="">Select tenant</option>
                         @if(count($tenants))
                             @foreach($tenants as $tenant)
@@ -32,6 +32,9 @@
                             @endif
                     </select>
                 </div>
+                    <div class="col-md-2 ">
+                        <button type="submit" class="btn btn-primary " style="margin-top: 25px;">Search</button>
+                    </div>
 
                 </form>
             </div>
@@ -103,35 +106,37 @@
 
 @push('js')
     <script>
-        $("#policies-form").on('submit',function(e){
-            e.preventDefault();
-            var data = {
-                "date_from": $('#date-from').val(),
-                "date_to": $('#date-to').val(),
-            };
-            $.ajax({
-                url: $(this).attr('action'),
-                type:'POST',
-                dateType: 'json',
-                data: data,
-                success:function(data){
-                    var html = '';
-                    if(data.length > 0){
-                        for(var i=0; i<data.length; i++){
-                            html += '<tr>' +
-                                '<td>'+ data[i].policy_number+'</td>' +
-                                '<td>'+ data[i].payment_mode+'</td>' +
-                                '<td>'+ data[i].reference+'</td>' +
-                                '<td>'+ data[i].amount_paid+'</td>'
-                        }
-                        $('#tbody').html(html)
-                    }else{
-                        $('#tbody').html('<tr><td colspan="4" class="text-center">No records available</td></tr>');
-                    }
+        // $("#policies-form").on('submit',function(e){
+        //     e.preventDefault();
+        //     var data = {
+        //         "date_from": $('#date-from').val(),
+        //         "date_to": $('#date-to').val(),
+        //     };
+        //     $.ajax({
+        //         url: $(this).attr('action'),
+        //         type:'POST',
+        //         dateType: 'json',
+        //         data: data,
+        //         success:function(data){
+        //             var html = '';
+        //             if(data.length > 0){
+        //                 for(var i=0; i<data.length; i++){
+        //                     html += '<tr>' +
+        //                         '<td>'+ data[i].policy_number+'</td>' +
+        //                         '<td>'+ data[i].payment_mode+'</td>' +
+        //                         '<td>'+ data[i].reference+'</td>' +
+        //                         '<td>'+ data[i].amount_paid+'</td>'
+        //                 }
+        //                 $('#tbody').html(html)
+        //             }else{
+        //                 $('#tbody').html('<tr><td colspan="4" class="text-center">No records available</td></tr>');
+        //             }
+        //
+        //
+        //         }
+        //     })
+        // })
+        $('a#tenantStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
 
-
-                }
-            })
-        })
     </script>
     @endpush

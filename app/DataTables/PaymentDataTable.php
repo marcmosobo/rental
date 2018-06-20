@@ -24,7 +24,7 @@ class PaymentDataTable extends DataTable
                 return Carbon::parse($payment->received_on)->toDayDateTimeString();
             })
             ->editColumn('status',function ($payment){
-                if($payment->processed){
+                if($payment->status){
                     return '<label class="label label-success">Processed</label>';
                 }
                 return '<label class="label label-warning">Legacy Client</label>';

@@ -102,4 +102,15 @@ class ReportController extends Controller
             'landlord'=>Masterfile::find($property->landlord_id)->full_name,
         ]);
     }
+
+    public function getTenantStatement(Request $request){
+        $statement = CustomerAccount::query()
+            ->where('tenant_id',$request->tenant)
+
+            ->get();
+        print_r($statement->toArray());die;
+        return view('reports.tenant-statement',[
+            'tenants'=>Masterfile::where('b_role',\tenant)->get()
+        ]);
+    }
 }

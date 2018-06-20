@@ -123,3 +123,5 @@ Route::get('tenantStatement','ReportController@tenantStatement');
 Route::get('propertyStatement','ReportController@propertyStatement');
 
 Route::post('getPropertyStatement','ReportController@getPropertyStatement');
+Route::post('getTenantStatement','ReportController@getTenantStatement');
+
