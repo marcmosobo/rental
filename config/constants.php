@@ -11,3 +11,5 @@ const cash = 'CASH';
 const mpesa = 'MPESA';
 const staff = 'STAFF';
 const lease_creation = "LEASE CREATION";
+const monthly = 'Monthly';
+const once = 'Once';

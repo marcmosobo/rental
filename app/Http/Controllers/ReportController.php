@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Claim;
+use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\Payment;
@@ -10,6 +11,7 @@ use App\Models\PolicyDetail;
 use App\Models\Property;
 use App\Models\PropertyUnit;
 use App\Models\Tenant;
+use App\Models\UnitServiceBill;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -46,26 +48,58 @@ class ReportController extends Controller
                     ['unit_id',$propertyUnit->id],['status',true]
                 ])->first();
                 if(!empty($lease)){
+                    $arrears = CustomerAccount::where([['created_at','<',Carbon::parse($request->date_from)],['tenant_id',$lease->tenant_id]])->get();
+                    $aBF = $arrears->where('transaction_type',credit)->sum('amount') - $arrears->where('transaction_type',debit)->sum('amount');
+
+                   //total due
+                    $totalDue= CustomerAccount::query()
+                        ->where('tenant_id',$lease->tenant_id)
+                        ->where('transaction_type',credit)
+                        ->whereBetween('created_at',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                        ->sum('amount') + $aBF;
+
+                    //amount paid
+                    $amountPaid = $arrears = CustomerAccount::query()
+                            ->where('tenant_id',$lease->tenant_id)
+                            ->where('transaction_type',debit)
+                            ->whereBetween('created_at',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                            ->sum('amount');
+
                     $report=[
-                        'unit_number'=>$propertyUnit->unit_number
+                        'unit_number'=>$propertyUnit->unit_number,
+                        'tenant'=>Masterfile::find($lease->tenant_id)->full_name,
+                        'status'=>'Occupied',
+                        'monthly_rent'=> UnitServiceBill::where([['unit_id',$propertyUnit->id],['period',monthly]])->sum('amount'),
+                        'arrears_bf'=>$aBF,
+                        'total_due'=>$totalDue,
+                        'amt_paid'=>$amountPaid,
+                        'arrears_cf'=>$totalDue-$amountPaid
                     ];
                 }else{
                     $report=[
                         'unit_number'=>$propertyUnit->unit_number,
                         'tenant'=>'N/A',
                         'status'=>'Vacant',
-                        'monthly_rent'=> '0.00',
-                        'arrears_bf'=>'0.00',
-                        'total_due'=>'0.00',
-                        'amt_paid'=>'0.00'
+                        'monthly_rent'=> 0,
+                        'arrears_bf'=>0,
+                        'total_due'=>0,
+                        'amt_paid'=>0,
+                        'arrears_cf'=>0
                     ];
                 }
                 $reports[]=$report;
             }
         }
 
-            print_r($reports);
-
-//        return response()->json($propertyUnits);
+            $reports = collect($reports);
+        $property = Property::find($request->property_id);
+        return view('reports.property-statement',[
+            'properties'=>Property::all(),
+            'pStatements'=> $reports,
+            'from'=>Carbon::parse($request->date_from)->toFormattedDateString(),
+            'to'=>Carbon::parse($request->date_to)->toFormattedDateString(),
+            'prop'=>$property->name,
+            'landlord'=>Masterfile::find($property->landlord_id)->full_name,
+        ]);
     }
 }

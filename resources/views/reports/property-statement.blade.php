@@ -5,6 +5,16 @@
             <li>Reports</li>
             <li>Property Statement</li>
          @endsection
+
+@section('css')
+    <style>
+        .no-top{
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 20px;
+        }
+    </style>
+    @endsection
 @section('content')
     <section class="invoice no-print">
         <div class="row">
@@ -43,6 +53,7 @@
             </div>
         </div>
     </section>
+    @if(isset($pStatements))
     <section class="invoice">
         <!-- title row -->
 
@@ -71,24 +82,51 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                {{--<p class="lead">T.P Vehicles Involved</p>--}}
+                <h4 class="">Property statement from: {{ $from }} - {{ $to }}</h4>
+                <p class="">Property: {{ $prop }}</p>
+                <p class="">Landlord/lady: {{ $landlord }}</p>
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Unit Number</th>
                             <th>Tenant</th>
                             <th>Status</th>
-                            <th>Monthly Rent</th>
-                            <th>Arrears B/F</th>
-                            <th>Total Due</th>
-                            <th>Amount Paid</th>
-                            <th>Arrears C/F</th>
+                            <th style="text-align: right;">Monthly Rent</th>
+                            <th style="text-align: right;">Arrears B/F</th>
+                            <th style="text-align: right;">Total Due</th>
+                            <th style="text-align: right;">Amount Paid</th>
+                            <th style="text-align: right;">Arrears C/F</th>
                         </tr>
                     </thead>
                     <tbody>
+                    @if(count($pStatements))
+                        @foreach($pStatements as $statement)
+                            <tr>
+                                <td>{{ $statement['unit_number'] }}</td>
+                                <td>{{ $statement['tenant'] }}</td>
+                                <td>{{ $statement['status'] }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['monthly_rent'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['arrears_bf'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['total_due'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['amt_paid'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['arrears_cf'],2) }}</td>
+                            </tr>
+                            @endforeach
                         <tr>
-                            <td class="text-center" colspan="8">Select tenant</td>
+                            <th><h3 class="no-top">{{ count($pStatements) }} </h3></th>
+                            <th><h3 class="no-top"></h3></th>
+                            <th><h3 class="no-top"></h3></th>
+                            <th><h3 class="no-top">Totals</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($pStatements->sum('arrears_bf'),2) }}</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($pStatements->sum('total_due'),2) }}</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($pStatements->sum('amt_paid'),2) }}</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($pStatements->sum('arrears_cf'),2) }}</h3></th>
                         </tr>
+                        @else
+                        <tr>
+                            <td class="text-center" colspan="8">No records found</td>
+                        </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -107,6 +145,7 @@
             </div>
         </div>
     </section>
+    @endif
     <!-- /.content -->
     <div class="clearfix"></div>
 @endsection
