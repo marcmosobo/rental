@@ -121,3 +121,5 @@ Route::resource('eventMessages', 'EventMessageController');
 
 Route::get('tenantStatement','ReportController@tenantStatement');
 Route::get('propertyStatement','ReportController@propertyStatement');
+
+Route::post('getPropertyStatement','ReportController@getPropertyStatement');

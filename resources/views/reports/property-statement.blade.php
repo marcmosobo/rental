@@ -9,32 +9,30 @@
     <section class="invoice no-print">
         <div class="row">
             <div class="col-md-12">
-                <div class="col-md-3">
-                    <label >Search By</label>
-                    <div class="form-group">
-                        <input type="radio" checked name="filter" class="i-check-line filter" value="pre-defined"><label>Pre Defined</label>
-                    </div>
-                    <div class="form-group">
-                        <input type="radio" name="filter" class="i-check-line filter" value="date-range"><label> Date Range</label>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                    <div class="form-group" id="pre-defined-div" style="margin-top: 18px;">
-                        <label>Select Period</label>
-                        <select name="period" class="form-control select2" id="pre-defined-select">
-                            <option value="this-month">This Month</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="date-range-div" style="margin-top: 18px;display: none;">
-                        <form action="{{ url('getExpectedRepayments') }}" id="policies-form" method="post">
+
+                <div class="col-md-12 col-md-offset-1">
+                    <div class="form-group" id="date-range-div" >
+                        <form action="{{ url('getPropertyStatement') }}" id="plot-form" method="post">
                             {{ csrf_field() }}
-                            <div class="col-md-5">
-                                <label>From</label>
-                                <input type="date" required class="form-control" id="date-from" name="from">
+                            <div class="col-md-3">
+                                <label>property</label>
+                                <select class="form-control select2" name="property_id" id="property_id" required>
+                                    <option value="">Select property</option>
+                                    @if(count($properties))
+                                        @foreach($properties as $property)
+                                            <option value="{{ $property->id }}">{{ $property->name }}</option>
+                                            @endforeach
+                                        @endif
+
+                                </select>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-3">
+                                <label>From</label>
+                                <input type="date" required class="form-control" id="date-from" name="date_from">
+                            </div>
+                            <div class="col-md-3">
                                 <label>To</label>
-                                <input type="date" required class="form-control" id="date-to" name="from">
+                                <input type="date" required class="form-control" id="date-to" name="date_to">
                             </div>
                             <div class="col-md-2 ">
                                 <button type="submit" class="btn btn-primary " style="margin-top: 25px;">Search</button>
@@ -115,34 +113,24 @@
 
 @push('js')
     <script>
-        $('.filter').on('ifChecked',function(){
-            var value = $(this).val()
-            if(value === 'date-range'){
-                $('#date-range-div').show();
-                $('#pre-defined-div').hide();
-            }else{
-                $('#date-range-div').hide();
-                $('#pre-defined-div').show();
-            }
-        });
-
-        $("#pre-defined-select").on('change',function(){
-            let val = $(this).val();
-            let data = {
-                'filter':'pre-defined',
-                'value':val
-            };
+        {{--$("#plot-form").on('submit',function(e){--}}
+            {{--e.preventDefault();--}}
+            {{--var data = {--}}
+                {{--'property_id':$('#property_id').val(),--}}
+                {{--"date-from": $('#date-from').val(),--}}
+                {{--'date-to': $('#date-to').val()--}}
+            {{--};--}}
+            {{--// console.log(data);--}}
 
             {{--$.ajax({--}}
-                {{--url: '{{ url('getExpectedRepayments') }}',--}}
-                {{--type:'POST',--}}
-                {{--dateType: 'json',--}}
-                {{--data: data,--}}
-                {{--success:function(data){--}}
-                    {{--// loadTable(data);--}}
-                {{--}--}}
-            {{--})--}}
-        });
+                {{--'url': '{{ url('getPropertyStatement') }}',--}}
+                {{--'type': 'POST',--}}
+                {{--'dataType': 'json',--}}
+                {{--'data':data,--}}
+                {{--success: function(data){--}}
 
+                {{--}--}}
+            {{--});--}}
+        {{--})--}}
     </script>
     @endpush
