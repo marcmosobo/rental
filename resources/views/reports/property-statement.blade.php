@@ -82,7 +82,7 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <h4 class="">Property statement from: {{ $from }} - {{ $to }}</h4>
+                <h4 class="">Property statement for: {{ $from }} - {{ $to }}</h4>
                 <p class="">Property: {{ $prop }}</p>
                 <p class="">Landlord/lady: {{ $landlord }}</p>
                 <table class="table table-striped">

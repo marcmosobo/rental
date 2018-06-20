@@ -18,7 +18,7 @@ class MpesaPaymentController extends Controller
     public $access_token;
     private  $configs = array(
         'AccessToken' => '',
-        'Environment' => 'sandbox',
+        'Environment' => 'live',
         'Content-Type' => 'application/json',
         'Verbose' => 'true',
     );
@@ -91,7 +91,7 @@ class MpesaPaymentController extends Controller
 
     public function simulate(){
         $mpesa= new Mpesa();
-        $c2bTransaction= $mpesa->c2b(600000, 'CustomerPayBillOnline', 1000, 254715862938, '21844232' );
+        $c2bTransaction= $mpesa->c2b(196094, 'CustomerPayBillOnline', 1000, 254715862938, '21844232' );
         var_dump($c2bTransaction);
     }
 
@@ -110,10 +110,10 @@ class MpesaPaymentController extends Controller
 //            'ShortCode' => '881595',
 //        );
 //        $response = $mpesa->call($api, $this->configs, $parameters);
-        $token = Mpesa::generateSandBoxToken();
+        $token = Mpesa::generateLiveToken();
 
-//        $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
-        $url = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+        $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
+//        $url = 'https://sandbox.safaricom.co.ke/mpesa/c2b/v1/registerurl';
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -124,8 +124,8 @@ class MpesaPaymentController extends Controller
             //Fill in the request parameters with valid values
             'ValidationURL' => 'https://mariteenterprisesltd.co.ke/getPaymentValidation',
             'ConfirmationURL' => 'https://mariteenterprisesltd.co.ke/getPayment',
-            'ResponseType' => 'Completed',
-            'ShortCode' => '600000',
+            'ResponseType' => 'Cancelled',
+            'ShortCode' => '196094',
         );
 
         $data_string = json_encode($curl_post_data);
