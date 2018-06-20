@@ -171,5 +171,7 @@
                 {{--}--}}
             {{--});--}}
         {{--})--}}
+        $('a#propertyStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
+
     </script>
     @endpush

@@ -54,6 +54,9 @@ class TenantController extends AppBaseController
     public function store(CreateTenantRequest $request)
     {
         $input = $request->all();
+        $this->validate($request,[
+           'phone_number'=>'required|unique:masterfiles,phone_number'
+        ]);
         $input['b_role'] = tenant;
         $input['created_by'] = Auth::user()->mf_id;
         $input['client_id'] = Auth::user()->client_id;

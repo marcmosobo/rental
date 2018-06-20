@@ -74,7 +74,14 @@ class PayBillController extends AppBaseController
         $mf = Masterfile::find($input['tenant_id']);
 //        print_r($input);die;
         $payment = DB::transaction(function()use($input,$mf){
-            $lease = Lease::where('tenant_id',$input['tenant_id'])->first();
+            $lease = Lease::where('tenant_id',$input['tenant_id'])
+                ->where('status',true)
+                ->first();
+            if(is_null($lease)){
+                $lease = Lease::where('tenant_id',$input['tenant_id'])
+//                    ->where('status',true)
+                    ->first();
+            }
 
             $input['phone_number'] = $mf->phone_number;
             $input['house_number'] = $lease->unit_id;

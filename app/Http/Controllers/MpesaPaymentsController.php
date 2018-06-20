@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\SendSms;
+use App\Models\CustomerAccount;
+use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\Payment;
+use App\Models\Property;
+use App\Models\PropertyUnit;
 use Carbon\Carbon;
 use Edwinmugendi\Sapamapay\MpesaApi;
 use Illuminate\Http\Request;
@@ -29,24 +33,11 @@ class MpesaPaymentController extends Controller
 
     public function getPayment(Request $request){
         $input = $request->all();
-        $input['tenant_id'] = null;
+        $input['client_id'] = null;
         $input['mf_id'] = null;
         $userName = $request->FirstName;
         $phone = $request->MSISDN;
         $p_number = '0'.ltrim($request->MSISDN,'254');
-//        echo  $p_number;die;
-        $mf = Masterfile::where('national_id',$input['BillRefNumber'])->orWhere('phone_number',$p_number)->first();
-        if(!is_null($mf)){
-            $input['account_number'] = $mf->national_id;
-            $input['tenant_id'] = $mf->tenant_id;
-            $input['mf_id'] = $mf->id;
-            $userName = explode(' ',$mf->full_name)[0];
-//                $phone = $mf->phone_number;
-
-        }
-//            print_r($mf);die;
-        $input['payment_mode'] = "MPESA";
-
         $payment = Payment::create([
             'payment_mode'=>'MPESA',
             'account_number'=>$request->BillRefNumber,
@@ -60,13 +51,83 @@ class MpesaPaymentController extends Controller
             'FirstName'=>$request->FirstName,
             'MiddleName'=>$request->MiddleName,
             'LastName'=>$request->LastName,
-            'tenant_id' => $input['tenant_id'],
+            'client_id' => $input['client_id'],
             'received_on'=>Carbon::now(),
             'mf_id'=>$input['mf_id']
         ]);
 
+        //search for unit number
+        $propertyUnit = PropertyUnit::where('unit_number',$input['BillRefNumber'])->first();
+        if(!is_null($propertyUnit)){
+            //get lease
+            $lease = Lease::where('unit_id',$propertyUnit->id)
+                ->where('status',true)->first();
+            if(is_null($lease)){
+                $lease = Lease::where('unit_id',$propertyUnit->id)->first();
+            }
 
-//        SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Pay your loans early to improve your rating.',$phone);
+            //get tenant
+            $tenant = Masterfile::find($lease->tenant_id);
+            $input['client_id'] = $tenant->client_id;
+            $input['mf_id'] = $tenant->id;
+            $userName = explode(' ',$tenant->full_name)[0];
+
+            DB::transaction(function()use($input,$tenant,$lease,$propertyUnit,$payment){
+                $acc = CustomerAccount::create([
+                    'tenant_id'=>$tenant->id,
+                    'lease_id'=>$lease->id,
+                    'unit_id'=>$propertyUnit->id,
+                    'payment_id'=>$payment->id,
+                    'ref_number'=>$payment->ref_number,
+                    'transaction_type'=>debit,
+                    'amount'=>$payment->amount,
+                ]);
+
+                $payment->status = true;
+                $payment->house_number = $propertyUnit->unit_number;
+                $payment->tenant_id = $tenant->id;
+                $payment->client_id = $input['client_id'];
+                $payment->save();
+            });
+            SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
+
+        }else{
+            //try with phone number
+            $mf = Masterfile::where('phone_number',$p_number)->first();
+            if(!is_null($mf)){
+                $input['lease_id'] = null;
+                $input['unit_id'] =null;
+                $lease = Lease::where('tenant_id',$mf->id)->where('status',true)->first();
+                if(is_null($lease)){
+                    $lease = Lease::where('tenant_id',$mf->id)->first();
+                }
+
+                if(!is_null($lease)){
+                    $input['lease_id'] = $lease->id;
+                    $input['unit_id'] = $lease->unit_id;
+                }
+                DB::transaction(function ()use($input,$mf,$payment){
+                    $acc = CustomerAccount::create([
+                        'tenant_id'=>$mf->id,
+                        'lease_id'=>$input['lease_id'],
+                        'unit_id'=>$input['unit_id'],
+                        'payment_id'=> $payment->id,
+                        'ref_number'=>$payment->ref_number,
+                        'transaction_type'=>debit,
+                        'amount'=>$payment->amount,
+                    ]);
+                    $payment->house_number = $input['unit_id'];
+                    $payment->tenant_id = $mf->id;
+                    $payment->client_id = $mf->client_id;
+                    $payment->status = true;
+                    $payment->save();
+                });
+            }
+            SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
+
+        }
+
+//        SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
         return ['C2BPaymentConfirmationResult'=>'success'];
     }
 
@@ -100,16 +161,6 @@ class MpesaPaymentController extends Controller
     }
 
     public function registerUrls(){
-//        $this->generateToken();
-//        $mpesa = new MpesaApi();
-//        $api = 'c2b_register_url';
-//        $parameters = array(
-//            'ValidationURL' => 'https://salasa.co.ke/getPaymentValidation',
-//            'ConfirmationURL' => 'https://salasa.co.ke/getPayment',
-//            'ResponseType' => 'Cancelled',
-//            'ShortCode' => '881595',
-//        );
-//        $response = $mpesa->call($api, $this->configs, $parameters);
         $token = Mpesa::generateLiveToken();
 
         $url = 'https://api.safaricom.co.ke/mpesa/c2b/v1/registerurl';
