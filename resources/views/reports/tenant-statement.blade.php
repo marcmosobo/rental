@@ -40,6 +40,7 @@
             </div>
         </div>
     </section>
+    @if(isset($statements))
     <section class="invoice">
         <!-- title row -->
 
@@ -68,20 +69,35 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                {{--<p class="lead">T.P Vehicles Involved</p>--}}
+                <h4 class="">Tenant Statement for: {{ $tenant }}</h4>
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>Date</th>
                             <th>Bill Type</th>
-                            <th>Debit</th>
-                            <th>Debit</th>
+                            <th style="text-align: right">Credit</th>
+                            <th style="text-align: right">Debit</th>
+                            <th style="text-align: right">Running Balance</th>
                         </tr>
                     </thead>
                     <tbody>
+                    @if(count($statements))
+                        @foreach($statements as $statement)
+                            <?php  ?>
+                            <tr>
+                                <td >{{ \Carbon\Carbon::parse($statement['date'])->toFormattedDateString() }}</td>
+                                <td>{{ $statement['bill_type'] }}</td>
+                                <td style="text-align: right">{{ number_format($statement['credit'],2) }}</td>
+                                <td style="text-align: right">{{ number_format($statement['debit'],2) }}</td>
+                                <td style="text-align: right">{{ number_format($statement['debit'],2) }}</td>
+                            </tr>
+                            @endforeach
+                        @else
                         <tr>
-                            <td class="text-center" colspan="4">Select tenant</td>
+                            <td class="text-center" colspan="4">No records found</td>
                         </tr>
+                        @endif
+
                     </tbody>
                 </table>
             </div>
@@ -100,6 +116,7 @@
             </div>
         </div>
     </section>
+    @endif
     <!-- /.content -->
     <div class="clearfix"></div>
 @endsection

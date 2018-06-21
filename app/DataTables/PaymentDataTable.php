@@ -58,13 +58,13 @@ class PaymentDataTable extends DataTable
             ->minifiedAjax()
 //            ->addAction(['width' => '80px'])
             ->parameters([
-//                'dom'     => 'Bfrtip',
+                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
                 'buttons' => [
-                    'create',
+//                    'create',
                     'export',
-                    'print',
-                    'reset',
+//                    'print',
+//                    'reset',
                     'reload',
                 ],
             ]);

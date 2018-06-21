@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillDetail;
 use App\Models\Claim;
 use App\Models\CustomerAccount;
 use App\Models\Lease;
@@ -10,6 +11,7 @@ use App\Models\Payment;
 use App\Models\PolicyDetail;
 use App\Models\Property;
 use App\Models\PropertyUnit;
+use App\Models\ServiceOption;
 use App\Models\Tenant;
 use App\Models\UnitServiceBill;
 use Carbon\Carbon;
@@ -104,13 +106,47 @@ class ReportController extends Controller
     }
 
     public function getTenantStatement(Request $request){
-        $statement = CustomerAccount::query()
+        $statements = CustomerAccount::query()
             ->where('tenant_id',$request->tenant)
-
+            ->orderByDesc('id')
             ->get();
-        print_r($statement->toArray());die;
+//        print_r($statement->toArray());die;
+        $tenantStatements =[];
+        if(count($statements)){
+            foreach ($statements as $statement){
+//                $trans =[
+//                    'date'=>$statement->created_at,
+//                    ''
+//                ];
+                if(is_null($statement->bill_id)){
+                    $trans =[
+                        'date'=>$statement->created_at,
+                        'bill_type'=>'Payment',
+                        'debit'=>$statement->amount,
+                        'credit'=> 0
+                    ];
+                    $tenantStatements[]= $trans;
+                }else{
+                    $billDetails = BillDetail::where('bill_id',$statement->bill_id)->get();
+                    if(count($billDetails)){
+                        foreach ($billDetails as $billDetail){
+                            $trans =[
+                                'date'=>$billDetail->created_at,
+                                'bill_type'=>ServiceOption::find($billDetail->service_bill_id)->name,
+                                'debit'=> 0,
+                                'credit'=>$billDetail->amount,
+                            ];
+                            $tenantStatements[]= $trans;
+                        }
+                    }
+                }
+
+            }
+        }
         return view('reports.tenant-statement',[
-            'tenants'=>Masterfile::where('b_role',\tenant)->get()
+            'tenants'=>Masterfile::where('b_role',\tenant)->get(),
+            'statements'=>collect($tenantStatements),
+            'tenant_name'=>Masterfile::find($request->tenant)->full_name
         ]);
     }
 }
