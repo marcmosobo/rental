@@ -81,10 +81,7 @@ class PropertyUnitController extends AppBaseController
             'service_bills'=>'required'
         ]);
         $propery = Property::find($request->property_id);
-//        $request->unit_number = $propery->code.'-'.$request->unit_number;
         $input = $request->all();
-//        print_r($input);die;
-//        var_dump($request->unit_number);die;
         $this->validate($request,[
             'unit_number'=>'unique:property_units,unit_number'
         ]);
@@ -97,8 +94,9 @@ class PropertyUnitController extends AppBaseController
         }
 
         DB::transaction(function()use($input){
+            $propertyUnit = $this->propertyUnitRepository->create($input);
             if(count($input['service_bills'])){
-                $propertyUnit = $this->propertyUnitRepository->create($input);
+
 
                 foreach ($input['service_bills'] as $bill){
                     if(isset($bill['service_bill_id']) && !empty($bill['service_bill_id'])){

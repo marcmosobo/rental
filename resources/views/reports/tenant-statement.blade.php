@@ -69,7 +69,7 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <h4 class="">Tenant Statement for: {{ $tenant }}</h4>
+                <h4 class="">Tenant Statement for: <strong>{{ $tenant_name }}</strong></h4>
                 <table class="table table-striped">
                     <thead>
                         <tr>
