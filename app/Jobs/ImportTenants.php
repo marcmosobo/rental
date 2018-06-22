@@ -21,10 +21,12 @@ class ImportTenants implements ShouldQueue
      */
     private $_record;
     private  $p_number;
-    public function __construct($record,$p_number)
+    private $b_role;
+    public function __construct($record,$p_number,$b_role)
     {
         $this->_record = $record;
         $this->p_number = $p_number;
+        $this->b_role = $b_role;
     }
 
     /**
@@ -41,9 +43,9 @@ class ImportTenants implements ShouldQueue
             'full_name'=>$this->_record['name'],
             'national_id'=>$this->_record['national_id'],
             'phone_number'=>$this->p_number,
-            'b_role'=>tenant,
+            'b_role'=>$this->b_role,
             'created_by'=>1,
-            'client_id'=>1,
+            'client_id'=>2,
             'gender'=>'Male'
         ]);
     }

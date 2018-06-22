@@ -202,31 +202,26 @@ class LandlordController extends AppBaseController
 
 
         if($request->type == 'landlords'){
-//            ImportTenants::dispatch($records);
-            foreach ($records as $record){
-                if(is_null(Masterfile::where('full_name',$record['name'])->first())){
-                    $phone_number ='';
-                    if(!empty($record['phone_number'])){
-//                        var_dump($record['phone_number']);die;
-                        $phone_number = explode('/',$record['phone_number'])[0];
-
-                        if($phone_number[0] ==='O'){
-                            $phone_number = '0'.ltrim($phone_number,'O');
-                        }else{
-                            $phone_number = '0'.$phone_number;
-                        }
-                    }
-//                    DB::transaction(function()use ($record,$phone_number){
-                        ImportTenants::dispatch($record,$phone_number);
-//                    });
-
-
-                }
-            }
-
+            $b_role =landlord;
         }else{
-            //import tenants
+            $b_role = tenant;
+        }
 
+        foreach ($records as $record){
+            if(is_null(Masterfile::where('full_name',$record['name'])->first())){
+                $phone_number ='';
+                if(!empty($record['phone_number'])){
+//                        var_dump($record['phone_number']);die;
+                    $phone_number = explode('/',$record['phone_number'])[0];
+
+                    if($phone_number[0] ==='O'){
+                        $phone_number = '0'.ltrim($phone_number,'O');
+                    }else{
+                        $phone_number = '0'.$phone_number;
+                    }
+                }
+                ImportTenants::dispatch($record,$phone_number,$b_role);
+            }
         }
     }
 }
