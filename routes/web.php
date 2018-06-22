@@ -129,3 +129,6 @@ Route::post('getTenantStatement','ReportController@getTenantStatement');
 Route::get('import','LandlordController@import');
 Route::post('importMasterfiles','LandlordController@importMasterfiles');
 
+
+
+Route::resource('customerMessages', 'CustomerMessageController');

@@ -10,6 +10,7 @@ use App\Jobs\SendSms;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
+use App\Models\EventMessage;
 use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\Property;
@@ -114,7 +115,20 @@ class LeaseController extends AppBaseController
         });
         $mf = Masterfile::find($input['tenant_id']);
         $unit = PropertyUnit::find($input['unit_id']);
-        SendSms::dispatch("Dear ".explode(' ',$mf->full_name)[0].', you have been assigned house number '.$unit->unit_number.'. Use paybill 196094 to pay your rent',$mf->phone_number);
+
+        $message = EventMessage::where('code',lease_creation)->first();
+        if(!is_null($message)){
+            $mess = str_replace([
+                '@name',
+                '@house_number',
+            ], [
+                explode(' ',$mf->full_name)[0],
+                $unit->unit_number
+            ], $message);
+
+            SendSms::dispatch($mess,$mf->phone_number);
+
+        }
 
 
         Flash::success('Lease saved successfully.');

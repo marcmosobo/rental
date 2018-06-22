@@ -63,7 +63,7 @@ class MpesaPaymentController extends Controller
             $lease = Lease::where('unit_id',$propertyUnit->id)
                 ->where('status',true)->first();
             if(is_null($lease)){
-                $lease = Lease::where('unit_id',$propertyUnit->id)->first();
+                $lease = Lease::where('unit_id',$propertyUnit->id)->orderByDesc('id')->first();
             }
 
             //get tenant
@@ -89,42 +89,47 @@ class MpesaPaymentController extends Controller
                 $payment->client_id = $input['client_id'];
                 $payment->save();
             });
+            //send sms
+
+
+
             SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
 
-        }else{
-            //try with phone number
-            $mf = Masterfile::where('phone_number',$p_number)->first();
-            if(!is_null($mf)){
-                $input['lease_id'] = null;
-                $input['unit_id'] =null;
-                $lease = Lease::where('tenant_id',$mf->id)->where('status',true)->first();
-                if(is_null($lease)){
-                    $lease = Lease::where('tenant_id',$mf->id)->first();
-                }
-
-                if(!is_null($lease)){
-                    $input['lease_id'] = $lease->id;
-                    $input['unit_id'] = $lease->unit_id;
-                }
-                DB::transaction(function ()use($input,$mf,$payment){
-                    $acc = CustomerAccount::create([
-                        'tenant_id'=>$mf->id,
-                        'lease_id'=>$input['lease_id'],
-                        'unit_id'=>$input['unit_id'],
-                        'payment_id'=> $payment->id,
-                        'ref_number'=>$payment->ref_number,
-                        'transaction_type'=>debit,
-                        'amount'=>$payment->amount,
-                    ]);
-                    $payment->house_number = $input['unit_id'];
-                    $payment->tenant_id = $mf->id;
-                    $payment->client_id = $mf->client_id;
-                    $payment->status = true;
-                    $payment->save();
-                });
-            }
-            SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
         }
+//        else{
+//            //try with phone number
+//            $mf = Masterfile::where('phone_number',$p_number)->first();
+//            if(!is_null($mf)){
+//                $input['lease_id'] = null;
+//                $input['unit_id'] =null;
+//                $lease = Lease::where('tenant_id',$mf->id)->where('status',true)->first();
+//                if(is_null($lease)){
+//                    $lease = Lease::where('tenant_id',$mf->id)->first();
+//                }
+//
+//                if(!is_null($lease)){
+//                    $input['lease_id'] = $lease->id;
+//                    $input['unit_id'] = $lease->unit_id;
+//                }
+//                DB::transaction(function ()use($input,$mf,$payment){
+//                    $acc = CustomerAccount::create([
+//                        'tenant_id'=>$mf->id,
+//                        'lease_id'=>$input['lease_id'],
+//                        'unit_id'=>$input['unit_id'],
+//                        'payment_id'=> $payment->id,
+//                        'ref_number'=>$payment->ref_number,
+//                        'transaction_type'=>debit,
+//                        'amount'=>$payment->amount,
+//                    ]);
+//                    $payment->house_number = $input['unit_id'];
+//                    $payment->tenant_id = $mf->id;
+//                    $payment->client_id = $mf->client_id;
+//                    $payment->status = true;
+//                    $payment->save();
+//                });
+//            }
+//            SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
+//        }
 
 //        SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
         return ['C2BPaymentConfirmationResult'=>'success'];
