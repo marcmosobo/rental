@@ -86,7 +86,7 @@ class PropertyUnitController extends AppBaseController
             'unit_number'=>'unique:property_units,unit_number'
         ]);
 
-        $input['unit_number'] = $propery->code.$request->unit_number;
+        $input['unit_number'] = strtoupper($propery->code.$request->unit_number);
 
         if(!is_null(PropertyUnit::where('unit_number',$input['unit_number'])->first())){
             Flash::error('House number ('.$input['unit_number'].') already exist.');
