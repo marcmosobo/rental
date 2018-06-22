@@ -44,14 +44,14 @@ class TenantDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '80px'])
             ->parameters([
-//                'dom'     => 'Bfrtip',
+                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
                 'buttons' => [
-                    'create',
+//                    'create',
                     'export',
-                    'print',
-                    'reset',
-                    'reload',
+//                    'print',
+//                    'reset',
+//                    'reload',
                 ],
             ]);
     }
@@ -82,6 +82,6 @@ class TenantDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'tenantsdatatable_' . time();
+        return 'tenants_' . time();
     }
 }

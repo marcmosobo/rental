@@ -7,7 +7,7 @@
 <!-- National Id Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('national_id', 'National Id:') !!}
-    {!! Form::text('national_id', null, ['class' => 'form-control','required']) !!}
+    {!! Form::text('national_id', null, ['class' => 'form-control',]) !!}
 </div>
 
 

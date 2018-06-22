@@ -44,14 +44,14 @@ class LandlordDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '80px'])
             ->parameters([
-//                'dom'     => 'Bfrtip',
+                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
                 'buttons' => [
-                    'create',
+//                    'create',
                     'export',
-                    'print',
-                    'reset',
-                    'reload',
+//                    'print',
+//                    'reset',
+//                    'reload',
                 ],
             ]);
     }
@@ -84,6 +84,6 @@ class LandlordDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'landlordsdatatable_' . time();
+        return 'landlords_' . time();
     }
 }
