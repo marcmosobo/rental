@@ -117,28 +117,31 @@ class LeaseController extends AppBaseController
         $mf = Masterfile::find($input['tenant_id']);
         $unit = PropertyUnit::find($input['unit_id']);
 
-        $message = EventMessage::where('code',lease_creation)->first();
-        if(!is_null($message)){
-            $mess = str_replace([
-                '@name',
-                '@house_number',
-            ], [
-                explode(' ',$mf->full_name)[0],
-                $unit->unit_number
-            ], $message);
+        if(!is_null($mf->phone_number) && !empty($mf->phone_number)){
+            $message = EventMessage::where('code',lease_creation)->first();
+            if(!is_null($message)){
+                $mess = str_replace([
+                    '@name',
+                    '@house_number',
+                ], [
+                    explode(' ',$mf->full_name)[0],
+                    $unit->unit_number
+                ], $message->message);
 
-            SendSms::dispatch($mess,$mf->phone_number);
-            //saves sms
-            CustomerMessage::create([
-                'phone_number'=>$mf->phone_number,
-                'name'=>$mf->full_name,
-                'user_id'=>$mf->id,
-                'tenant_id'=> $mf->client_id,
-                'message_type'=>'SMS',
-                'message'=>$mess,
-                'sent'=>true
-            ]);
+                SendSms::dispatch($mess,$mf->phone_number);
+                //saves sms
+                CustomerMessage::create([
+                    'phone_number'=>$mf->phone_number,
+                    'name'=>$mf->full_name,
+                    'user_id'=>$mf->id,
+                    'tenant_id'=> $mf->client_id,
+                    'message_type'=>'SMS',
+                    'message'=>$mess,
+                    'sent'=>true
+                ]);
+            }
         }
+
 
 
         Flash::success('Lease saved successfully.');
