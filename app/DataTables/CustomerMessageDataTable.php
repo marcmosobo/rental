@@ -29,7 +29,7 @@ class CustomerMessageDataTable extends DataTable
      */
     public function query(CustomerMessage $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderByDesc('id');
     }
 
     /**
@@ -42,10 +42,10 @@ class CustomerMessageDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['width' => '80px'])
+//            ->addAction(['width' => '80px'])
             ->parameters([
-                'dom'     => 'Bfrtip',
-                'order'   => [[0, 'desc']],
+//                'dom'     => 'Bfrtip',
+//                'order'   => [[0, 'desc']],
                 'buttons' => [
                     'create',
                     'export',
@@ -64,17 +64,17 @@ class CustomerMessageDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'phone_number',
             'name',
-            'user_id',
-            'tenant_id',
-            'schedule_id',
-            'days',
-            'loan_id',
-            'message_type',
-            'sent',
+            'phone_number',
             'message',
-            'execution_time'
+//            'user_id',
+//            'tenant_id',
+//            'schedule_id',
+//            'days',
+//            'loan_id',
+//            'message_type',
+//            'sent',
+//            'execution_time'
         ];
     }
 

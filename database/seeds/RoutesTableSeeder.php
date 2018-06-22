@@ -66,6 +66,22 @@ class RoutesTableSeeder extends Seeder
         ####### crm
 
         $parent = Route::create([
+            'route_name'=> 'Broadcasts',
+            'icon'=> 'fa-volume-up',
+            'sequence'=>3,
+        ]);
+
+        $child = Route::create([
+            'route_name'=>'Customer Messages',
+            'parent_route' => $parent->id,
+            'url'=>'customerMessages'
+        ]);
+        $child->roles()->attach($admin);
+
+
+        ####### crm
+
+        $parent = Route::create([
             'route_name'=> 'CRM',
             'icon'=> 'fa-users',
             'sequence'=>3,

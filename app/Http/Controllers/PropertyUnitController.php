@@ -96,8 +96,6 @@ class PropertyUnitController extends AppBaseController
         DB::transaction(function()use($input){
             $propertyUnit = $this->propertyUnitRepository->create($input);
             if(count($input['service_bills'])){
-
-
                 foreach ($input['service_bills'] as $bill){
                     if(isset($bill['service_bill_id']) && !empty($bill['service_bill_id'])){
                         if(!empty($bill['amount'])){

@@ -10,6 +10,7 @@ use App\Jobs\SendSms;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
+use App\Models\CustomerMessage;
 use App\Models\EventMessage;
 use App\Models\Lease;
 use App\Models\Masterfile;
@@ -127,7 +128,16 @@ class LeaseController extends AppBaseController
             ], $message);
 
             SendSms::dispatch($mess,$mf->phone_number);
-
+            //saves sms
+            CustomerMessage::create([
+                'phone_number'=>$mf->phone_number,
+                'name'=>$mf->full_name,
+                'user_id'=>$mf->id,
+                'tenant_id'=> $mf->client_id,
+                'message_type'=>'SMS',
+                'message'=>$mess,
+                'sent'=>true
+            ]);
         }
 
 
