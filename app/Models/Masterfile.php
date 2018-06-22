@@ -43,7 +43,8 @@ class Masterfile extends Model
         'role_id',
         'address',
         'national_id',
-        'created_by'
+        'created_by',
+        'client_id'
     ];
 
     /**

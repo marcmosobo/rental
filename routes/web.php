@@ -125,3 +125,7 @@ Route::get('propertyStatement','ReportController@propertyStatement');
 Route::post('getPropertyStatement','ReportController@getPropertyStatement');
 Route::post('getTenantStatement','ReportController@getTenantStatement');
 
+//imports
+Route::get('import','LandlordController@import');
+Route::post('importMasterfiles','LandlordController@importMasterfiles');
+

@@ -6,13 +6,19 @@ use App\DataTables\LandlordDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateLandlordRequest;
 use App\Http\Requests\UpdateLandlordRequest;
+use App\Jobs\ImportTenants;
+use App\Models\Masterfile;
 use App\Models\Role;
 use App\Models\User;
 use App\Repositories\LandlordRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
+use Illuminate\Queue\Jobs\Job;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use League\Csv\Reader;
+use League\Csv\Statement;
 use Response;
 
 class LandlordController extends AppBaseController
@@ -171,5 +177,56 @@ class LandlordController extends AppBaseController
         Flash::success('Landlord deleted successfully.');
 
         return redirect(route('landlords.index'));
+    }
+
+    public function import(){
+        return view('landlords.uploads');
+    }
+
+    public function importMasterfiles(Request $request){
+
+//        var_dump($request->file('import_file')->path());die;
+        $stream = fopen($request->file('import_file')->path(), 'r');
+        $csv = Reader::createFromStream($stream);
+        $csv->setDelimiter(',');
+        $csv->setHeaderOffset(0);
+
+        $stmt = (new Statement());
+//            ->offset(10)
+//            ->limit(25);
+
+        //query your records from the document
+        $records = $stmt->process($csv);
+//        echo count($records);die;
+
+
+
+        if($request->type == 'landlords'){
+//            ImportTenants::dispatch($records);
+            foreach ($records as $record){
+                if(is_null(Masterfile::where('full_name',$record['name'])->first())){
+                    $phone_number ='';
+                    if(!empty($record['phone_number'])){
+//                        var_dump($record['phone_number']);die;
+                        $phone_number = explode('/',$record['phone_number'])[0];
+
+                        if($phone_number[0] ==='O'){
+                            $phone_number = '0'.ltrim($phone_number,'O');
+                        }else{
+                            $phone_number = '0'.$phone_number;
+                        }
+                    }
+//                    DB::transaction(function()use ($record,$phone_number){
+                        ImportTenants::dispatch($record,$phone_number);
+//                    });
+
+
+                }
+            }
+
+        }else{
+            //import tenants
+
+        }
     }
 }

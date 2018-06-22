@@ -16,7 +16,7 @@ class CreateMasterfilesTable extends Migration
         Schema::create('masterfiles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('full_name');
-            $table->string('national_id',150)->unique()->nullable();
+            $table->string('national_id',150)->nullable();
             $table->string('gender');
             $table->string('phone_number');
             $table->string('email')->unique()->nullable();

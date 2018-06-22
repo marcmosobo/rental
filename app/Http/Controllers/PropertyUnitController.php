@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Requests\CreatePropertyUnitRequest;
 use App\Http\Requests\UpdatePropertyUnitRequest;
 use App\Models\Property;
+use App\Models\PropertyUnit;
 use App\Models\ServiceOption;
 use App\Models\UnitServiceBill;
 use App\Repositories\PropertyUnitRepository;
@@ -88,7 +89,12 @@ class PropertyUnitController extends AppBaseController
             'unit_number'=>'unique:property_units,unit_number'
         ]);
 
-        $input['unit_number'] = $propery->code.'-'.$request->unit_number;
+        $input['unit_number'] = $propery->code.$request->unit_number;
+
+        if(!is_null(PropertyUnit::where('unit_number',$input['unit_number'])->first())){
+            Flash::error('House number ('.$input['unit_number'].') already exist.');
+            return redirect()->back();
+        }
 
         DB::transaction(function()use($input){
             if(count($input['service_bills'])){
