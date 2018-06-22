@@ -44,7 +44,8 @@ class Masterfile extends Model
         'address',
         'national_id',
         'created_by',
-        'client_id'
+        'client_id',
+        'b_role'
     ];
 
     /**
