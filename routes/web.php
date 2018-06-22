@@ -129,6 +129,9 @@ Route::post('getTenantStatement','ReportController@getTenantStatement');
 Route::get('import','LandlordController@import');
 Route::post('importMasterfiles','LandlordController@importMasterfiles');
 
+//infobip
+Route::get('infobipBalance','InfobipController@getBalance');
+
 
 
 Route::resource('customerMessages', 'CustomerMessageController');

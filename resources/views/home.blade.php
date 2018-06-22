@@ -9,7 +9,7 @@
             <!-- small box -->
             {{--<div class="small-box bg-aqua">--}}
                 {{--<div class="inner">--}}
-                    {{--<h3>{{ $employeesOnGround }}</h3>--}}
+                    {{--<h3></h3>--}}
 
                     {{--<p>Employees on ground</p>--}}
                 {{--</div>--}}
@@ -20,20 +20,20 @@
             {{--</div>--}}
         </div>
         <!-- ./col -->
-        {{--<div class="col-lg-3 col-xs-6">--}}
-            {{--<!-- small box -->--}}
-            {{--<div class="small-box bg-green">--}}
-                {{--<div class="inner">--}}
-                    {{--<h3>53<sup style="font-size: 20px">%</sup></h3>--}}
+        <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-green">
+                <div class="inner">
+                    <p>SMS Credits remaining</p>
+                    <h3><span id="bal-span">...</span><sup style="font-size: 20px"> Ksh</sup></h3>
 
-                    {{--<p>Bounce Rate</p>--}}
-                {{--</div>--}}
-                {{--<div class="icon">--}}
-                    {{--<i class="ion ion-stats-bars"></i>--}}
-                {{--</div>--}}
+                </div>
+                <div class="icon">
+                    <i class="ion ion-stats-bars"></i>
+                </div>
                 {{--<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>--}}
-            {{--</div>--}}
-        {{--</div>--}}
+            </div>
+        </div>
         {{--<!-- ./col -->--}}
         {{--<div class="col-lg-3 col-xs-6">--}}
             {{--<!-- small box -->--}}
@@ -68,3 +68,21 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                url: '{{ url('infobipBalance') }}',
+                type: 'GET',
+                beforeSend: function(){
+                    // $("#bal-span").html('...')
+                },
+                dataType: 'json',
+                success: function(data){
+                    $("#bal-span").html(data)
+                }
+            });
+        });
+    </script>
+    @endpush
