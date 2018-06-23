@@ -12,6 +12,6 @@ class InfobipController extends Controller
         $client = new GetAccountBalance(new BasicAuthConfiguration('samuel_nguro','samuel_nguro'));
         $response = $client->execute();
 
-        return response()->json($response->getBalance());
+        return response()->json(number_format($response->getBalance(),2));
     }
 }

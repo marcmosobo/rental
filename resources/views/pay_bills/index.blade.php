@@ -415,6 +415,15 @@
             //Restore orignal HTML
             // document.body.innerHTML = oldPage;
         }
+
+        $('#payment-mode').on('change',function(){
+            let val = $(this).val();
+            if(val === 'Bank slip'){
+                $('#bank-div').show();
+            }else{
+                $('#bank-div').hide();
+            }
+        })
     </script>
     @endpush
 

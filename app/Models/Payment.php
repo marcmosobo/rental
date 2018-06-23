@@ -62,6 +62,7 @@ class Payment extends Model
         'received_on',
         'client_id',
         'created_by',
+        'bank_id',
         'status'
     ];
 
@@ -83,6 +84,7 @@ class Payment extends Model
         'middleName' => 'string',
         'LastName' => 'string',
         'client_id' => 'integer',
+        'bank_id' => 'integer',
         'created_by' => 'integer',
         'status'=>'boolean'
     ];

@@ -6,6 +6,7 @@ use App\DataTables\PayBillDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreatePayBillRequest;
 use App\Http\Requests\UpdatePayBillRequest;
+use App\Models\Bank;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
@@ -41,7 +42,8 @@ class PayBillController extends AppBaseController
     public function index(PayBillDataTable $payBillDataTable)
     {
         return $payBillDataTable->render('pay_bills.index',[
-            'tenants'=>Tenant::where('b_role',\tenant)->get()
+            'tenants'=>Tenant::where('b_role',\tenant)->get(),
+            'banks'=>Bank::all()
         ]);
     }
 
@@ -286,7 +288,8 @@ class PayBillController extends AppBaseController
         return view('pay_bills.index',[
             'tenants'=>Tenant::where('b_role',\tenant)->get(),
             'bills'=>$bills,
-            'tenant_id' => $request->tenant
+            'tenant_id' => $request->tenant,
+            'banks'=>Bank::all()
         ]);
     }
 }

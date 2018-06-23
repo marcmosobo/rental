@@ -19,6 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->string('house_number')->nullable()->index();
             $table->bigInteger('tenant_id')->index()->nullable();
             $table->string('ref_number')->nullable();
+            $table->integer('bank_id')->nullable();
             $table->double('amount');
             $table->string('paybill')->nullable();
             $table->string('phone_number')->nullable();

@@ -1,10 +1,22 @@
 <!-- Payment Mode Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('payment_mode', 'Payment Mode:') !!}
-    <select name="payment_mode" class="form-control select2">
+    <select name="payment_mode" id="payment-mode" class="form-control select2">
         <option value="CASH">Cash</option>
         <option value="MPESA">Mpesa</option>
         <option value="Bank slip">Bank Slip</option>
+    </select>
+</div>
+
+<div class="form-group col-sm-12" id="bank-div" style="display: none;">
+    {!! Form::label('bank_id', 'Bank:') !!}
+    <select name="bank_id" class="form-control select2">
+        <option value="">Select Bank</option>
+       @if(count($banks))
+           @foreach($banks as $bank)
+               <option value="{{ $bank->id }}">{{ $bank->name.'-'.$bank->account_number  }}</option>
+               @endforeach
+           @endif
     </select>
 </div>
 
