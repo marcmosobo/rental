@@ -137,3 +137,5 @@ Route::get('infobipBalance','InfobipController@getBalance');
 Route::resource('customerMessages', 'CustomerMessageController');
 
 Route::resource('banks', 'BankController');
+
+Route::resource('landlordSettlements', 'LandlordSettlementController');

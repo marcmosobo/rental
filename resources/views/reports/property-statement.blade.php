@@ -84,7 +84,7 @@
             <div class="col-md-12 table-responsive">
                 <h4 class="">Property statement for: {{ $from }} - {{ $to }}</h4>
                 <p class="">Property: {{ $prop }}</p>
-                <p class="">Landlord/lady: {{ $landlord }}</p>
+                <p class="">Landlord/lady: {{ $landlord->full_name }}</p>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -129,8 +129,38 @@
                         @endif
                     </tbody>
                 </table>
+
             </div>
             <!-- /.col -->
+        </div>
+        <div class="row">
+            {{--<div class="col-md-6"><hr></div>--}}
+            <div class="col-md-12" >
+                <p class="lead">Summary</p>
+                <div class="table-responsive">
+                    @if(count($pStatements))
+                    <table class="table" style="width: 50%" >
+                    <tr>
+                        <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($pStatements->sum('amt_paid'),2) }}</td>
+                    </tr>
+                    <tr>
+                        <th style="width:50%">Commission Percentage</th><td>{{ $commission }} %</td>
+                    </tr>
+                    <tr>
+                        <th style="width:50%">Less Commission Charged</th><td>{{ number_format($pStatements->sum('amt_paid')* $commission/100,2) }}</td>
+                    </tr>
+                        <tfoot>
+                        <tr>
+                            <th>Total Payable</th>
+                            <th>{{ number_format($pStatements->sum('amt_paid')* (1-($commission/100)),2) }}</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                        @endif
+                </div>
+
+                <button class="btn btn-primary no-print" data-toggle="modal" href="#create-modal">Record settlement</button>
+            </div>
         </div>
         <!-- /.row -->
 
@@ -141,36 +171,81 @@
         <div class="row no-print">
             <div class="col-xs-12">
 
-                <a onclick="window.print()" target="_blank" class="btn btn-default pull-right"><i class="fa fa-print"></i> Print</a>
+                <a onclick="window.print()" target="_blank" class="btn btn-success pull-right"><i class="fa fa-print"></i> Print</a>
             </div>
         </div>
     </section>
     @endif
     <!-- /.content -->
     <div class="clearfix"></div>
+
+    <div class="modal fade" id="create-modal" role="dialog">
+        {!! Form::open(['route' => 'landlordSettlements.store']) !!}
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Record Landlord Settlement</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Landlord Id Field -->
+                        <div class="form-group col-sm-12">
+                            {!! Form::label('landlord_id', 'Landlord:') !!}
+                            <select name="landlord_id" class="form-control select2" required>
+                                <option value="{{ $landlord->id }}">{{ $landlord->full_name }}</option>
+                            </select>
+                        </div>
+
+                        <!-- Date Field -->
+                        <div class="form-group col-sm-12">
+                            {!! Form::label('date', 'Date:') !!}
+                            {!! Form::date('date', null, ['class' => 'form-control','required']) !!}
+                        </div>
+
+                        <!-- Amount Collected Field -->
+                        <div class="form-group col-sm-12">
+                            {!! Form::label('amount_collected', 'Amount Collected:') !!}
+                            {!! Form::number('amount_collected', $pStatements->sum('amt_paid'), ['class' => 'form-control']) !!}
+                        </div>
+
+                        <!-- Commission Percentage Field -->
+                        <div class="form-group col-sm-12">
+                            {!! Form::label('commission_percentage', 'Commission Percentage:') !!}
+                            {!! Form::number('commission_percentage', $commission, ['class' => 'form-control']) !!}
+                        </div>
+
+                        <!-- Commission Amount Field -->
+                        <div class="form-group col-sm-12">
+                            {!! Form::label('commission_amount', 'Commission Amount:') !!}
+                            {!! Form::number('commission_amount', $pStatements->sum('amt_paid')* $commission/100, ['class' => 'form-control']) !!}
+                        </div>
+
+                        <!-- Overdraft Field -->
+                        <div class="form-group col-sm-12">
+                            {!! Form::label('overdraft', 'Overdraft:') !!}
+                            {!! Form::number('overdraft', 0, ['class' => 'form-control']) !!}
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+        {!! Form::close() !!}
+    </div>
 @endsection
 
 @push('js')
     <script>
-        {{--$("#plot-form").on('submit',function(e){--}}
-            {{--e.preventDefault();--}}
-            {{--var data = {--}}
-                {{--'property_id':$('#property_id').val(),--}}
-                {{--"date-from": $('#date-from').val(),--}}
-                {{--'date-to': $('#date-to').val()--}}
-            {{--};--}}
-            {{--// console.log(data);--}}
-
-            {{--$.ajax({--}}
-                {{--'url': '{{ url('getPropertyStatement') }}',--}}
-                {{--'type': 'POST',--}}
-                {{--'dataType': 'json',--}}
-                {{--'data':data,--}}
-                {{--success: function(data){--}}
-
-                {{--}--}}
-            {{--});--}}
-        {{--})--}}
         $('a#propertyStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
 
     </script>

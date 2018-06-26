@@ -55,14 +55,14 @@ class ReportController extends Controller
 
                    //total due
                     $totalDue= CustomerAccount::query()
-                        ->where('tenant_id',$lease->tenant_id)
+                        ->where('unit_id',$lease->unit_id)
                         ->where('transaction_type',credit)
                         ->whereBetween('created_at',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
                         ->sum('amount') + $aBF;
 
                     //amount paid
                     $amountPaid = $arrears = CustomerAccount::query()
-                            ->where('tenant_id',$lease->tenant_id)
+                            ->where('unit_id',$lease->unit_id)
                             ->where('transaction_type',debit)
                             ->whereBetween('created_at',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
                             ->sum('amount');
@@ -101,7 +101,8 @@ class ReportController extends Controller
             'from'=>Carbon::parse($request->date_from)->toFormattedDateString(),
             'to'=>Carbon::parse($request->date_to)->toFormattedDateString(),
             'prop'=>$property->name,
-            'landlord'=>Masterfile::find($property->landlord_id)->full_name,
+            'landlord'=>Masterfile::find($property->landlord_id),
+            'commission'=>$property->commission
         ]);
     }
 

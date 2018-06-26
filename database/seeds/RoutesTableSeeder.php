@@ -195,6 +195,13 @@ class RoutesTableSeeder extends Seeder
         ]);
         $child->roles()->attach($admin);
 
+        $child = Route::create([
+            'route_name'=>'Landlord Settlements',
+            'parent_route' => $parent->id,
+            'url'=>'landlordSettlements'
+        ]);
+        $child->roles()->attach($admin);
+
         #### user management
         $user_mngt = new Route();
         $user_mngt->route_name = 'User Manager';
