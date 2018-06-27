@@ -24,7 +24,7 @@ class InfobipController extends Controller
 
         $result =$input['results'][0];
         $message = CustomerMessage::find($result['callbackData']);
-        $message->status = ['status'][0]['name'];
+        $message->status = $result['status']['name'];
         $message->smsCount = ['smsCount'];
         $message->message_id = ['messageId'];
         $message->save();
