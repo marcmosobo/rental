@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use infobip\api\client\GetAccountBalance;
@@ -18,7 +19,16 @@ class InfobipController extends Controller
 
     public function infoBipCallback(Request $request){
         $input = $request->all();
-        Log::info($input['results']);
+//        Log::info($input['results']);
+
+
+        $result =$input['results'][0];
+        $message = CustomerMessage::find($result['callbackData']);
+        $message->status = ['status']['name'];
+        $message->smsCount = ['smsCount'];
+        $message->message_id = ['messageId'];
+        $message->save();
+
 
     }
 }
