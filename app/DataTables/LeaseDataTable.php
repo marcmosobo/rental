@@ -64,6 +64,7 @@ class LeaseDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '80px'])
             ->parameters([
+                'scrollX'=>true,
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
                 'buttons' => [

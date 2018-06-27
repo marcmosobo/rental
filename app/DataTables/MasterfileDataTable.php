@@ -45,6 +45,7 @@ class MasterfileDataTable extends DataTable
             ->addAction(['width' => '80px'])
             ->parameters([
                 'dom'     => 'Bfrtip',
+                'scrollX'=>true,
                 'order'   => [[0, 'desc']],
                 'buttons' => [
                     'create',

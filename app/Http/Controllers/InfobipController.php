@@ -19,9 +19,6 @@ class InfobipController extends Controller
 
     public function infoBipCallback(Request $request){
         $input = $request->all();
-        Log::info($input['results']);
-
-
         $result =$input['results'][0];
         $message = CustomerMessage::find($result['callbackData']);
         $message->status = $result['status']['groupName'];

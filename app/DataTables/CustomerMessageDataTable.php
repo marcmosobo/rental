@@ -56,6 +56,7 @@ class CustomerMessageDataTable extends DataTable
             ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
+                'scrollX'=>true,
                 'buttons' => [
                     'create',
                     'export',
@@ -77,7 +78,6 @@ class CustomerMessageDataTable extends DataTable
             'name',
             'phone_number',
             'message',
-            'smsCount',
             'status',
 //            'schedule_id',
 //            'days',
@@ -85,6 +85,7 @@ class CustomerMessageDataTable extends DataTable
 //            'message_type',
 //            'sent',
 //            'execution_time'
+            'smsCount',
         ];
     }
 

@@ -46,6 +46,7 @@ class BankDataTable extends DataTable
             ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
+                'scrollX'=>true,
                 'buttons' => [
                     'create',
                     'export',
