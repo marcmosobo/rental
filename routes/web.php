@@ -131,6 +131,7 @@ Route::post('importMasterfiles','LandlordController@importMasterfiles');
 
 //infobip
 Route::get('infobipBalance','InfobipController@getBalance');
+Route::post('infoBipCallback','InfobipController@infoBipCallback');
 
 
 

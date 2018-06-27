@@ -56,7 +56,7 @@ class SendSms implements ShouldQueue
         $message->setFrom("VOOMSMS");
         $message->setDestinations([$destination]);
         $message->setText($this->_message);
-//        $message->setNotifyUrl(url('infobip-callback/'.$this->message_id));
+        $message->setNotifyUrl(url('infoBipCallback'));
 
         $requestBody = new infobip\api\model\sms\mt\send\textual\SMSAdvancedTextualRequest();
         $requestBody->setMessages([$message]);

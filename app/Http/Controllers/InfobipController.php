@@ -14,4 +14,8 @@ class InfobipController extends Controller
 
         return response()->json(number_format($response->getBalance(),2));
     }
+
+    public function infoBipCallback(Request $request){
+
+    }
 }
