@@ -25,7 +25,8 @@ class CustomerMessageDataTable extends DataTable
                 }
                 return $message->status;
             })
-            ->addColumn('action', 'customer_messages.datatables_actions');
+            ->addColumn('action', 'customer_messages.datatables_actions')
+            ->rawColumns(['status']);
     }
 
     /**
