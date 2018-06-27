@@ -22,6 +22,8 @@ class CustomerMessageDataTable extends DataTable
             ->editColumn('status',function($message){
                 if($message->status == 'DELIVERED'){
                     return '<label class="label label-success">DELIVERED</label>';
+                }else if($message->status == 'PENDING'){
+                    return '<label class="label label-warning">PENDING</label>';
                 }
                 return $message->status;
             })

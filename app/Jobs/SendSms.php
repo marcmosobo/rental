@@ -70,7 +70,7 @@ class SendSms implements ShouldQueue
             'message'=>$this->_message,
 //            'message_id'=>$response->getMessages()[0]->getMessageId(),
 //            'smsCount'=>$response->getMessages()[0]->getSmsCount(),
-//            'status'=>$response->getMessages()[0]->getStatus()->getName(),
+            'status'=>'PENDING',
             'sent'=>true
         ]);
         $message->setCallbackData($Cmessage->id);
