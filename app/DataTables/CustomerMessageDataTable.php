@@ -18,7 +18,14 @@ class CustomerMessageDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'customer_messages.datatables_actions');
+        return $dataTable
+            ->editColumn('status',function($message){
+                if($message->status == 'DELIVERED'){
+                    return '<label class="label label-success">DELIVERED</label>';
+                }
+                return $message->status;
+            })
+            ->addColumn('action', 'customer_messages.datatables_actions');
     }
 
     /**
@@ -67,8 +74,8 @@ class CustomerMessageDataTable extends DataTable
             'name',
             'phone_number',
             'message',
-//            'user_id',
-//            'tenant_id',
+            'smsCount',
+            'status',
 //            'schedule_id',
 //            'days',
 //            'loan_id',
