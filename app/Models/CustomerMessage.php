@@ -51,7 +51,11 @@ class CustomerMessage extends Model
         'message_type',
         'sent',
         'message',
-        'execution_time'
+        'execution_time',
+        'message_id',
+        'smsCount',
+        'status',
+        'delivery_checked',
     ];
 
     /**
@@ -64,7 +68,11 @@ class CustomerMessage extends Model
         'name' => 'string',
         'message_type' => 'string',
         'sent' => 'boolean',
-        'message' => 'string'
+        'message' => 'string',
+        'delivery_checked' => 'boolean',
+        'status' => 'string',
+        'message_id' => 'string',
+        'smsCount' => 'integer',
     ];
 
     /**

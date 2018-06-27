@@ -23,6 +23,10 @@ class CreateCustomerMessagesTable extends Migration
             $table->bigInteger('days')->index()->nullable();
             $table->bigInteger('loan_id')->nullable();
             $table->string('message_type')->nullable();
+            $table->string('status')->nullable();
+            $table->string('message_id')->nullable();
+            $table->integer('smsCount')->nullable();
+            $table->boolean('delivery_checked')->default(false);
             $table->boolean('sent')->default(false);
             $table->text('message');
             $table->dateTime('execution_time')->nullable();

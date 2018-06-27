@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use infobip\api\client\GetAccountBalance;
 use infobip\api\configuration\BasicAuthConfiguration;
 
@@ -16,6 +17,8 @@ class InfobipController extends Controller
     }
 
     public function infoBipCallback(Request $request){
+        $input = $request->all();
+        Log::info($input['results']);
 
     }
 }

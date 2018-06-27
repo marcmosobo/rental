@@ -128,17 +128,9 @@ class LeaseController extends AppBaseController
                     $unit->unit_number
                 ], $message->message);
 
-                SendSms::dispatch($mess,$mf->phone_number);
+                SendSms::dispatch($mess,$mf->phone_number,$mf);
                 //saves sms
-                CustomerMessage::create([
-                    'phone_number'=>$mf->phone_number,
-                    'name'=>$mf->full_name,
-                    'user_id'=>$mf->id,
-                    'tenant_id'=> $mf->client_id,
-                    'message_type'=>'SMS',
-                    'message'=>$mess,
-                    'sent'=>true
-                ]);
+
             }
         }
 

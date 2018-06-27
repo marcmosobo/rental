@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 //use App\Models\Sms;
+use App\Models\CustomerMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -28,10 +29,12 @@ class SendSms implements ShouldQueue
     protected $_message;
     protected $to;
     protected $message_id;
-    public function __construct($m,$to)
+    protected $mf;
+    public function __construct($m,$to,$mf)
     {
         $this->_message = $m;
         $this->to = $to;
+        $this->mf = $mf;
     }
 
     /**
@@ -58,14 +61,28 @@ class SendSms implements ShouldQueue
         $message->setText($this->_message);
         $message->setNotifyUrl(url('infoBipCallback'));
 
+        $Cmessage = CustomerMessage::create([
+            'phone_number'=>$this->to,
+            'name'=>$this->mf->full_name,
+            'user_id'=>$this->mf->id,
+            'tenant_id'=> $this->mf->client_id,
+            'message_type'=>'SMS',
+            'message'=>$this->_message,
+//            'message_id'=>$response->getMessages()[0]->getMessageId(),
+//            'smsCount'=>$response->getMessages()[0]->getSmsCount(),
+//            'status'=>$response->getMessages()[0]->getStatus()->getName(),
+            'sent'=>true
+        ]);
+        $message->setCallbackData($Cmessage->id);
+
         $requestBody = new infobip\api\model\sms\mt\send\textual\SMSAdvancedTextualRequest();
         $requestBody->setMessages([$message]);
+
         $response = $client->execute($requestBody);
-//        Log::info($response);
+
+//        print_r($response->getMessages()[0]->getMessageId());die;
+
+
     }
 
-//    public function failed(Excep $exception)
-//    {
-////         Send user notification of failure, etc...
-//    }
 }
