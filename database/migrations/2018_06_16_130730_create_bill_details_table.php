@@ -20,6 +20,7 @@ class CreateBillDetailsTable extends Migration
             $table->integer('service_bill_id');
             $table->double('amount');
             $table->double('balance')->nullable();
+            $table->dateTime('bill_date')->nullable();
             $table->boolean('status')->default(true);
             $table->softDeletes();
             $table->timestamps();

@@ -99,7 +99,8 @@ class LeaseController extends AppBaseController
                         'service_bill_id'=> $unitBill->service_bill_id,
                         'amount'=>$unitBill->amount,
                         'balance'=>$unitBill->amount,
-                        'status'=>false
+                        'status'=>false,
+                        'bill_date'=>$input['start_date']
                     ]);
                 }
             }
@@ -111,7 +112,8 @@ class LeaseController extends AppBaseController
                 'bill_id'=>$bill->id,
                 'transaction_type'=>credit,
                 'amount'=>$unitBills->sum('amount'),
-                'balance'=>$unitBills->sum('amount')
+                'balance'=>$unitBills->sum('amount'),
+                'date'=>$input['start_date']
             ]);
         });
         $mf = Masterfile::find($input['tenant_id']);

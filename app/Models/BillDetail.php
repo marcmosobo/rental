@@ -39,7 +39,8 @@ class BillDetail extends Model
         'service_bill_id',
         'amount',
         'status',
-        'balance'
+        'balance',
+        'bill_date',
     ];
 
     /**

@@ -81,6 +81,7 @@ class MpesaPaymentController extends Controller
                     'ref_number'=>$payment->ref_number,
                     'transaction_type'=>debit,
                     'amount'=>$payment->amount,
+                    'date'=>Carbon::today()
                 ]);
 
                 $payment->status = true;

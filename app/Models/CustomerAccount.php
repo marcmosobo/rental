@@ -47,7 +47,8 @@ class CustomerAccount extends Model
         'ref_number',
         'transaction_type',
         'amount',
-        'balance'
+        'balance',
+        'date',
     ];
 
     /**
@@ -64,7 +65,8 @@ class CustomerAccount extends Model
         'ref_number' => 'string',
         'transaction_type' => 'string',
         'amount' => 'float',
-        'balance'=>'float'
+        'balance'=>'float',
+//        'date'=>'dateTime',
     ];
 
     /**

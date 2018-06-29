@@ -24,7 +24,8 @@ class CreateCustomerAccountsTable extends Migration
             $table->string('ref_number')->nullable();
             $table->string('transaction_type');
             $table->double('balance')->nullable();
-//            $table->dateTime('received_on')->nullable();
+
+            $table->dateTime('date')->nullable();
             $table->double('amount');
             $table->softDeletes();
             $table->timestamps();
