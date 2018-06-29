@@ -33,6 +33,9 @@ class MpesaPaymentController extends Controller
 
     public function getPayment(Request $request){
         $input = $request->all();
+
+        $proccessedPayments = Payment::where('ref_number',$request->TransID)->first();
+        if(is_null($proccessedPayments)){
         $input['client_id'] = null;
         $input['mf_id'] = null;
         $userName = $request->FirstName;
@@ -133,7 +136,8 @@ class MpesaPaymentController extends Controller
 //        }
 
 //        SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone);
-        return ['C2BPaymentConfirmationResult'=>'success'];
+        }
+            return ['C2BPaymentConfirmationResult'=>'success'];
     }
 
     public function getPaymentValidation(Request $request){
