@@ -178,7 +178,7 @@
     @endif
     <!-- /.content -->
     <div class="clearfix"></div>
-
+    @if(isset($pStatemants))
     <div class="modal fade" id="create-modal" role="dialog">
         {!! Form::open(['route' => 'landlordSettlements.store']) !!}
         <div class="modal-dialog">
@@ -242,6 +242,7 @@
         <!-- /.modal-dialog -->
         {!! Form::close() !!}
     </div>
+    @endif
 @endsection
 
 @push('js')
