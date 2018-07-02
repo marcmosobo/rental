@@ -6,9 +6,17 @@ use App\DataTables\PaymentDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreatePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
+use App\Models\CustomerAccount;
+use App\Models\Lease;
+use App\Models\Masterfile;
+use App\Models\Payment;
+use App\Models\PropertyUnit;
 use App\Repositories\PaymentRepository;
+use Carbon\Carbon;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class PaymentController extends AppBaseController
@@ -30,7 +38,9 @@ class PaymentController extends AppBaseController
      */
     public function index(PaymentDataTable $paymentDataTable)
     {
-        return $paymentDataTable->render('payments.index');
+        return $paymentDataTable->render('payments.index',[
+            'units'=>PropertyUnit::all()
+        ]);
     }
 
     /**
@@ -72,13 +82,7 @@ class PaymentController extends AppBaseController
     {
         $payment = $this->paymentRepository->findWithoutFail($id);
 
-        if (empty($payment)) {
-            Flash::error('Payment not found');
-
-            return redirect(route('payments.index'));
-        }
-
-        return view('payments.show')->with('payment', $payment);
+        return response()->json($payment);
     }
 
     /**
@@ -92,13 +96,13 @@ class PaymentController extends AppBaseController
     {
         $payment = $this->paymentRepository->findWithoutFail($id);
 
-        if (empty($payment)) {
-            Flash::error('Payment not found');
+//        if (empty($payment)) {
+//            Flash::error('Payment not found');
+//
+//            return redirect(route('payments.index'));
+//        }
 
-            return redirect(route('payments.index'));
-        }
-
-        return view('payments.edit')->with('payment', $payment);
+        return response()->json($payment);
     }
 
     /**
@@ -119,7 +123,10 @@ class PaymentController extends AppBaseController
             return redirect(route('payments.index'));
         }
 
-        $payment = $this->paymentRepository->update($request->all(), $id);
+        $input = $request->all();
+        $input['updated_by'] = Auth::id();
+
+        $payment = $this->paymentRepository->update($input, $id);
 
         Flash::success('Payment updated successfully.');
 
@@ -147,6 +154,57 @@ class PaymentController extends AppBaseController
 
         Flash::success('Payment deleted successfully.');
 
+        return redirect(route('payments.index'));
+    }
+
+    public function processPayment($id){
+        $payment = Payment::find($id);
+        if(!is_null($payment->house_number )) {
+            $propertyUnit = PropertyUnit::where('unit_number', $payment->house_number)->first();
+//            print_r($propertyUnit);die;
+            if (!is_null($propertyUnit)) {
+                //get lease
+                $lease = Lease::where('unit_id', $propertyUnit->id)
+                    ->where('status', true)->first();
+                if (is_null($lease)) {
+                    $lease = Lease::where('unit_id', $propertyUnit->id)->orderByDesc('id')->first();
+                }
+//
+                if(!is_null($lease)) {
+                    //get tenant
+                    $tenant = Masterfile::find($lease->tenant_id);
+                    $input['client_id'] = $tenant->client_id;
+                    $input['mf_id'] = $tenant->id;
+
+                    DB::transaction(function () use ($input, $tenant, $lease, $propertyUnit, $payment) {
+                        $acc = CustomerAccount::create([
+                            'tenant_id' => $tenant->id,
+                            'lease_id' => $lease->id,
+                            'unit_id' => $propertyUnit->id,
+                            'payment_id' => $payment->id,
+                            'ref_number' => $payment->ref_number,
+                            'transaction_type' => debit,
+                            'amount' => $payment->amount,
+                            'date' => Carbon::today()
+                        ]);
+
+                        $payment->status = true;
+                        $payment->house_number = $propertyUnit->unit_number;
+                        $payment->tenant_id = $tenant->id;
+                        $payment->client_id = $input['client_id'];
+                        $payment->save();
+                    });
+                    //send sms
+                }else{
+                    Flash::error('This house has no active lease');
+                    return redirect(route('payments.index'));
+                }
+            }
+        }else{
+            Flash::error('You must choose house number.');
+            return redirect(route('payments.index'));
+        }
+        Flash::success('Payment processed successfully.');
         return redirect(route('payments.index'));
     }
 }

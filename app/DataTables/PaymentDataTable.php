@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Masterfile;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
@@ -27,10 +28,25 @@ class PaymentDataTable extends DataTable
                 if($payment->status){
                     return '<label class="label label-success">Processed</label>';
                 }
-                return '<label class="label label-warning">Legacy Client</label>';
+                return '<label class="label label-warning">Un proccessed</label>';
             })
-            ->rawColumns(['status'])
-            ->addColumn('action', 'payments.datatables_actions');
+
+            ->editColumn('created_by',function($payment){
+                if(!$payment->status){
+                    return '<a href="#edit-modal" data-toggle="modal" e-id="'.$payment->id.'" hint="'.url('payments/'.$payment->id).'" class="btn btn-default btn-xs edit-common" ><i class="glyphicon glyphicon-eye-edit"></i>update</a>';
+                }
+                if(!is_null($payment->updated_by)){
+                    return Masterfile::find($payment->updated_by)->full_name;
+                }
+                return '';
+            })
+            ->rawColumns(['status','created_by','action'])
+            ->addColumn('action', function($payment){
+                if(!$payment->status){
+                    return '<a href="#delete-modal" data-toggle="modal" action="'.url('processPayment/'.$payment->id).'" class="btn btn-success btn-xs delete-common"><i class=""></i> process payment</a>';
+                }
+                return '';
+            });
     }
 
     /**
@@ -56,7 +72,7 @@ class PaymentDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-//            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px'])
             ->parameters([
                 'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
@@ -83,6 +99,7 @@ class PaymentDataTable extends DataTable
             'BillRefNumber'=>[
                 'title'=>'Account'
             ],
+            'house_number',
             'phone_number',
             'FirstName',
             'LastName',
@@ -98,7 +115,9 @@ class PaymentDataTable extends DataTable
 //            'middleName',
 
 //            'client_id',
-//            'created_by'
+            'created_by'=>[
+                'title'=>'Update/Updated by'
+            ]
         ];
     }
 

@@ -63,7 +63,8 @@ class Payment extends Model
         'client_id',
         'created_by',
         'bank_id',
-        'status'
+        'status',
+        'updated_by'
     ];
 
     /**
@@ -86,6 +87,7 @@ class Payment extends Model
         'client_id' => 'integer',
         'bank_id' => 'integer',
         'created_by' => 'integer',
+        'updated_by' => 'integer',
         'status'=>'boolean'
     ];
 
