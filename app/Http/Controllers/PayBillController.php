@@ -156,7 +156,8 @@ class PayBillController extends AppBaseController
 //        print_r($payment->toArray());die;
         return $payBillDataTable->render('pay_bills.index',[
             'tenants'=>Tenant::where('b_role',\tenant)->get(),
-            'payment' =>$payment
+            'payment' =>$payment,
+            'banks'=>Bank::all()
         ]);
     }
 
