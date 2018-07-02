@@ -140,3 +140,7 @@ Route::resource('customerMessages', 'CustomerMessageController');
 Route::resource('banks', 'BankController');
 
 Route::resource('landlordSettlements', 'LandlordSettlementController');
+
+Route::delete('reverse-lease/{id}','LeaseController@reverse');
+
+Route::resource('terminatedLeases', 'TerminatedLeaseController');

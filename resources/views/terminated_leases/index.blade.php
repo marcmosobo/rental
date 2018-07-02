@@ -1,9 +1,10 @@
 @extends('layouts.app')
- @section("pageTitle",'All Leases')
- @section("pageSubtitle",'create, terminate leases')
-  @section("breadcrumbs")
-         <li>Home</li> <li>Leases</li>
-         @endsection
+@section("pageTitle",'Terminated/Reversed Leases')
+{{--@section("pageSubtitle",'create, terminate leases')--}}
+@section("breadcrumbs")
+    <li>Home</li> <li>Leases</li>
+    <li>terminated leases</li>
+@endsection
 
 @section('css')
     <style>
@@ -64,7 +65,7 @@
 @section('content')
     <section class="content-header">
         <h1 class="pull-right">
-           <a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>
+            {{--<a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>--}}
         </h1>
     </section>
     <div class="content">
@@ -75,142 +76,40 @@
         <div class="clearfix"></div>
         <div class="box box-primary">
             <div class="box-body">
-                    @include('leases.table')
+                @include('leases.table')
             </div>
         </div>
         <div class="text-center">
-        
+
         </div>
     </div>
 @endsection
 
 @section('modals')
-    <div class="modal fade" id="create-modal" role="dialog">
-            {!! Form::open(['route' => 'leases.store']) !!}
+
+    <div class="modal fade" id="delete-modal" role="dialog">
+        <form id="delete-form" method="post">
+            <input name="_method" type="hidden" value="DELETE">
+            {{ csrf_field() }}
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Create Lease</h4>
+                        <h4 class="modal-title">Terminate Lease</h4>
                     </div>
                     <div class="modal-body">
-                        {{--<div class="row">--}}
-                            {{--@include('leases.fields')--}}
-
-
-                        {{--</div>--}}
-                        <div class="stepwizard">
-                            <div class="stepwizard-row setup-panel">
-                                <div class="stepwizard-step">
-                                    <a href="#step-1" type="button" class="btn btn-primary btn-circle">1</a>
-                                    <p>Lease Details</p>
-                                </div>
-                                <div class="stepwizard-step">
-                                    <a href="#step-2" type="button" class="btn btn-default btn-circle" disabled="disabled">2</a>
-                                    <p>Confirm Bills Attached</p>
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div class="row setup-content" id="step-1">
-                            <div class="col-xs-12">
-                                <div class="col-md-12">
-                                    {{--<h3> Tenant Details</h3><br>--}}
-                                    @include('leases.fields')
-                                    <br>
-                                </div>
-                                <div class="col-md-12">
-                                    <button class="btn btn-primary btn-sm nextBtn btn-lg pull-right" type="button" >Next</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row setup-content" id="step-2">
-                            <div class="col-md-12">
-                                <div class="col-md-12">
-                                    <br>
-                                </div>
-                                <div class="col-md-12" id="service_bills_div">
-                                    {{--<h3> Accident Details</h3><br>--}}
-                                    {{--@include('claims.accident_details')--}}
-                                    <br>
-                                </div>
-                                <div class="col-md-12">
-                                    <button type="submit" class="btn btn-success btn-sm  pull-right" id="finish-btn" >Finish</button>
-                                </div>
-                            </div>
-                        </div>
-
+                        <p>Are you sure you want to terminate this Lease?</p>
                     </div>
-
                     <div class="modal-footer">
-                        {{--<div class="col-md-12">--}}
-                            {{--<button class="btn btn-primary btn-sm nextBtn btn-lg pull-right" type="button" >Next</button>--}}
-                        {{--</div>--}}
-                        {{--<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>--}}
-                        {{--<button type="submit" class="btn btn-primary">Save</button>--}}
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-danger">Yes</button>
                     </div>
                 </div>
-                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-dialog -->
-        {!! Form::close() !!}
+        </form>
     </div>
-
-    <div class="modal fade" id="edit-modal" role="dialog">
-           <form method="post" id="edit-form">
-               {{ csrf_field() }}
-           <input name="_method" type="hidden" value="PATCH">
-           <div class="modal-dialog">
-               <div class="modal-content">
-                   <div class="modal-header">
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                           <span aria-hidden="true">&times;</span>
-                       </button>
-                       <h4 class="modal-title">Edit Lease</h4>
-                   </div>
-                   <div class="modal-body">
-                        <div class="row">
-                           {{--@include('leases.fields')--}}
-                        </div>
-                   </div>
-                   <div class="modal-footer">
-                       <input type="hidden" id="editDetails" value="{{ url("/leases") }}">
-                       <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-                       <button type="submit" class="btn btn-primary">Save</button>
-                   </div>
-               </div>
-               <!-- /.modal-content -->
-           </div>
-           </form>
-       </div>
-
-     {{--delete modal--}}
-        <div class="modal fade" id="delete-modal" role="dialog">
-            <form id="delete-form" method="post">
-                <input name="_method" type="hidden" value="DELETE">
-            {{ csrf_field() }}
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title">Terminate Lease</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Are you sure you want to terminate this Lease?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
-                            <button type="submit" class="btn btn-danger">Yes</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
 
     {{--delete modal--}}
     <div class="modal fade" id="reverse-modal" role="dialog">

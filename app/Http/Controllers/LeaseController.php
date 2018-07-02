@@ -18,8 +18,11 @@ use App\Models\Property;
 use App\Models\PropertyUnit;
 use App\Models\UnitServiceBill;
 use App\Repositories\LeaseRepository;
+use Carbon\Carbon;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Response;
 
@@ -226,6 +229,8 @@ class LeaseController extends AppBaseController
         }
 
         $lease->status = false;
+        $lease->state = 'Terminated';
+        $lease->reversed_by = Auth::id();
         $lease->save();
 
         Flash::success('Lease terminated successfully.');
@@ -251,5 +256,58 @@ class LeaseController extends AppBaseController
             ->where([['unit_service_bills.unit_id',$id],['service_options.status',true]])->get();
 
         return response()->json($bills);
+    }
+
+    public function reverse($id){
+
+
+        DB::transaction(function()use ($id){
+            $lease = Lease::find($id);
+            $lease->status = false;
+            $lease->is_reversed = true;
+            $lease->reversed_by = Auth::id();
+            $lease->state = 'Reversed';
+            $lease->save();
+            $bill = Bill::where([['lease_id',$id],['description','Lease Creation']])->first();
+
+            if(!is_null($bill)){
+                //create a negative bill
+                $reversal = Bill::create([
+                    'lease_id'=> $id,
+                    'tenant_id'=> $bill->id,
+                    'property_id'=>$bill->tenant_id,
+                    'description'=> 'Lease reversal',
+                    'ref_number'=>$bill->id,
+                    'total'=>-$bill->total,
+                ]);
+                $billDetails = BillDetail::where('bill_id',$bill->id)->get();
+                if(count($billDetails)){
+                    foreach ($billDetails as $billDetail){
+                        BillDetail::create([
+                            'bill_id'=>$reversal->id,
+                            'service_bill_id'=>$billDetail->service_bill_id,
+                            'amount'=> -$billDetail->amount,
+                            'balance' => -$billDetail->amount,
+                            'status'=>true
+                        ]);
+                    }
+                }
+
+                //customer account
+                $customerAccount = CustomerAccount::create([
+                    'tenant_id'=>$bill->tenant_id,
+                    'lease_id'=>$id,
+                    'unit_id'=> $lease->unit_id,
+                    'bill_id'=>$reversal->id,
+                    'transaction_type'=>credit,
+                    'amount'=>- $bill->total,
+                    'balance'=>-$bill->total,
+                    'date'=>Carbon::now()
+                ]);
+            }
+        });
+        Flash::success('Lease reversed successfully.');
+
+        return redirect(route('terminatedLeases.index'));
     }
 }

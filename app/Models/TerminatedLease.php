@@ -6,9 +6,9 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class Lease
+ * Class TerminatedLease
  * @package App\Models
- * @version June 16, 2018, 9:23 am EAT
+ * @version July 2, 2018, 12:56 pm EAT
  *
  * @property \App\Models\Masterfile masterfile
  * @property \App\Models\PropertyUnit propertyUnit
@@ -17,13 +17,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Database\Eloquent\Collection roles
  * @property \Illuminate\Database\Eloquent\Collection users
  * @property integer unit_id
+ * @property integer property_id
  * @property bigInteger tenant_id
  * @property string|\Carbon\Carbon start_date
  * @property boolean status
  * @property integer created_by
  * @property integer client_id
+ * @property boolean is_reversed
+ * @property integer reversed_by
  */
-class Lease extends Model
+class TerminatedLease extends Model
 {
     use SoftDeletes;
 
@@ -38,16 +41,14 @@ class Lease extends Model
 
     public $fillable = [
         'unit_id',
+        'property_id',
         'tenant_id',
         'start_date',
         'status',
         'created_by',
         'client_id',
-        'property_id',
         'is_reversed',
-        'reversed_by',
-        'state'
-
+        'reversed_by'
     ];
 
     /**
@@ -58,13 +59,12 @@ class Lease extends Model
     protected $casts = [
         'id' => 'integer',
         'unit_id' => 'integer',
+        'property_id' => 'integer',
         'status' => 'boolean',
-        'is_reversed' => 'boolean',
         'created_by' => 'integer',
         'client_id' => 'integer',
-        'property_id' => 'integer',
-        'reversed_by' => 'integer',
-        'state' => 'string',
+        'is_reversed' => 'boolean',
+        'reversed_by' => 'integer'
     ];
 
     /**
@@ -81,18 +81,14 @@ class Lease extends Model
      **/
     public function masterfile()
     {
-        return $this->belongsTo(\App\Models\Masterfile::class,'tenant_id');
+        return $this->belongsTo(\App\Models\Masterfile::class);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/
-    public function unit()
+    public function propertyUnit()
     {
-        return $this->belongsTo(\App\Models\PropertyUnit::class,'unit_id');
-    }
-
-    public function property(){
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(\App\Models\PropertyUnit::class);
     }
 }

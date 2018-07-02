@@ -3,11 +3,13 @@
 namespace App\DataTables;
 
 use App\Models\Lease;
+use App\Models\Masterfile;
+use App\Models\TerminatedLease;
 use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class LeaseDataTable extends DataTable
+class TerminatedLeaseDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -25,9 +27,14 @@ class LeaseDataTable extends DataTable
             })
             ->editColumn('status',function($lease){
                 if($lease->status){
-                    return '<label class="label label-success">Active</label>';
+                    return '<label class="label label-success">reversed/terminated</label>';
                 }
                 return '<label class="label label-danger">Terminated</label>';
+            })
+            ->editColumn('reversed_by',function($lease){
+                if(!is_null($lease->reversed_by)){
+                    return Masterfile::find($lease->reversed_by)->full_name;
+                }
             })
             ->addColumn('action', function($lease){
                 if($lease->status){
@@ -36,12 +43,20 @@ class LeaseDataTable extends DataTable
                 return '<label class="label label-danger">Terminated</label>';
             })
             ->editColumn('client_id',function ($lease){
-                if($lease->status){
+                if($lease->state == 'Terminated'){
                     return '<a href="#reverse-modal" data-toggle="modal" action="'.url('reverse-lease/'.$lease->id).'" class="btn btn-default btn-xs reverse-btn"><i class="fa fa-close"></i> reverse</a>';
                 }
                 return '<label class="label label-default">reversed/terminated</label>';
             })
-            ->rawColumns(['action','status','client_id']);
+            ->editColumn('state',function ($lease){
+                if($lease->state == 'Reversed'){
+                    return '<label class="label label-info">Reversed</label>';
+                }elseif ($lease->state == 'Terminated'){
+                    return '<label class="label label-info">Terminated</label>';
+                }
+                return '';
+            })
+            ->rawColumns(['action','status','client_id','state']);
     }
 
     /**
@@ -54,7 +69,7 @@ class LeaseDataTable extends DataTable
     {
         return $model->newQuery()
             ->select('leases.*')
-            ->where('leases.status',true)
+            ->where('leases.status',false)
             ->with(['masterfile','unit','property'])->orderByDesc('leases.id')
             ;
     }
@@ -69,7 +84,7 @@ class LeaseDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['width' => '80px'])
+//            ->addAction(['width' => '80px'])
             ->parameters([
                 'scrollX'=>true,
 //                'dom'     => 'Bfrtip',
@@ -103,8 +118,10 @@ class LeaseDataTable extends DataTable
                 'title'=>'Phone Number'
             ],
             'start_date',
-            'status',
-//            'created_by',
+            'state',
+            'reversed_by'=>[
+                'title'=>'Reversed/terminated By'
+            ],
             'client_id'=>[
                 'title'=>'Reverse'
             ]
@@ -118,6 +135,6 @@ class LeaseDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'leasesdatatable_' . time();
+        return 'terminated_leasesdatatable_' . time();
     }
 }
