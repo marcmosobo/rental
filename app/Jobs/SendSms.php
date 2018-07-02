@@ -61,11 +61,20 @@ class SendSms implements ShouldQueue
         $message->setText($this->_message);
         $message->setNotifyUrl(url('infoBipCallback'));
 
+        if(!$this->mf == null){
+           $name =  $this->mf->full_name;
+           $user_id = $this->mf->id;
+           $tenant_id =  $this->mf->client_id;
+        }else{
+            $name =  null;
+            $user_id = null;
+            $tenant_id =  null;
+        }
         $Cmessage = CustomerMessage::create([
             'phone_number'=>$this->to,
-            'name'=>$this->mf->full_name,
-            'user_id'=>$this->mf->id,
-            'tenant_id'=> $this->mf->client_id,
+            'name'=>$name,
+            'user_id'=>$user_id,
+            'tenant_id'=>$tenant_id,
             'message_type'=>'SMS',
             'message'=>$this->_message,
 //            'message_id'=>$response->getMessages()[0]->getMessageId(),
