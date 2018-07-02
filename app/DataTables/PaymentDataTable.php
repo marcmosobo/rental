@@ -104,7 +104,7 @@ class PaymentDataTable extends DataTable
             'FirstName',
             'LastName',
             'received_on',
-            'payment_mode',
+//            'payment_mode',
 //            'house_number',
 //            'tenant_id',
 //
@@ -116,7 +116,7 @@ class PaymentDataTable extends DataTable
 
 //            'client_id',
             'created_by'=>[
-                'title'=>'Update/Updated by'
+                'title'=>'Update / Updated by'
             ]
         ];
     }
