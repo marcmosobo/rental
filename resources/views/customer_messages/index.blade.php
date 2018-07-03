@@ -7,7 +7,7 @@
 @section('content')
     <section class="content-header">
         <h1 class="pull-right">
-           {{--<a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>--}}
+           <a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>
         </h1>
     </section>
     <div class="content">
@@ -36,7 +36,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Create Customer Message</h4>
+                        <h4 class="modal-title">Send Message</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Send</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->

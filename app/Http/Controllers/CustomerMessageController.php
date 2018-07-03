@@ -6,6 +6,8 @@ use App\DataTables\CustomerMessageDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateCustomerMessageRequest;
 use App\Http\Requests\UpdateCustomerMessageRequest;
+use App\Jobs\SendSms;
+use App\Models\Masterfile;
 use App\Repositories\CustomerMessageRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
@@ -18,6 +20,7 @@ class CustomerMessageController extends AppBaseController
 
     public function __construct(CustomerMessageRepository $customerMessageRepo)
     {
+        $this->middleware('auth');
         $this->customerMessageRepository = $customerMessageRepo;
     }
 
@@ -29,7 +32,9 @@ class CustomerMessageController extends AppBaseController
      */
     public function index(CustomerMessageDataTable $customerMessageDataTable)
     {
-        return $customerMessageDataTable->render('customer_messages.index');
+        return $customerMessageDataTable->render('customer_messages.index',[
+            'recipients'=>Masterfile::where('b_role',tenant)->get()
+        ]);
     }
 
     /**
@@ -52,10 +57,13 @@ class CustomerMessageController extends AppBaseController
     public function store(CreateCustomerMessageRequest $request)
     {
         $input = $request->all();
+        $mf = Masterfile::find($request->recipient);
 
-        $customerMessage = $this->customerMessageRepository->create($input);
+        SendSms::dispatch($request->message,$mf->phone_number,$mf);
 
-        Flash::success('Customer Message saved successfully.');
+//        $customerMessage = $this->customerMessageRepository->create($input);
+
+        Flash::success('Customer Message queued for sending.');
 
         return redirect(route('customerMessages.index'));
     }
