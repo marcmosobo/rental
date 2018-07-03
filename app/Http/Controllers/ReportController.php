@@ -109,19 +109,15 @@ class ReportController extends Controller
     public function getTenantStatement(Request $request){
         $statements = CustomerAccount::query()
             ->where('tenant_id',$request->tenant)
-            ->orderByDesc('id')
+            ->orderBy('id')
             ->get();
 //        print_r($statement->toArray());die;
         $tenantStatements =[];
         if(count($statements)){
             foreach ($statements as $statement){
-//                $trans =[
-//                    'date'=>$statement->created_at,
-//                    ''
-//                ];
                 if(is_null($statement->bill_id)){
                     $trans =[
-                        'date'=>$statement->created_at,
+                        'date'=>$statement->date,
                         'bill_type'=>'Payment',
                         'debit'=>$statement->amount,
                         'credit'=> 0
@@ -132,7 +128,7 @@ class ReportController extends Controller
                     if(count($billDetails)){
                         foreach ($billDetails as $billDetail){
                             $trans =[
-                                'date'=>$billDetail->created_at,
+                                'date'=>$billDetail->bill_date,
                                 'bill_type'=>ServiceOption::find($billDetail->service_bill_id)->name,
                                 'debit'=> 0,
                                 'credit'=>$billDetail->amount,
