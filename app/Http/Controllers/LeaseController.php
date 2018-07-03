@@ -300,8 +300,10 @@ class LeaseController extends AppBaseController
                     'unit_id'=> $lease->unit_id,
                     'bill_id'=>$reversal->id,
                     'transaction_type'=>debit,
-                    'amount'=>- $bill->total,
-                    'balance'=>-$bill->total,
+                    'amount'=> $bill->total,
+                    'balance'=>$bill->total,
+                    'ref_number'=>"Lease Reversal",
+
                     'date'=>Carbon::now()
                 ]);
             }
