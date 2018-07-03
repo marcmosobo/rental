@@ -199,7 +199,7 @@ class PaymentController extends AppBaseController
                     //send sms
                     $message = 'Dear '.explode(' ',$tenant->full_name)[0].' your payment of '.$payment->amount.' was received. Kindly use '.$propertyUnit->unit_number.' as the account number the next time when paying rent. Marite Enterprises';
 
-                    SendSms::dispatch($message,$tenant->phone_number,$tenant);
+                    SendSms::dispatch($message,$payment->phone_number,$tenant);
                 }else{
                     Flash::error('This house has no active lease');
                     return redirect(route('payments.index'));

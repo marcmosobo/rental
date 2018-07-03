@@ -72,14 +72,14 @@ class LeaseDataTable extends DataTable
             ->addAction(['width' => '80px'])
             ->parameters([
                 'scrollX'=>true,
-//                'dom'     => 'Bfrtip',
+                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
                 'buttons' => [
-                    'create',
+//                    'create',
                     'export',
-                    'print',
-                    'reset',
-                    'reload',
+//                    'print',
+//                    'reset',
+//                    'reload',
                 ],
             ]);
     }
