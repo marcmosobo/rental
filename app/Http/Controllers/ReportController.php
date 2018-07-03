@@ -118,6 +118,7 @@ class ReportController extends Controller
                 if(is_null($statement->bill_id)){
                     $trans =[
                         'date'=>$statement->date,
+                        'house_number'=>PropertyUnit::find($statement->unit_id)->unit_number,
                         'bill_type'=>'Payment',
                         'debit'=>$statement->amount,
                         'ref_number'=>$statement->ref_number,
@@ -130,6 +131,7 @@ class ReportController extends Controller
                         foreach ($billDetails as $billDetail){
                             $trans =[
                                 'date'=>$billDetail->bill_date,
+                                'house_number'=>'',
                                 'bill_type'=>'Bill',
                                 'ref_number'=>ServiceOption::find($billDetail->service_bill_id)->name,
                                 'debit'=> 0,
