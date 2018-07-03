@@ -6,6 +6,7 @@ use App\DataTables\PaymentDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreatePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
+use App\Jobs\SendSms;
 use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\Masterfile;
@@ -176,7 +177,7 @@ class PaymentController extends AppBaseController
                     $input['client_id'] = $tenant->client_id;
                     $input['mf_id'] = $tenant->id;
 
-                    DB::transaction(function () use ($input, $tenant, $lease, $propertyUnit, $payment) {
+                     DB::transaction(function () use ($input, $tenant, $lease, $propertyUnit, $payment) {
                         $acc = CustomerAccount::create([
                             'tenant_id' => $tenant->id,
                             'lease_id' => $lease->id,
@@ -193,8 +194,12 @@ class PaymentController extends AppBaseController
                         $payment->tenant_id = $tenant->id;
                         $payment->client_id = $input['client_id'];
                         $payment->save();
+
                     });
                     //send sms
+                    $message = 'Dear '.explode(' ',$tenant->full_name)[0].' your payment of '.$payment->amount.' was received. Kindly use '.$propertyUnit->unit_number.' as the account number the next time when paying rent. Marite Enterprises';
+
+                    SendSms::dispatch($message,$tenant->phone_number,$tenant);
                 }else{
                     Flash::error('This house has no active lease');
                     return redirect(route('payments.index'));
