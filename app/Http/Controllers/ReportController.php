@@ -135,14 +135,26 @@ class ReportController extends Controller
                         ->where('bills.id',$statement->bill_id)->first();
                     if(count($billDetails)){
                         foreach ($billDetails as $billDetail){
-                            $trans =[
-                                'date'=>$billDetail->bill_date,
-                                'house_number'=>$bill->house_number,
-                                'bill_type'=>'Bill',
-                                'ref_number'=>ServiceOption::find($billDetail->service_bill_id)->name,
-                                'debit'=> 0,
-                                'credit'=>$billDetail->amount,
-                            ];
+                            if($billDetail->amount < 0){
+                                $trans =[
+                                    'date'=>$billDetail->bill_date,
+                                    'house_number'=>$bill->house_number,
+                                    'bill_type'=>'Bill',
+                                    'ref_number'=>"Lease Reversal",
+                                    'debit'=> -$billDetail->amount,
+                                    'credit'=>0,
+                                ];
+                            }else{
+                                $trans =[
+                                    'date'=>$billDetail->bill_date,
+                                    'house_number'=>$bill->house_number,
+                                    'bill_type'=>'Bill',
+                                    'ref_number'=>ServiceOption::find($billDetail->service_bill_id)->name,
+                                    'debit'=> 0,
+                                    'credit'=>$billDetail->amount,
+                                ];
+                            }
+
                             $tenantStatements[]= $trans;
                         }
                     }
