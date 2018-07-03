@@ -299,7 +299,7 @@ class LeaseController extends AppBaseController
                     'lease_id'=>$id,
                     'unit_id'=> $lease->unit_id,
                     'bill_id'=>$reversal->id,
-                    'transaction_type'=>credit,
+                    'transaction_type'=>debit,
                     'amount'=>- $bill->total,
                     'balance'=>-$bill->total,
                     'date'=>Carbon::now()
