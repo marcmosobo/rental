@@ -75,6 +75,7 @@
                         <tr>
                             <th>Date</th>
                             <th>Bill Type</th>
+                            <th>Reference</th>
                             <th style="text-align: right">Credit</th>
                             <th style="text-align: right">Debit</th>
                             <th style="text-align: right">Running Balance</th>
@@ -87,6 +88,7 @@
                             <tr>
                                 <td >{{ \Carbon\Carbon::parse($statement['date'])->toFormattedDateString() }}</td>
                                 <td>{{ $statement['bill_type'] }}</td>
+                                <td>{{ $statement['ref_number'] }}</td>
                                 <td style="text-align: right">{{ number_format($statement['credit'],2) }}</td>
                                 <td style="text-align: right">{{ number_format($statement['debit'],2) }}</td>
                                 <td style="text-align: right">{{ number_format($statement['debit'],2) }}</td>

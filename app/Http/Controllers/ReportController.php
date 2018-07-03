@@ -120,6 +120,7 @@ class ReportController extends Controller
                         'date'=>$statement->date,
                         'bill_type'=>'Payment',
                         'debit'=>$statement->amount,
+                        'ref_number'=>$statement->ref_number,
                         'credit'=> 0
                     ];
                     $tenantStatements[]= $trans;
@@ -129,7 +130,8 @@ class ReportController extends Controller
                         foreach ($billDetails as $billDetail){
                             $trans =[
                                 'date'=>$billDetail->bill_date,
-                                'bill_type'=>ServiceOption::find($billDetail->service_bill_id)->name,
+                                'bill_type'=>'Bill',
+                                'ref_number'=>ServiceOption::find($billDetail->service_bill_id)->name,
                                 'debit'=> 0,
                                 'credit'=>$billDetail->amount,
                             ];
