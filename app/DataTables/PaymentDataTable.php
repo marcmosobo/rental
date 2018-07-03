@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Masterfile;
 use App\Models\Payment;
+use App\Models\User;
 use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
@@ -36,7 +37,7 @@ class PaymentDataTable extends DataTable
                     return '<a href="#edit-modal" data-toggle="modal" e-id="'.$payment->id.'" hint="'.url('payments/'.$payment->id).'" class="btn btn-default btn-xs edit-common" ><i class="glyphicon glyphicon-eye-edit"></i>update</a>';
                 }
                 if(!is_null($payment->updated_by)){
-                    return Masterfile::find($payment->updated_by)->full_name;
+                    return User::find($payment->updated_by)->name;
                 }
                 return '';
             })
