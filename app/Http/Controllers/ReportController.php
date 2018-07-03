@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\Claim;
 use App\Models\CustomerAccount;
@@ -127,11 +128,16 @@ class ReportController extends Controller
                     $tenantStatements[]= $trans;
                 }else{
                     $billDetails = BillDetail::where('bill_id',$statement->bill_id)->get();
+                    $bill = Bill::query()
+                        ->select("property_units.unit_number as house_number")
+                        ->leftJoin('leases','leases.id','=','bills.lease_id')
+                        ->leftJoin('property_units','property_units.id','=','leases.unit_id')
+                        ->where('bills.id',$statement->bill_id)->first();
                     if(count($billDetails)){
                         foreach ($billDetails as $billDetail){
                             $trans =[
                                 'date'=>$billDetail->bill_date,
-                                'house_number'=>'',
+                                'house_number'=>$bill->house_number,
                                 'bill_type'=>'Bill',
                                 'ref_number'=>ServiceOption::find($billDetail->service_bill_id)->name,
                                 'debit'=> 0,
