@@ -83,15 +83,22 @@
                     </thead>
                     <tbody>
                     @if(count($statements))
+                        <?php $runningBalance =0;?>
                         @foreach($statements as $statement)
-                            <?php  ?>
+                            <?php
+                            if($statement['credit'] > 0){
+                                $runningBalance = $runningBalance +  $statement['credit'];
+                            }else{
+                                $runningBalance = $runningBalance - $statement['debit'];
+                            }
+                            ?>
                             <tr>
                                 <td >{{ \Carbon\Carbon::parse($statement['date'])->toFormattedDateString() }}</td>
                                 <td>{{ $statement['bill_type'] }}</td>
                                 <td>{{ $statement['ref_number'] }}</td>
                                 <td style="text-align: right">{{ number_format($statement['credit'],2) }}</td>
                                 <td style="text-align: right">{{ number_format($statement['debit'],2) }}</td>
-                                <td style="text-align: right">{{ number_format($statement['debit'],2) }}</td>
+                                <td style="text-align: right">{{ number_format($runningBalance,2) }}</td>
                             </tr>
                             @endforeach
                         @else
