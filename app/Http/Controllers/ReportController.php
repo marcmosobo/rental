@@ -50,21 +50,21 @@ class ReportController extends Controller
                     ['unit_id',$propertyUnit->id],['status',true]
                 ])->first();
                 if(!empty($lease)){
-                    $arrears = CustomerAccount::where([['created_at','<',Carbon::parse($request->date_from)],['tenant_id',$lease->tenant_id]])->get();
+                    $arrears = CustomerAccount::where([['date','<',Carbon::parse($request->date_from)],['tenant_id',$lease->tenant_id]])->get();
                     $aBF = $arrears->where('transaction_type',credit)->sum('amount') - $arrears->where('transaction_type',debit)->sum('amount');
 
                    //total due
                     $totalDue= CustomerAccount::query()
                         ->where('unit_id',$lease->unit_id)
                         ->where('transaction_type',credit)
-                        ->whereBetween('created_at',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                        ->whereBetween('date',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
                         ->sum('amount') + $aBF;
 
                     //amount paid
                     $amountPaid = $arrears = CustomerAccount::query()
                             ->where('unit_id',$lease->unit_id)
                             ->where('transaction_type',debit)
-                            ->whereBetween('created_at',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                            ->whereBetween('date',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
                             ->sum('amount');
 
                     $report=[
