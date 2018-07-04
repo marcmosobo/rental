@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\BillDetail;
+use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
@@ -18,7 +19,14 @@ class BillDetailDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'bill_details.datatables_actions');
+        return $dataTable
+            ->editColumn('bill_date',function($bill){
+                if(!is_null($bill->bill_date)){
+                    return Carbon::parse($bill->bill_date)->toDateString();
+                }
+                return '';
+            })
+            ->addColumn('action', 'bill_details.datatables_actions');
     }
 
     /**
@@ -29,7 +37,7 @@ class BillDetailDataTable extends DataTable
      */
     public function query(BillDetail $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderByDesc('bill_details.id')->with(['bill.lease.unit','bill.lease.masterfile','service','bill.lease.property']);
     }
 
     /**
@@ -42,9 +50,9 @@ class BillDetailDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['width' => '80px'])
+//            ->addAction(['width' => '80px'])
             ->parameters([
-                'dom'     => 'Bfrtip',
+//                'dom'     => 'Bfrtip',
                 'order'   => [[0, 'desc']],
                 'scrollX'=>true,
                 'buttons' => [
@@ -65,10 +73,18 @@ class BillDetailDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'bill_id',
-            'service_bill_id',
+            'bill.lease.property.name'=>[
+                'title'=>'Plot'
+            ],
+            'bill.lease.unit.unit_number'=>[
+                'title'=>'House Number'
+            ],
+            'bill.lease.masterfile.full_name'=>[
+                'title'=>'Tenant'
+            ],
+            'service.name',
             'amount',
-            'status'
+            'bill_date',
         ];
     }
 

@@ -41,6 +41,7 @@ class BillDetail extends Model
         'status',
         'balance',
         'bill_date',
+        'created_by',
     ];
 
     /**
@@ -72,5 +73,9 @@ class BillDetail extends Model
     public function bill()
     {
         return $this->belongsTo(\App\Models\Bill::class);
+    }
+
+    public function service(){
+        return $this->belongsTo(ServiceOption::class,'service_bill_id');
     }
 }

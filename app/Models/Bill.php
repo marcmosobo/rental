@@ -76,4 +76,8 @@ class Bill extends Model
     {
         return $this->hasMany(\App\Models\BillDetail::class);
     }
+
+    public function lease(){
+        return $this->belongsTo(Lease::class,'lease_id');
+    }
 }

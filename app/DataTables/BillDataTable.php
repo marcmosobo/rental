@@ -29,7 +29,7 @@ class BillDataTable extends DataTable
      */
     public function query(Bill $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderByDesc('bills.id');
     }
 
     /**
@@ -44,7 +44,7 @@ class BillDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '80px'])
             ->parameters([
-                'dom'     => 'Bfrtip',
+//                'dom'     => 'Bfrtip',
                 'order'   => [[0, 'desc']],
                 'scrollX'=>true,
                 'buttons' => [

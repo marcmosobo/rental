@@ -6,9 +6,16 @@ use App\DataTables\BillDetailDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateBillDetailRequest;
 use App\Http\Requests\UpdateBillDetailRequest;
+use App\Models\Bill;
+use App\Models\CustomerAccount;
+use App\Models\Lease;
+use App\Models\ServiceOption;
 use App\Repositories\BillDetailRepository;
+use Carbon\Carbon;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class BillDetailController extends AppBaseController
@@ -18,6 +25,7 @@ class BillDetailController extends AppBaseController
 
     public function __construct(BillDetailRepository $billDetailRepo)
     {
+        $this->middleware('auth');
         $this->billDetailRepository = $billDetailRepo;
     }
 
@@ -29,7 +37,10 @@ class BillDetailController extends AppBaseController
      */
     public function index(BillDetailDataTable $billDetailDataTable)
     {
-        return $billDetailDataTable->render('bill_details.index');
+        return $billDetailDataTable->render('bill_details.index',[
+            'leases'=> Lease::where('status',true)->with(['unit','masterfile'])->get(),
+            'bills'=> ServiceOption::all()
+        ]);
     }
 
     /**
@@ -53,9 +64,37 @@ class BillDetailController extends AppBaseController
     {
         $input = $request->all();
 
-        $billDetail = $this->billDetailRepository->create($input);
+        DB::transaction(function()use($input){
+            $lease = Lease::find($input['lease_id']);
+            $bill = Bill::create([
+                'lease_id'=>$input['lease_id'],
+                'tenant_id'=>$lease->tenant_id,
+                'property_id'=> $lease->property_id,
+                'description'=>'Additional bill',
+                'total'=> $input['amount'],
+            ]);
+            $input['bill_id'] = $bill->id;
+            $input['balance'] = $input['amount'];
+            $input['bill_date']= $input['date'];
+            $input['created_by'] = Auth::user()->mf_id;
+            $billDetail = $this->billDetailRepository->create($input);
 
-        Flash::success('Bill Detail saved successfully.');
+            CustomerAccount::create([
+                'lease_id'=>$input['lease_id'],
+                'tenant_id'=>$lease->tenant_id,
+                'bill_id'=> $bill->id,
+                'unit_id'=> $lease->unit_id,
+                'transaction_type'=>credit,
+                'balance'=> $input['amount'],
+                'amount'=>$input['amount'],
+                'date'=>$input['date']
+            ]);
+
+        });
+
+
+
+        Flash::success('Bill Details saved successfully.');
 
         return redirect(route('billDetails.index'));
     }
