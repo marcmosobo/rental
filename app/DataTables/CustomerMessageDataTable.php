@@ -24,6 +24,8 @@ class CustomerMessageDataTable extends DataTable
                     return '<label class="label label-success">DELIVERED</label>';
                 }else if($message->status == 'PENDING'){
                     return '<label class="label label-warning">PENDING</label>';
+                }else if($message->status == 'REJECTED'){
+                    return '<label class="label label-danger">REJECTED</label>';
                 }
                 return $message->status;
             })

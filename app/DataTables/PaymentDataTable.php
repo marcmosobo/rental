@@ -29,7 +29,7 @@ class PaymentDataTable extends DataTable
                 if($payment->status){
                     return '<label class="label label-success">Processed</label>';
                 }
-                return '<label class="label label-warning">Un proccessed</label>';
+                return '<label class="label label-warning">Un processed</label>';
             })
 
             ->editColumn('created_by',function($payment){
@@ -75,7 +75,7 @@ class PaymentDataTable extends DataTable
             ->minifiedAjax()
             ->addAction(['width' => '80px'])
             ->parameters([
-                'dom'     => 'Bfrtip',
+//                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
                 'scrollX'=>true,
                 'buttons' => [
