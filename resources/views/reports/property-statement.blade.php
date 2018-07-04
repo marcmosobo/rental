@@ -38,11 +38,11 @@
                             </div>
                             <div class="col-md-3">
                                 <label>From</label>
-                                <input type="date" required class="form-control" id="date-from" name="date_from">
+                                <input type="date" required value="{{ \Carbon\Carbon::today()->startOfMonth()->toDateString() }}" class="form-control" id="date-from" name="date_from">
                             </div>
                             <div class="col-md-3">
                                 <label>To</label>
-                                <input type="date" required class="form-control" id="date-to" name="date_to">
+                                <input type="date" required value="{{ \Carbon\Carbon::today()->endOfMonth()->toDateString() }}" class="form-control" id="date-to" name="date_to">
                             </div>
                             <div class="col-md-2 ">
                                 <button type="submit" class="btn btn-primary " style="margin-top: 25px;">Search</button>
