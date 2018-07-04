@@ -85,6 +85,14 @@ class LeaseController extends AppBaseController
             return redirect(route('leases.index'));
         }
 
+//        $unit = PropertyUnit::find($input['unit_id']);
+        $activeLe = Lease::where([['unit_id',$input['unit_id']],['status',true]])->first();
+        if(!is_null($activeLe)){
+            Flash::error('Failed! this unit already has an active lease.');
+
+            return redirect(route('leases.index'));
+        }
+
         DB::transaction(function()use ($input,$unitBills){
             $lease = $this->leaseRepository->create($input);
 
