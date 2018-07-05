@@ -372,6 +372,20 @@ class ReportController extends Controller
                             'over_payment'=>($cf <0)? -$cf: 0,
                         ];
 //                    }
+                }else{
+                    $reports[]=[
+                        'house_number'=>$unit->unit_number,
+                        'tenant'=>'-',
+                        'phone_number'=>'-',
+                        'bbf'=>0,
+                        'status'=>"VACANT",
+                        'monthly_rent'=> 0,
+                        'current'=>0,
+                        'total'=>0,
+                        'paid'=>0,
+                        'bcf'=>0,
+                        'over_payment'=> 0,
+                    ];
                 }
             }
         }
