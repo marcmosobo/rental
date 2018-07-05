@@ -128,7 +128,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td class="text-center" colspan="8">No records found</td>
+                            <td class="text-center" colspan="9">No records found</td>
                         </tr>
                         @endif
                     </tbody>

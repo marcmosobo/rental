@@ -212,7 +212,7 @@ class RoutesTableSeeder extends Seeder
         $child = Route::create([
             'route_name'=>'Property Statement',
             'parent_route' => $parent->id,
-            'url'=>'propertyStatement'
+            'url'=>'plotStatement'
         ]);
         $child->roles()->attach($admin);
 
