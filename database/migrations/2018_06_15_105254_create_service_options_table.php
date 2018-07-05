@@ -16,6 +16,7 @@ class CreateServiceOptionsTable extends Migration
         Schema::create('service_options', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('code')->nullable();
             $table->boolean('status')->default(true);
             $table->integer('created_by')->nullable();
             $table->integer('client_id')->nullable();

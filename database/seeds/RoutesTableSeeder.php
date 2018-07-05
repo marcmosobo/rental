@@ -203,6 +203,13 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($admin);
 
         $child = Route::create([
+            'route_name'=>'Tenant Arrears',
+            'parent_route' => $parent->id,
+            'url'=>'tenantArrears'
+        ]);
+        $child->roles()->attach($admin);
+
+        $child = Route::create([
             'route_name'=>'Property Statement',
             'parent_route' => $parent->id,
             'url'=>'propertyStatement'

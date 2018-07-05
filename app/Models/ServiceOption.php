@@ -36,7 +36,8 @@ class ServiceOption extends Model
         'name',
         'status',
         'created_by',
-        'client_id'
+        'client_id',
+        'code',
     ];
 
     /**
@@ -47,6 +48,7 @@ class ServiceOption extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
+        'code' => 'string',
         'status' => 'boolean',
         'created_by' => 'integer',
         'client_id' => 'integer'

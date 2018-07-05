@@ -13,3 +13,4 @@ const staff = 'STAFF';
 const lease_creation = "LEASECREATION";
 const monthly = 'Monthly';
 const once = 'Once';
+const rent = 'RENT';

@@ -121,9 +121,11 @@ Route::resource('eventMessages', 'EventMessageController');
 
 Route::get('tenantStatement','ReportController@tenantStatement');
 Route::get('propertyStatement','ReportController@propertyStatement');
+Route::get('tenantArrears','ReportController@tenantArrears');
 
-Route::post('getPropertyStatement','ReportController@getPropertyStatement');
-Route::post('getTenantStatement','ReportController@getTenantStatement');
+Route::any('getPropertyStatement','ReportController@getPropertyStatement');
+Route::any('getTenantStatement','ReportController@getTenantStatement');
+Route::any('getTenantArrears','ReportController@getTenantArrears');
 
 //imports
 Route::get('import','LandlordController@import');

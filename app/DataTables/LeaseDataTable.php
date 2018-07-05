@@ -105,9 +105,9 @@ class LeaseDataTable extends DataTable
             'start_date',
             'status',
 //            'created_by',
-            'client_id'=>[
-                'title'=>'Reverse'
-            ]
+//            'client_id'=>[
+//                'title'=>'Reverse'
+//            ]
         ];
     }
 
