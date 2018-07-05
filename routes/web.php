@@ -123,11 +123,13 @@ Route::get('tenantStatement','ReportController@tenantStatement');
 Route::get('propertyStatement','ReportController@propertyStatement');
 Route::get('tenantArrears','ReportController@tenantArrears');
 Route::get('plotStatement','ReportController@plotStatement');
+Route::get('landlordSettlementStatement','ReportController@landlordSettlementStatement');
 
 Route::any('getPropertyStatement','ReportController@getPropertyStatement');
 Route::any('getTenantStatement','ReportController@getTenantStatement');
 Route::any('getTenantArrears','ReportController@getTenantArrears');
 Route::any('getPlotStatement','ReportController@getPlotStatement');
+Route::any('getLandlordStatement','ReportController@getLandlordStatement');
 
 //imports
 Route::get('import','LandlordController@import');

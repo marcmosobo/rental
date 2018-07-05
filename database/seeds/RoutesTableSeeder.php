@@ -217,9 +217,9 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($admin);
 
         $child = Route::create([
-            'route_name'=>'Landlord Settlements',
+            'route_name'=>'Landlord Settlement Report',
             'parent_route' => $parent->id,
-            'url'=>'landlordSettlements'
+            'url'=>'landlordSettlementStatement'
         ]);
         $child->roles()->attach($admin);
 
