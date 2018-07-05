@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\BillDetail;
-use App\Models\Claim;
 use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\Payment;
-use App\Models\PolicyDetail;
 use App\Models\Property;
 use App\Models\PropertyUnit;
 use App\Models\ServiceOption;
