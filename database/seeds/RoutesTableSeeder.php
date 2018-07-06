@@ -222,6 +222,14 @@ class RoutesTableSeeder extends Seeder
             'url'=>'landlordSettlementStatement'
         ]);
         $child->roles()->attach($admin);
+        $child = Route::create([
+            'route_name'=>'Rent Collection Report',
+            'parent_route' => $parent->id,
+            'url'=>'rentpay'
+        ]);
+        $child->roles()->attach($admin);
+
+
 
         #### user management
         $user_mngt = new Route();

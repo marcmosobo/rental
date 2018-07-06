@@ -18,6 +18,7 @@ class ClientController extends AppBaseController
 
     public function __construct(ClientRepository $clientRepo)
     {
+        $this->middleware('auth');
         $this->clientRepository = $clientRepo;
     }
 

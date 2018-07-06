@@ -497,4 +497,46 @@ class ReportController extends Controller
             'prop'=>$property->name
         ]);
     }
+
+    public function rentPayments(Request $request)
+    {
+
+        return view('reports.property-statement3',[
+            'properties'=>Property::all()
+        ]);
+
+    }
+    public function getrentPayments(Request $request)
+    {
+        if(!$request->isMethod('POST')){
+            return redirect('rentpay');
+        }
+        $input=$request->all();
+        $payed=CustomerAccount::query()
+            ->where('transaction_type',debit)
+            ->whereBetween('date',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
+        $pay=CustomerAccount::query()
+            ->leftJoin('masterfiles', 'customer_accounts.tenant_id', '=', 'masterfiles.id')
+            ->leftJoin ('property_units','customer_accounts.unit_id','=','property_units.id')
+            ->leftJoin('properties','property_units.property_id','=','properties.id')
+            ->whereBetween('date',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+            ->where('transaction_type', '=', debit)
+//            ->sum(number_format($pay->amount))
+            ->orderBy('date')
+            ->get();
+
+//            $total=CustomerAccount::query()
+//                ->sum('amount')
+//                 ->whereBetween('date',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
+//
+//            dd($total);
+
+//        print_r($pay->toArray());die;
+        return view('reports.property-statement3',[
+            'pay'=>$pay
+        ]);
+
+
+
+    }
 }
