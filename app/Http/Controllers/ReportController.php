@@ -462,8 +462,11 @@ class ReportController extends Controller
                         'current'=>$currentBal,
                         'total'=>($bf <0)? -$bf + $total: $total,
 //                        'paid'=>((($bf <0)? - $bf + $paid: $paid ) >)?,
-                        'paid'=>($amPaid > $rent->amount)? $rent->amount: $amPaid,
-                        'bcf'=>($cf <0)? 0: $cf,
+                        'paid'=>($amPaid),
+                        'rentPaid'=>$rentPaid =($amPaid > $rent->amount)? $rent->amount: $amPaid,
+                        'otherBills'=>($cf <0)? 0: $cf,
+//                        'bcf'=>($cf <0)? 0: $cf,
+                        'bcf'=>$rent->amount - $rentPaid,
                         'over_payment'=>($cf <0)? -$cf: 0,
                     ];
 //                    }

@@ -96,9 +96,10 @@
                             {{--<th style="text-align: right;">Arrears B/F</th>--}}
                             {{--<th style="text-align: right;">Current Bal</th>--}}
                             {{--<th style="text-align: right;">Total Due</th>--}}
-                            <th style="text-align: right;">Amount Paid</th>
+                            {{--<th style="text-align: right;">Total Paid</th>--}}
+                            <th style="text-align: right;">Rent Paid</th>
                             <th style="text-align: right;">Arrears C/F</th>
-                            <th style="text-align: right;">Over Payment</th>
+                            {{--<th style="text-align: right;">Over Payment</th>--}}
                         </tr>
                     </thead>
                     <tbody>
@@ -110,12 +111,13 @@
                                 <td>{{ $statement['phone_number'] }}</td>
                                 <td>{{ $statement['status'] }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['monthly_rent'],2) }}</td>
-                                {{--<td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>--}}
-                                {{--<td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>--}}
-                                {{--<td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>--}}
-                                <td style="text-align: right;">{{ number_format($statement['paid'],2) }}</td>
+{{--                                <td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>--}}
+{{--                                <td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>--}}
+{{--                                <td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>--}}
+{{--                                <td style="text-align: right;">{{ number_format($statement['paid'],2) }}</td>--}}
+                                <td style="text-align: right;">{{ number_format($statement['rentPaid'],2) }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['bcf'],2) }}</td>
-                                <td style="text-align: right;">{{ number_format($statement['over_payment'],2) }}</td>
+                                {{--<td style="text-align: right;">{{ number_format($statement['over_payment'],2) }}</td>--}}
                             </tr>
                             @endforeach
                         <tr>
@@ -127,9 +129,10 @@
                             {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bbf'),2) }}</h3></th>--}}
                             {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('current'),2) }}</h3></th>--}}
                             {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('total'),2) }}</h3></th>--}}
-                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('paid'),2) }}</h3></th>
+                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('paid'),2) }}</h3></th>--}}
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('rentPaid'),2) }}</h3></th>
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bcf'),2) }}</h3></th>
-                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('over_payment'),2) }}</h3></th>
+{{--                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('over_payment'),2) }}</h3></th>--}}
                         </tr>
                         @else
                         <tr>
