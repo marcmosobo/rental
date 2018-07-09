@@ -271,6 +271,5 @@
 @push('js')
     <script>
         $('a#rentpay').parent('li').addClass('active').parent('ul').parent().addClass('active');
-
     </script>
     @endpush

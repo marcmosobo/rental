@@ -1,96 +1,60 @@
 <!-- Payment Mode Field -->
 <div class="form-group col-sm-12">
-    {!! Form::label('payment_mode', 'Payment Mode:') !!}
-    {!! Form::text('payment_mode', null, ['class' => 'form-control']) !!}
+    <label> Select House Number</label>
+    <select name="lease_id" class="form-control select2" id="tenant-select" required>
+        <option value="">Select house number/tenant</option>
+        @if(count($tenants))
+            @foreach($tenants as $tenant)
+                <option value="{{ $tenant->id }}">{{ $tenant->unit->unit_number.' - '.  $tenant->masterfile->full_name }}</option>
+            @endforeach
+        @endif
+
+    </select>
 </div>
 
-<!-- House Number Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('house_number', 'House Number:') !!}
-    {!! Form::text('house_number', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Tenant Id Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('tenant_id', 'Tenant Id:') !!}
-    {!! Form::number('tenant_id', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Ref Number Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('ref_number', 'Ref Number:') !!}
-    {!! Form::text('ref_number', null, ['class' => 'form-control']) !!}
-</div>
 
 <!-- Amount Field -->
 <div class="form-group col-sm-12">
-    {!! Form::label('amount', 'Amount:') !!}
-    {!! Form::number('amount', null, ['class' => 'form-control']) !!}
+    {!! Form::label('payment-mode', 'Payment Mode:') !!}
+    <select class="form-control select2" id="payment-mode" name="payment_mode">
+        <option value="CASH">Cash</option>
+        <option value="Bank">Bank</option>
+    </select>
+</div>
+<div class="form-group col-sm-12" id="bank-div" style="display: none;">
+    {!! Form::label('bank_id', 'Bank:') !!}
+    <select name="bank_id"  id="bank-id" class="form-control select2">
+        <option value="">Select Bank</option>
+        @if(count($banks))
+            @foreach($banks as $bank)
+                <option value="{{ $bank->id }}">{{ $bank->name.' - '.$bank->account_number  }}</option>
+            @endforeach
+        @endif
+    </select>
 </div>
 
-<!-- Paybill Field -->
+{{--<!-- House Number Field -->--}}
 <div class="form-group col-sm-12">
-    {!! Form::label('paybill', 'Paybill:') !!}
-    {!! Form::text('paybill', null, ['class' => 'form-control']) !!}
+    {!! Form::label('ref_number', 'Reference Number:') !!}
+    {!! Form::text('ref_number', null, ['class' => 'form-control','required']) !!}
 </div>
 
-<!-- Phone Number Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('phone_number', 'Phone Number:') !!}
-    {!! Form::text('phone_number', null, ['class' => 'form-control']) !!}
+<div class="form-group col-md-12">
+    <label>Amount</label>
+    <input type="number" class="form-control" required name="amount">
 </div>
 
-<!-- Billrefnumber Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('BillRefNumber', 'Billrefnumber:') !!}
-    {!! Form::text('BillRefNumber', null, ['class' => 'form-control']) !!}
-</div>
+<!-- Tenant Id Field -->
+{{--<div class="form-group col-sm-12">--}}
+{{--    {!! Form::label('tenant_id', 'Tenant Id:') !!}--}}
+@if(isset($tenant))
+    <input type="hidden" name="tenant_id" value="{{ $tenant->id }}">
+@endif
+{{--</div>--}}
 
-<!-- Transid Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('TransID', 'Transid:') !!}
-    {!! Form::text('TransID', null, ['class' => 'form-control']) !!}
-</div>
 
-<!-- Transtime Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('TransTime', 'Transtime:') !!}
-    {!! Form::date('TransTime', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Firstname Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('FirstName', 'Firstname:') !!}
-    {!! Form::text('FirstName', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Middlename Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('middleName', 'Middlename:') !!}
-    {!! Form::text('middleName', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Lastname Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('LastName', 'Lastname:') !!}
-    {!! Form::text('LastName', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Received On Field -->
+{{--<!-- Firstname Field -->--}}
 <div class="form-group col-sm-12">
     {!! Form::label('received_on', 'Received On:') !!}
-    {!! Form::date('received_on', null, ['class' => 'form-control']) !!}
+    {!! Form::date('received_on', \Carbon\Carbon::today()->toDateString(), ['class' => 'form-control']) !!}
 </div>
-
-<!-- Client Id Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('client_id', 'Client Id:') !!}
-    {!! Form::number('client_id', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Created By Field -->
-<div class="form-group col-sm-12">
-    {!! Form::label('created_by', 'Created By:') !!}
-    {!! Form::number('created_by', null, ['class' => 'form-control']) !!}
-</div>
-

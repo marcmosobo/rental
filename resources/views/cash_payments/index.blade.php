@@ -1,13 +1,13 @@
 @extends('layouts.app')
- @section("pageTitle",'Cash Payments')
- @section("pageSubtitle",'create, edit, delete CashPayments')
+ @section("pageTitle",'Cash/Bank Payments')
+{{-- @section("pageSubtitle",'create, edit, delete CashPayments')--}}
   @section("breadcrumbs")
-         <li>Home</li> <li>CashPayments</li>
+         <li>Home</li> <li>Cash/Bank Payments</li>
          @endsection
 @section('content')
     <section class="content-header">
         <h1 class="pull-right">
-           {{--<a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>--}}
+           <a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Make Payment</a>
         </h1>
     </section>
     <div class="content">
@@ -36,7 +36,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Create Cash Payment</h4>
+                        <h4 class="modal-title">Create Cash/Bank Payment</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -108,3 +108,20 @@
         </div>
 
     @endsection
+
+@push('js')
+    <script>
+
+        $('#payment-mode').on('change',function(){
+            let val = $(this).val();
+            if(val === 'Bank'){
+                $('#bank-div').show();
+                $('#bank-id').attr('required','required')
+            }else{
+                $('#bank-id').removeAttr('required');
+                $('#bank-div').hide();
+
+            }
+        })
+    </script>
+@endpush

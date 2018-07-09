@@ -34,7 +34,7 @@ class CashPaymentDataTable extends DataTable
         return $model->newQuery()
             ->select(['payments.*'])
             ->where('payment_mode',cash)
-            ->orWhere('payment_mode','Bank slip')
+            ->orWhere('payment_mode','Bank')
             ->orderByDesc('payments.id')
             ->with(['masterfile','unit'])
             ;

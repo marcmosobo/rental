@@ -42,7 +42,7 @@ class PayBillController extends AppBaseController
     public function index(PayBillDataTable $payBillDataTable)
     {
         return $payBillDataTable->render('pay_bills.index',[
-            'tenants'=>Tenant::where('b_role',\tenant)->get(),
+            'tenants'=>Lease::where('status',true)->with(['masterfile','unit'])->get(),
             'banks'=>Bank::all()
         ]);
     }
@@ -251,28 +251,6 @@ class PayBillController extends AppBaseController
     }
 
     public function searchBills(Request $request){
-//        print_r($request->all());
-        if($request->filter == "tenant"){
-            $this->validate($request,[
-                'tenant'=>'required'
-            ]);
-
-            $bills = BillDetail::query()
-                ->leftJoin('bills','bills.id','=','bill_details.bill_id')
-                ->leftJoin('service_options','service_options.id','=','bill_details.service_bill_id')
-                ->leftJoin('leases','leases.id','=','bills.lease_id')
-                ->leftJoin('property_units','property_units.id','=','leases.unit_id')
-                ->where([
-                    ['bills.tenant_id',$request->tenant],
-                    ['bill_details.balance','>',0]
-                ])->get();
-//            echo 'here';
-
-//            print_r($bills);
-        }else{
-            $this->validate($request,[
-                'house_number'=>'required'
-            ]);
 
             $bills = BillDetail::query()
                 ->select(['bill_details.*'])
@@ -284,7 +262,7 @@ class PayBillController extends AppBaseController
                     ['leases.unit_id',$request->house_number],
                     ['bill_details.balance','>',0]
                 ])->get();
-        }
+
 
         return view('pay_bills.index',[
             'tenants'=>Tenant::where('b_role',\tenant)->get(),

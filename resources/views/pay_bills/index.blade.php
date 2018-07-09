@@ -107,51 +107,51 @@
         </h1>
     </section>
     <div class="content">
-        <section class="invoice no-print">
-            <div class="row">
-                <div class="col-md-12">
-                    <form action="{{ url('searchBills') }}" method="post">
-                        {{ csrf_field() }}
-                        <div class="col-md-3">
-                            <label >Search By</label>
+        {{--<section class="invoice no-print">--}}
+            {{--<div class="row">--}}
+                {{--<div class="col-md-12">--}}
+                    {{--<form action="{{ url('searchBills') }}" method="post">--}}
+                        {{--{{ csrf_field() }}--}}
+                        {{--<div class="col-md-2">--}}
+                            {{--<label >Search By</label>--}}
 
-                            <div class="form-group">
-                                <input type="radio" checked name="filter" class="i-check-line filter" value="tenant"><label> Tenant</label>
-                            </div>
+                            {{--<div class="form-group">--}}
+                                {{--<input type="radio" checked name="filter" class="i-check-line filter" value="tenant"><label> Tenant</label>--}}
+                            {{--</div>--}}
                             {{--<div class="form-group">--}}
                                 {{--<input type="radio"  name="filter" class="i-check-line filter" value="house_number"><label>House Number</label>--}}
                             {{--</div>--}}
-                        </div>
-                        <div class="col-md-9">
-                        <div class="form-group" id="pre-defined-div"{{-- style="margin-top: 18px;"--}}>
-                            <div class="col-md-10 ">
-                                <label> Tenant</label>
-                                <select name="tenant" class="form-control select2" id="tenant-select" required>
-                                    <option value="">Select Tenant</option>
-                                    @if(count($tenants))
-                                        @foreach($tenants as $tenant)
-                                            <option value="{{ $tenant->id }}">{{ $tenant->full_name }}</option>
-                                            @endforeach
-                                        @endif
+                        {{--</div>--}}
+                        {{--<div class="col-md-8">--}}
+                        {{--<div class="form-group" id="pre-defined-div"--}}{{-- style="margin-top: 18px;"--}}{{-->--}}
+                            {{--<div class="col-md-10 ">--}}
+                                {{--<label> Select House Number</label>--}}
+                                {{--<select name="tenant" class="form-control select2" id="tenant-select" required>--}}
+                                    {{--<option value="">Select house number/tenant</option>--}}
+                                    {{--@if(count($tenants))--}}
+                                        {{--@foreach($tenants as $tenant)--}}
+                                            {{--<option value="{{ $tenant->id }}">{{ $tenant->unit->unit_number.' - '.  $tenant->masterfile->full_name }}</option>--}}
+                                            {{--@endforeach--}}
+                                        {{--@endif--}}
 
-                                </select>
-                            </div>
-                            <div class="col-md-10 " style="display: none;">
-                                <label> House Number</label>
-                                <select name="house_number" class="form-control select2" id="pre-defined-select">
-                                    <option value="">Select House Number</option>
+                                {{--</select>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-md-10 " style="display: none;">--}}
+                                {{--<label> House Number</label>--}}
+                                {{--<select name="house_number" class="form-control select2" id="pre-defined-select">--}}
+                                    {{--<option value="">Select House Number</option>--}}
 
-                                </select>
-                            </div>
-                            <div class="col-md-2 ">
-                                <button type="submit" class="btn btn-primary " style="margin-top: 25px;">Search</button>
-                            </div>
-                        </div>
-                </div>
-                    </form>
-                </div>
-            </div>
-        </section>
+                                {{--</select>--}}
+                            {{--</div>--}}
+                            {{--<div class="col-md-2 ">--}}
+                                {{--<button type="submit" class="btn btn-primary " style="margin-top: 25px;">Search</button>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                {{--</div>--}}
+                    {{--</form>--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</section>--}}
 
         @if(isset($payment))
         <section class="invoice">
@@ -214,7 +214,7 @@
                                             </td>
                                             <td style="padding-top: 5px; text-align: right;"></td>
                                             <td style="padding-top: 5px; text-align: right;">
-                                                {{ \App\Models\Masterfile::find($tenant->id)->full_name }}
+                                                {{ \App\Models\Masterfile::find($payment->tenant_id)->full_name }}
                                             </td>
                                         </tr>
                                         <tr>

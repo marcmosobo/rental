@@ -6,9 +6,15 @@ use App\DataTables\CashPaymentDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateCashPaymentRequest;
 use App\Http\Requests\UpdateCashPaymentRequest;
+use App\Models\Bank;
+use App\Models\CustomerAccount;
+use App\Models\Lease;
+use App\Models\Payment;
 use App\Repositories\CashPaymentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class CashPaymentController extends AppBaseController
@@ -30,7 +36,10 @@ class CashPaymentController extends AppBaseController
      */
     public function index(CashPaymentDataTable $cashPaymentDataTable)
     {
-        return $cashPaymentDataTable->render('cash_payments.index');
+        return $cashPaymentDataTable->render('cash_payments.index',[
+            'tenants'=>Lease::where('status',true)->with(['masterfile','unit'])->get(),
+            'banks'=>Bank::all()
+        ]);
     }
 
     /**
@@ -54,7 +63,45 @@ class CashPaymentController extends AppBaseController
     {
         $input = $request->all();
 
-        $cashPayment = $this->cashPaymentRepository->create($input);
+        DB::transaction(function()use ($input){
+            $lease = Lease::where('id',$input['lease_id'])->with(['unit','masterfile'])->first();
+            $payment = Payment::create([
+                'payment_mode'=>$input['payment_mode'],
+                'account_number'=>$lease->unit->unit_number,
+                'ref_number'=>$input['ref_number'],
+                'amount'=>$input['amount'],
+//                'paybill'=>$request->BusinessShortCode,
+                'phone_number'=>$lease->masterfile->phone_number,
+                'BillRefNumber'=>$lease->unit->unit_number,
+                'TransID'=>$input['ref_number'],
+                'TransTime'=>$input['received_on'],
+                'FirstName'=>$lease->masterfile->full_name,
+//                'MiddleName'=>$request->MiddleName,
+//                'LastName'=>$request->LastName,
+//                'client_id' => $input['client_id'],
+                'received_on'=>$input['received_on'],
+                'mf_id'=>$lease->masterfile->id,
+                'status'=>true,
+                'house_number'=>$lease->unit_id,
+                'tenant_id' => $lease->tenant_id,
+                'created_by'=>Auth::user()->mf_id,
+                'bank_id'=>$input['bank_id']
+            ]);
+
+            $acc = CustomerAccount::create([
+                'tenant_id'=>$lease->tenant_id,
+                'lease_id'=>$lease->id,
+                'unit_id'=>$lease->unit->id,
+                'payment_id'=>$payment->id,
+                'ref_number'=>$payment->ref_number,
+                'transaction_type'=>debit,
+                'amount'=>$payment->amount,
+                'date'=>$input['received_on']
+            ]);
+
+
+        });
+
 
         Flash::success('Cash Payment saved successfully.');
 
