@@ -177,7 +177,7 @@ class RoutesTableSeeder extends Seeder
 //        $child->roles()->attach($admin);
 
         $child = Route::create([
-            'route_name'=>'Cash Payments',
+            'route_name'=>'Cash/Bank Payments',
             'parent_route' => $parent->id,
             'url'=>'cashPayments'
         ]);
@@ -228,6 +228,13 @@ class RoutesTableSeeder extends Seeder
             'route_name'=>'Rent Collection Report',
             'parent_route' => $parent->id,
             'url'=>'rentpay'
+        ]);
+        $child->roles()->attach($admin);
+
+        $child = Route::create([
+            'route_name'=>'Daily Collection Report',
+            'parent_route' => $parent->id,
+            'url'=>'dailyPayments'
         ]);
         $child->roles()->attach($admin);
 

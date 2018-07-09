@@ -539,4 +539,52 @@ class ReportController extends Controller
 
 
     }
+
+    public function mpesaPayments(){
+
+        return view('reports.daily-payments',[
+            'properties'=>Property::all()
+        ]);
+
+    }
+
+    public function getmpesaPayments(Request $request)
+    {
+        if(!$request->isMethod('POST')){
+            return redirect('dailyPayments');
+        }
+
+        $input=$request->all();
+        if($request->status == 'all'){
+            $mpay=Payment::query()
+                ->leftjoin('masterfiles','payments.tenant_id','=','masterfiles.id')
+                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
+                ->leftjoin('properties','leases.property_id','=','properties.id')
+//                    ->where('payments.status','=',$request->status)
+                ->whereBetween('TransTime',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
+
+        }else if($request->status == 0){
+            $mpay=Payment::query()
+                ->leftjoin('masterfiles','payments.tenant_id','=','masterfiles.id')
+                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
+                ->leftjoin('properties','leases.property_id','=','properties.id')
+                ->where('payments.status',false)
+                ->whereBetween('TransTime',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
+
+        }else{
+            $mpay=Payment::query()
+                ->leftjoin('masterfiles','payments.tenant_id','=','masterfiles.id')
+                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
+                ->leftjoin('properties','leases.property_id','=','properties.id')
+                ->where('payments.status',true)
+                ->whereBetween('TransTime',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
+
+        }
+
+//            print_r($mpay->toArray());die;
+        return view('reports.daily-payments',[
+
+            'pay'=>collect($mpay)
+        ]);
+    }
 }
