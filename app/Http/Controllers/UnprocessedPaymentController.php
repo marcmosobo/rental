@@ -6,6 +6,8 @@ use App\DataTables\UnprocessedPaymentDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateUnprocessedPaymentRequest;
 use App\Http\Requests\UpdateUnprocessedPaymentRequest;
+use App\Models\Property;
+use App\Models\PropertyUnit;
 use App\Repositories\UnprocessedPaymentRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
@@ -18,6 +20,7 @@ class UnprocessedPaymentController extends AppBaseController
 
     public function __construct(UnprocessedPaymentRepository $unprocessedPaymentRepo)
     {
+        $this->middleware('auth');
         $this->unprocessedPaymentRepository = $unprocessedPaymentRepo;
     }
 
@@ -29,7 +32,9 @@ class UnprocessedPaymentController extends AppBaseController
      */
     public function index(UnprocessedPaymentDataTable $unprocessedPaymentDataTable)
     {
-        return $unprocessedPaymentDataTable->render('unprocessed_payments.index');
+        return $unprocessedPaymentDataTable->render('unprocessed_payments.index',[
+            'units'=>PropertyUnit::all()
+        ]);
     }
 
     /**

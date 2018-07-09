@@ -131,7 +131,7 @@ class PaymentController extends AppBaseController
 
         Flash::success('Payment updated successfully.');
 
-        return redirect(route('payments.index'));
+        return redirect(route('unprocessedPayments.index'));
     }
 
     /**
@@ -207,9 +207,9 @@ class PaymentController extends AppBaseController
             }
         }else{
             Flash::error('You must choose house number.');
-            return redirect(route('payments.index'));
+            return redirect(route('unprocessedPayments.index'));
         }
         Flash::success('Payment processed successfully.');
-        return redirect(route('payments.index'));
+        return redirect(route('unprocessedPayments.index'));
     }
 }
