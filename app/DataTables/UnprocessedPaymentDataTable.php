@@ -2,21 +2,15 @@
 
 namespace App\DataTables;
 
-use App\Models\Masterfile;
 use App\Models\Payment;
-use App\Models\User;
+use App\Models\UnprocessedPayment;
+use App\User;
 use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class PaymentDataTable extends DataTable
+class UnprocessedPaymentDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
     public function dataTable($query)
     {
         $dataTable = new EloquentDataTable($query);
@@ -59,7 +53,7 @@ class PaymentDataTable extends DataTable
     public function query(Payment $model)
     {
         return $model->newQuery()->where('payment_mode',mpesa)
-            ->where('status',true)
+            ->where('status',false)
             ->orderByDesc('payments.id')
             ;
     }
@@ -123,13 +117,8 @@ class PaymentDataTable extends DataTable
         ];
     }
 
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
     protected function filename()
     {
-        return 'paymentsdatatable_' . time();
+        return 'unprocessed_paymentsdatatable_' . time();
     }
 }
