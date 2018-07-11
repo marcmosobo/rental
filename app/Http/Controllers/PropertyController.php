@@ -10,6 +10,8 @@ use App\Models\Masterfile;
 use App\Repositories\PropertyRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
+use League\Csv\Reader;
 use Response;
 
 class PropertyController extends AppBaseController
@@ -152,4 +154,6 @@ class PropertyController extends AppBaseController
 
         return redirect(route('properties.index'));
     }
+
+
 }

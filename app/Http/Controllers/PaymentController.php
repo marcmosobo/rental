@@ -19,6 +19,8 @@ use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use League\Csv\Reader;
+use League\Csv\Statement;
 use Response;
 
 class PaymentController extends AppBaseController
@@ -223,4 +225,42 @@ class PaymentController extends AppBaseController
 //            'ref_number'=>
 //        ]);
 //    }
+
+
+    public function crossCheck(){
+        return view('payments.uploads');
+    }
+
+    public function crossCheckPayments(Request $request){
+
+//        var_dump($request->file('import_file')->path());die;
+        $stream = fopen($request->file('import_file')->path(), 'r');
+        $csv = Reader::createFromStream($stream);
+        $csv->setDelimiter(',');
+        $csv->setHeaderOffset(5);
+
+        $stmt = (new Statement())
+            ->offset(5);
+//            ->limit(25);
+
+        //query your records from the document
+        $records = $stmt->process($csv);
+//        echo count($records);die;
+
+        $recs =[];
+        foreach ($records as $record){
+            $payments = Payment::where('ref_number',$record['Receipt No.'])->first();
+            if(is_null($payments)){
+                if(!empty($record['Paid In'])){
+                    $record['Paid In'] = floatval($record['Paid In']);
+                    $recs[] = $record;
+                }
+            }
+//            echo $record['Receipt No.'];
+        }
+//        print_r($recs);die;
+        return view('payments.uploads',[
+            'payments'=>collect($recs)
+        ]);
+    }
 }

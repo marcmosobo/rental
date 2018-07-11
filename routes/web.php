@@ -160,7 +160,7 @@ Route::patch('reversePayment/{id}','PaymentController@reversePayment');
 Route::resource('unprocessedPayments', 'UnprocessedPaymentController');
 
 
-
-
-
 Route::resource('paymentTransfers', 'PaymentTransferController');
+
+Route::get('crossCheckTrans','PaymentController@crossCheck');
+Route::post('crossCheckPayments','PaymentController@crossCheckPayments');
