@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Http\Controllers\LoggedUserController;
 use App\Models\PropertyUnit;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
@@ -51,22 +52,41 @@ class PropertyUnitDataTable extends DataTable
      */
     public function html()
     {
-        return $this->builder()
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->addAction(['width' => '80px'])
-            ->parameters([
-                'scrollX'=>true,
+        if(LoggedUserController::isAllAccessGranted()){
+            return $this->builder()
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                ->addAction(['width' => '80px'])
+                ->parameters([
 //                'dom'     => 'Bfrtip',
 //                'order'   => [[0, 'desc']],
-                'buttons' => [
-                    'create',
-                    'export',
-                    'print',
-                    'reset',
-                    'reload',
-                ],
-            ]);
+                    'scrollX'=>true,
+                    'buttons' => [
+                        'create',
+                        'export',
+                        'print',
+                        'reset',
+                        'reload',
+                    ],
+                ]);
+        }else{
+            return $this->builder()
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+//                ->addAction(['width' => '80px'])
+                ->parameters([
+//                'dom'     => 'Bfrtip',
+//                'order'   => [[0, 'desc']],
+                    'scrollX'=>true,
+                    'buttons' => [
+                        'create',
+                        'export',
+                        'print',
+                        'reset',
+                        'reload',
+                    ],
+                ]);
+        }
     }
 
     /**
