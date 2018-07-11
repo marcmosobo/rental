@@ -125,7 +125,7 @@ class CashPaymentController extends AppBaseController
             return redirect(route('cashPayments.index'));
         }
 
-        return view('cash_payments.show')->with('cashPayment', $cashPayment);
+        return response()->json($cashPayment);
     }
 
     /**
@@ -165,8 +165,16 @@ class CashPaymentController extends AppBaseController
 
             return redirect(route('cashPayments.index'));
         }
+        DB::transaction(function()use ($request,$id){
+            $cashPayment = $this->cashPaymentRepository->update($request->all(), $id);
 
-        $cashPayment = $this->cashPaymentRepository->update($request->all(), $id);
+            $customerAcc = CustomerAccount::where('payment_id',$cashPayment->id)->first();
+            if(!is_null($customerAcc)){
+                $customerAcc->date = $request->received_on;
+                $customerAcc->save();
+            }
+        });
+
 
         Flash::success('Cash Payment updated successfully.');
 

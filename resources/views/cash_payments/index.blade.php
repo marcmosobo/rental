@@ -64,11 +64,15 @@
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                            <span aria-hidden="true">&times;</span>
                        </button>
-                       <h4 class="modal-title">Edit Cash Payment</h4>
+                       <h4 class="modal-title">Edit Cash/Bank Payment</h4>
                    </div>
                    <div class="modal-body">
                         <div class="row">
-                           @include('cash_payments.fields')
+                           {{--@include('cash_payments.fields')--}}
+                            <div class="form-group col-sm-12">
+                                {!! Form::label('received_on', 'Received On:') !!}
+                                {!! Form::date('received_on', null, ['class' => 'form-control','id'=>'received_on']) !!}
+                            </div>
                         </div>
                    </div>
                    <div class="modal-footer">

@@ -155,5 +155,7 @@ Route::delete('reverse-lease/{id}','LeaseController@reverse');
 Route::resource('terminatedLeases', 'TerminatedLeaseController');
 
 Route::patch('processPayment/{id}','PaymentController@processPayment');
+Route::patch('reversePayment/{id}','PaymentController@reversePayment');
 
 Route::resource('unprocessedPayments', 'UnprocessedPaymentController');
+

@@ -2,7 +2,9 @@
 
 namespace App\DataTables;
 
+use App\Http\Controllers\LoggedUserController;
 use App\Models\CashPayment;
+use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
@@ -18,7 +20,14 @@ class CashPaymentDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->editColumn('action', function($payment){
+        return $dataTable
+            ->editColumn('received_on',function($payment){
+                return Carbon::parse($payment->received_on)->toDateString();
+            })
+            ->editColumn('paybill',function($payment){
+                return '<a data-toggle="modal" e-id="'.$payment->id.'" href="#edit-modal" hint="'.url('cashPayments/'.$payment->id).'"  class="btn btn-xs btn-success edit-common">Edit payment</a>';
+            })->rawColumns(['action','paybill'])
+            ->editColumn('action', function($payment){
             return '<a href="'.url('receipt/'.$payment->id).'" class="btn btn-xs btn-primary">view/print receipt</a>';
         });
     }
@@ -72,29 +81,36 @@ class CashPaymentDataTable extends DataTable
      */
     protected function getColumns()
     {
-        return [
-//            'payment_mode',
+        if(LoggedUserController::isAllAccessGranted()){
+            return [
+                'masterfile.full_name'=>[
+                    'title'=>'Tenant Name'
+                ],
+                'unit.unit_number'=>[
+                    'title'=>'Unit Number'
+                ],
+                'ref_number',
+                'amount',
+                'received_on',
+                'paybill'=>[
+                    'title'=>'Edit'
+                ]
+            ];
 
-            'masterfile.full_name'=>[
-                'title'=>'Tenant Name'
-            ],
-            'unit.unit_number'=>[
-                'title'=>'Unit Number'
-            ],
-            'ref_number',
-            'amount',
-//            'paybill',
-//            'phone_number',
-//            'BillRefNumber',
-//            'TransID',
-//            'TransTime',
-//            'FirstName',
-//            'middleName',
-//            'LastName',
-//            'received_on',
-//            'client_id',
-//            'created_by'
-        ];
+        }else{
+            return [
+                'masterfile.full_name'=>[
+                    'title'=>'Tenant Name'
+                ],
+                'unit.unit_number'=>[
+                    'title'=>'Unit Number'
+                ],
+                'ref_number',
+                'amount',
+                'received_on',
+            ];
+        }
+
     }
 
     /**

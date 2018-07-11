@@ -16,6 +16,7 @@ use App\Repositories\PaymentRepository;
 use Carbon\Carbon;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Response;
@@ -212,4 +213,14 @@ class PaymentController extends AppBaseController
         Flash::success('Payment processed successfully.');
         return redirect(route('unprocessedPayments.index'));
     }
+
+//    public function reversePayment(Request $request, $id){
+//        $payment = Payment::find($id);
+//        $reversal = Payment::create([
+//            'payment_mode'=>$payment->payment_mode,
+//            'house_number'=>$payment->house_number,
+//            'tenant_id'=>$payment->tenant,
+//            'ref_number'=>
+//        ]);
+//    }
 }
