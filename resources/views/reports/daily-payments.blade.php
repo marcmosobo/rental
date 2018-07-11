@@ -1,6 +1,5 @@
 @extends('layouts.app')
  @section("pageTitle",'Payments Summary Report')
- {{--@section("pageSubtitle",'create, edit, delete Claims')--}}
   @section("breadcrumbs")
             <li>Reports</li>
             <li>Payments History</li>
@@ -15,6 +14,8 @@
         }
     </style>
     @endsection
+
+
 @section('content')
     <section class="invoice no-print">
         <div class="row">
@@ -24,14 +25,14 @@
                         <form action="{{ url('getDailyPayments') }}" id="plot-form" method="post">
                             {{ csrf_field() }}
                             <div class="col-md-3">
-                                <label>Status</label>
-                                <select name="status" id="status"  class="form-control">
-
-                                    <option value="1">Processed</option>
-                                    <option value="0">Pending</option>
+                                <label>Filter By</label>
+                                <select name="filter_by" id="status" class="form-control select2">
                                     <option value="all">All</option>
+                                    <option value="processed">Processed</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="mpesa">MPESA Payments</option>
+                                    <option value="bank">Bank Payments</option>
                                 </select>
-                                {{--<input type="text" required value="{{ \Carbon\Carbon::today()->startOfMonth()->toDateString() }}" class="form-control" id="date-from" name="date_from">--}}
                             </div>
                             <div class="col-md-3">
                                 <label>From</label>
@@ -50,116 +51,91 @@
             </div>
         </div>
     </section>
-    @if(isset($pay))
-    <section class="invoice">
-        <!-- title row -->
+    @if(isset($payments))
+        <section class="invoice">
+            <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
 
-        <!-- info row -->
-        <div class="row invoice-info">
-            <div class="col-sm-4 invoice-col">
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col text-center">
+                    <address>
+                        <h3>Marite Enterprises Limited</h3>
+                        Lentile House, 2<sup>nd</sup> Floor Rm 213<br>
+                        P.O Box 1440 - 10400 Nanyuki<br>
+                        {{--<br>--}}
+                        Phone number: 0700634000<br>
+                        Email: info@mariteenterprises.co.ke
+                    </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
 
+                </div>
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-            <div class="col-sm-4 invoice-col text-center">
-                <address>
-                    <h3>Marite Enterprises Limited</h3>
-                    Lentile House, 2<sup>nd</sup> Floor Rm 213<br>
-                    P.O Box 1440 - 10400 Nanyuki<br>
-                    {{--<br>--}}
-                    Phone number: 0700634000<br>
-                    Email: info@mariteenterprises.co.ke
-                </address>
-            </div>
-            <!-- /.col -->
-            <div class="col-sm-4 invoice-col">
 
-            </div>
-            <!-- /.col -->
-        </div>
-
-        <div class="row">
-            <div class="col-md-12 table-responsive">
-                {{--<h4 class="">Property statement for: {{ $from }} - {{ $to }}</h4>--}}
-                {{--<p class="">Property: {{ $prop }}</p>--}}
-                {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
-                <table class="table table-striped">
-                    <thead>
+            <div class="row">
+                <div class="col-md-12 table-responsive">
+                    {{--<h4 class="">Property statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>--}}
+                    {{--<p class="">Property: {{ $prop }}</p>--}}
+                    {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
-                            <th>Name</th>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: right;"><h2>Total : {{ number_format($payments->sum('amount'),2) }} Ksh</h2></td>
+                        </tr>
+                        <tr>
+                            <th>Payment Mode</th>
+                            <th>Reference Number</th>
+                            {{--<th>Paid By</th>--}}
                             <th>Date Paid</th>
-                            <th>RefNumber</th>
-                            <th>Property Name</th>
-                            <th>Unit Number</th>
-                            <th>Amount Paid</th>
-                            {{--<th>Status</th>--}}
-                            {{--<th style="text-align: right;">Monthly Rent</th>--}}
-                            {{--<th style="text-align: right;">Arrears B/F</th>--}}
-                            {{--<th style="text-align: right;">Total Due</th>--}}
-                            {{--<th style="text-align: right;">Amount Paid</th>--}}
-                            {{--<th style="text-align: right;">Arrears C/F</th>--}}
+                            <th style="text-align: right">Amount </th>
                         </tr>
-                    </thead>
-                    <tbody>
-                    @if(count($pay))
-                        <?php $total=0; ?>
-                        @foreach($pay as $pays)
-
-                            @php
-
-                                $total=$total+$pays->amount;
-
-                            @endphp
-                            <tr>
-                                <td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>
-                                <td>{{$pays['TransTime']}}</td>
-                                <td>{{$pays['ref_number']}}</td>
-                                <td>{{$pays['name']}}</td>
-                                <td>{{ $pays['house_number'] }}</td>
-                                <td  style="text-align: right;">{{ number_format($pays['amount'],2) }}</td>
-                            </tr>
-
+                        </thead>
+                        <tbody>
+                        @if(count($payments))
+                            @foreach($payments as $payment)
+                                <tr>
+                                    <td>{{ $payment->payment_mode }}</td>
+                                    <td>{{ $payment->ref_number }}</td>
+                                    {{--<td>{{ $payment->reference_mode }}</td>--}}
+                                    <td>{{ \Carbon\Carbon::parse($payment->received_on)->toFormattedDateString()}}</td>
+                                    <td  style="text-align: right;">{{ number_format($payment['amount'],2) }}</td>
+                                </tr>
                             @endforeach
-
-
-
-                        <tr>
-                            <th><h3 class="no-top"></h3></th>
-                            <th><h3 class="no-top"></h3></th>
-                            <th><h3 class="no-top"></h3></th>
-                            <th><h3 class="no-top"></h3></th>
-                            <th><h3 class="no-top">Totals</h3></th>
-                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($pay->sum('amount'),2) }}</h3></th>
-                        </tr>
+                            <tr>
+                                <th><h3 class="no-top">{{ count($payments) }} </h3></th>
+                                <th><h3 class="no-top"></h3></th>
+                                {{--<th><h3 class="no-top"></h3></th>--}}
+                                <th><h3 class="no-top">Totals</h3></th>
+                                <th style="text-align: right;"><h3 class="no-top">{{ number_format($payments->sum('amount'),2) }}</h3></th>
+                            </tr>
                         @else
-                        <tr>
-                            <td class="text-center" colspan="6">No records found</td>
-                        </tr>
+                            <tr>
+                                <td class="text-center" colspan="5">No records found</td>
+                            </tr>
                         @endif
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
 
+                </div>
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
-        </div>
 
+            <br>
+            <br>
+            <div class="row no-print">
+                <div class="col-xs-12">
 
-
-        <!-- this row will not appear when printing -->
-        <br>
-        <br>
-        <div class="row no-print">
-            <div class="col-xs-12">
-
-                <a onclick="window.print()" target="_blank" class="btn btn-success pull-right"><i class="fa fa-print"></i> Print</a>
+                    <a onclick="window.print()" target="_blank" class="btn btn-success pull-right"><i class="fa fa-print"></i> Print</a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
     @endif
+    <!-- /.content -->
+    <div class="clearfix"></div>
 @endsection
-
-@push('js')
-    <script>
-        // $('a#propertyStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
-
-    </script>
-    @endpush

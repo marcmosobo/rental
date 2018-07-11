@@ -133,7 +133,7 @@ Route::any('getTenantArrears','ReportController@getTenantArrears');
 Route::any('getPlotStatement','ReportController@getPlotStatement');
 Route::any('getLandlordStatement','ReportController@getLandlordStatement');
 Route::any('getrentPayment','ReportController@getrentPayments');
-Route::any('getDailyPayments','ReportController@getmpesaPayments');
+Route::any('getDailyPayments','ReportController@getDailyPaymentsByDate');
 //imports
 Route::get('import','LandlordController@import');
 Route::post('importMasterfiles','LandlordController@importMasterfiles');
@@ -159,3 +159,8 @@ Route::patch('reversePayment/{id}','PaymentController@reversePayment');
 
 Route::resource('unprocessedPayments', 'UnprocessedPaymentController');
 
+
+
+
+
+Route::resource('paymentTransfers', 'PaymentTransferController');

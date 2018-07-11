@@ -33,6 +33,10 @@ class CreatePaymentsTable extends Migration
             $table->integer('client_id')->nullable();
             $table->integer('created_by')->nullable();
             $table->boolean('status')->default(false);
+            $table->string('transferred_from')->nullable();
+            $table->string('transferred_to')->nullable();
+            $table->string('transferred_by')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });

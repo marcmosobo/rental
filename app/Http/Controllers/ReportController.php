@@ -548,43 +548,32 @@ class ReportController extends Controller
 
     }
 
-    public function getmpesaPayments(Request $request)
+    public function getDailyPaymentsByDate(Request $request)
     {
         if(!$request->isMethod('POST')){
             return redirect('dailyPayments');
         }
+        $input = $request->all();
+        $date_from = Carbon::parse($request->date_from)->startOfDay();
+        $date_to = Carbon::parse($request->date_to)->endOfDay();
 
-        $input=$request->all();
-        if($request->status == 'all'){
-            $mpay=Payment::query()
-                ->leftjoin('masterfiles','payments.tenant_id','=','masterfiles.id')
-                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
-                ->leftjoin('properties','leases.property_id','=','properties.id')
-//                    ->where('payments.status','=',$request->status)
-                ->whereBetween('TransTime',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
-
-        }else if($request->status == 0){
-            $mpay=Payment::query()
-                ->leftjoin('masterfiles','payments.tenant_id','=','masterfiles.id')
-                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
-                ->leftjoin('properties','leases.property_id','=','properties.id')
-                ->where('payments.status',false)
-                ->whereBetween('TransTime',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
-
-        }else{
-            $mpay=Payment::query()
-                ->leftjoin('masterfiles','payments.tenant_id','=','masterfiles.id')
-                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
-                ->leftjoin('properties','leases.property_id','=','properties.id')
-                ->where('payments.status',true)
-                ->whereBetween('TransTime',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
-
+        $payments = [];
+        if($request->filter_by == 'all'){
+            $payments = Payment::query()
+                ->where('received_on','>=',$date_from)
+                ->where('received_on','<=',$date_to)
+                ->get();
+        }else if($request->filter_by == 'mpesa'){
+            $payments = Payment::query()
+                ->where('payment_mode',mpesa)
+                ->where('received_on','>=',$date_from)
+                ->where('received_on','<=',$date_to)
+                ->get();
         }
+//        print_r($allPayments);die;
 
-//            print_r($mpay->toArray());die;
         return view('reports.daily-payments',[
-
-            'pay'=>collect($mpay)
+            'payments'=>collect($payments)
         ]);
     }
 }

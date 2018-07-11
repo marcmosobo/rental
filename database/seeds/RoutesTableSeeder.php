@@ -184,16 +184,23 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($admin);
 
         $child = Route::create([
-            'route_name'=>' Processed Mpesa Payments',
+            'route_name'=>'Processed Mpesa Payments',
             'parent_route' => $parent->id,
             'url'=>'payments'
         ]);
         $child->roles()->attach($admin);
 
         $child = Route::create([
-            'route_name'=>' UnProcessed Mpesa Payments',
+            'route_name'=>'UnProcessed Mpesa Payments',
             'parent_route' => $parent->id,
             'url'=>'unprocessedPayments'
+        ]);
+        $child->roles()->attach($admin);
+
+        $child = Route::create([
+            'route_name'=>'Payment Transfers',
+            'parent_route' => $parent->id,
+            'url'=>'paymentTransfers'
         ]);
         $child->roles()->attach($admin);
 

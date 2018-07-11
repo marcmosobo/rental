@@ -62,6 +62,9 @@ class CashPaymentController extends AppBaseController
     public function store(CreateCashPaymentRequest $request)
     {
         $input = $request->all();
+        $this->validate($request,[
+            'ref_number'=>'required|unique:payments,ref_number'
+        ]);
 
         DB::transaction(function()use ($input){
             $lease = Lease::where('id',$input['lease_id'])->with(['unit','masterfile'])->first();
