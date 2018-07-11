@@ -569,6 +569,24 @@ class ReportController extends Controller
                 ->where('received_on','>=',$date_from)
                 ->where('received_on','<=',$date_to)
                 ->get();
+        }else if($request->filter_by == 'bank'){
+            $payments = Payment::query()
+                ->where('payment_mode','Bank')
+                ->where('received_on','>=',$date_from)
+                ->where('received_on','<=',$date_to)
+                ->get();
+        }else if($request->filter_by == 'processed'){
+            $payments = Payment::query()
+                ->where('status',true)
+                ->where('received_on','>=',$date_from)
+                ->where('received_on','<=',$date_to)
+                ->get();
+        }else{
+            $payments = Payment::query()
+                ->where('status',false)
+                ->where('received_on','>=',$date_from)
+                ->where('received_on','<=',$date_to)
+                ->get();
         }
 //        print_r($allPayments);die;
 
