@@ -560,35 +560,35 @@ class ReportController extends Controller
         $payments = [];
         if($request->filter_by == 'all'){
             $payments = Payment::query()
-                ->where('received_on','>=',$date_from)
-                ->where('received_on','<=',$date_to)
+                ->whereBetween('received_on',[$date_from,$date_to])
+                ->with(['masterfile'])
                 ->get();
         }else if($request->filter_by == 'mpesa'){
             $payments = Payment::query()
                 ->where('payment_mode',mpesa)
-                ->where('received_on','>=',$date_from)
-                ->where('received_on','<=',$date_to)
+                    ->whereBetween('received_on',[$date_from,$date_to])
+                ->with(['masterfile'])
                 ->get();
         }else if($request->filter_by == 'bank'){
             $payments = Payment::query()
                 ->where('payment_mode','Bank')
-                ->where('received_on','>=',$date_from)
-                ->where('received_on','<=',$date_to)
+                ->whereBetween('received_on',[$date_from,$date_to])
+                ->with(['masterfile'])
                 ->get();
         }else if($request->filter_by == 'processed'){
             $payments = Payment::query()
                 ->where('status',true)
-                ->where('received_on','>=',$date_from)
-                ->where('received_on','<=',$date_to)
+                ->whereBetween('received_on',[$date_from,$date_to])
+                ->with(['masterfile'])
                 ->get();
         }else{
             $payments = Payment::query()
                 ->where('status',false)
-                ->where('received_on','>=',$date_from)
-                ->where('received_on','<=',$date_to)
+                ->whereBetween('received_on',[$date_from,$date_to])
+                ->with(['masterfile'])
                 ->get();
         }
-//        print_r($allPayments);die;
+//        print_r($payments->toArray());die;
 
         return view('reports.daily-payments',[
             'payments'=>collect($payments)

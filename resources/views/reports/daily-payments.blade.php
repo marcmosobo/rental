@@ -86,12 +86,12 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td style="text-align: right;"><h2>Total : {{ number_format($payments->sum('amount'),2) }} Ksh</h2></td>
+                            <td style="text-align: right;"><p class="lead">Total : {{ number_format($payments->sum('amount'),2) }} Ksh</p></td>
                         </tr>
                         <tr>
                             <th>Payment Mode</th>
                             <th>Reference Number</th>
-                            {{--<th>Paid By</th>--}}
+                            <th>Paid By</th>
                             <th>Date Paid</th>
                             <th style="text-align: right">Amount </th>
                         </tr>
@@ -102,7 +102,7 @@
                                 <tr>
                                     <td>{{ $payment->payment_mode }}</td>
                                     <td>{{ $payment->ref_number }}</td>
-                                    {{--<td>{{ $payment->reference_mode }}</td>--}}
+                                    <td>{{ (!is_null($payment->masterfile))? $payment->masterfile->full_name : $payment->FirstName.' '.$payment->LastName }}</td>
                                     <td>{{ \Carbon\Carbon::parse($payment->received_on)->toFormattedDateString()}}</td>
                                     <td  style="text-align: right;">{{ number_format($payment['amount'],2) }}</td>
                                 </tr>
@@ -110,7 +110,7 @@
                             <tr>
                                 <th><h3 class="no-top">{{ count($payments) }} </h3></th>
                                 <th><h3 class="no-top"></h3></th>
-                                {{--<th><h3 class="no-top"></h3></th>--}}
+                                <th><h3 class="no-top"></h3></th>
                                 <th><h3 class="no-top">Totals</h3></th>
                                 <th style="text-align: right;"><h3 class="no-top">{{ number_format($payments->sum('amount'),2) }}</h3></th>
                             </tr>

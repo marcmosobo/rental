@@ -100,5 +100,9 @@ class Payment extends Model
         
     ];
 
+    public function masterfile(){
+        return $this->belongsTo(Masterfile::class,'tenant_id');
+    }
+
     
 }
