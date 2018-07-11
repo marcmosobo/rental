@@ -139,3 +139,9 @@
     <!-- /.content -->
     <div class="clearfix"></div>
 @endsection
+
+@push('js')
+    <script>
+        $('a#dailyPayments').parent('li').addClass('active').parent('ul').parent().addClass('active');
+    </script>
+@endpush
