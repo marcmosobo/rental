@@ -555,8 +555,8 @@ class ReportController extends Controller
         }
         $input = $request->all();
         $date_from = Carbon::parse($request->date_from)->startOfDay();
-//        $date_to = Carbon::parse($request->date_to)->endOfDay();
-       echo  $date_to = Carbon::parse('11-07-2018 09:35:53');
+        $date_to = Carbon::parse($request->date_to)->endOfDay();
+//       echo  $date_to = Carbon::parse('11-07-2018 09:35:53');
 
         $payments = [];
         if($request->filter_by == 'all'){
