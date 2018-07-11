@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\TerminatedLease;
+use App\User;
 use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
@@ -33,7 +34,7 @@ class TerminatedLeaseDataTable extends DataTable
             })
             ->editColumn('reversed_by',function($lease){
                 if(!is_null($lease->reversed_by)){
-                    return Masterfile::find($lease->reversed_by)->full_name;
+                    return User::find($lease->reversed_by)->name;
                 }
             })
             ->addColumn('action', function($lease){
