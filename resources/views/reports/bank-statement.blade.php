@@ -107,13 +107,7 @@
                             <th>RefNumber</th>
                             <th>Property Name</th>
                             <th>Unit Number</th>
-                            <th>Amount Paid</th>
-                            {{--<th>Status</th>--}}
-                            {{--<th style="text-align: right;">Monthly Rent</th>--}}
-                            {{--<th style="text-align: right;">Arrears B/F</th>--}}
-                            {{--<th style="text-align: right;">Total Due</th>--}}
-                            {{--<th style="text-align: right;">Amount Paid</th>--}}
-                            {{--<th style="text-align: right;">Arrears C/F</th>--}}
+                            <th style="text-align: right;">Amount paid</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,7 +123,7 @@
                             <tr>
                                 {{--<td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
                                 <td>{{$pays['TenantName']}}</td>
-                                <td>{{$pays['Date']}}</td>
+                                <td>{{\Carbon\Carbon::parse($pays['Date'])->toFormattedDateString() }}</td>
                                 <td>{{$pays['Reference No']}}</td>
                                 <td>{{$pays['pname']}}</td>
                                 <td>{{ $pays['HouseNo'] }}</td>
@@ -180,7 +174,7 @@
 
 @push('js')
     <script>
-        // $('a#propertyStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
+        $('a#bankStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
 
     </script>
     @endpush
