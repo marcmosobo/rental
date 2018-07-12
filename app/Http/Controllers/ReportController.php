@@ -586,6 +586,7 @@ class ReportController extends Controller
                 }else{
                     $reports[]=[
                         'house_number'=>$unit->unit_number,
+                        'property_name'=>Property::find($unit->property_id)->name,
                         'tenant'=>'-',
                         'phone_number'=>'-',
                         'bbf'=>0,
@@ -596,6 +597,7 @@ class ReportController extends Controller
                         'paid'=>0,
                         'bcf'=>0,
                         'over_payment'=> 0,
+                        'rentPaid'=>0
                     ];
                 }
             }
@@ -611,7 +613,7 @@ class ReportController extends Controller
             'landlords'=>Masterfile::where('b_role',landlord)->get(),
 //            'landlord' =>$property->masterfile,
 //            'prop'=>$property->name,
-//            'expenditures'=>$expenditures,
+            'expenditures'=>$expenditures,
 //            'commission'=> $property->commission
         ]);
     }

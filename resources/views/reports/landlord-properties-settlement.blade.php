@@ -156,13 +156,13 @@
                     @if(isset($expenditures))
                     <table class="table" style="width: 50%" >
                     <tr>
-                        <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('rentPaid',2)) }}</td>
+                        {{--<th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('rentPaid',2)) }}</td>--}}
                     </tr>
                     <tr>
-                        <th style="width:50%">Commission Percentage</th><td>{{ $commission }} %</td>
+                        {{--<th style="width:50%">Commission Percentage</th><td>{{ $commission }} %</td>--}}
                     </tr>
                         <tr>
-                            <th style="width:50%">Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* $commission/100,2) }}</td>
+                            {{--<th style="width:50%">Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* $commission/100,2) }}</td>--}}
                         </tr>
                     {{--<tr>--}}
                         {{--<th style="width:50%">Less Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* (1-($commission/100)),2) }}</td>--}}
@@ -188,7 +188,7 @@
                         <tfoot>
                         <tr>
                             <th><h3>Total Payable</h3></th>
-                            <th><h3>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</h3></th>
+                            {{--<th><h3>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</h3></th>--}}
                         </tr>
                         </tfoot>
                     </table>
