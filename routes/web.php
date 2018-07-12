@@ -169,3 +169,9 @@ Route::post('importTransactions','PaymentController@importPayments');
 Route::get('bankStatement','ReportController@bankStatement');
 
 Route::any('getBankStatement','ReportController@getBankStatement');
+
+Route::resource('expenditures', 'ExpenditureController');
+
+Route::resource('propertyExpenditures', 'PropertyExpenditureController');
+
+Route::resource('landlordRemittances', 'LandlordRemittanceController');
