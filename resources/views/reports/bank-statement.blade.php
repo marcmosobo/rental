@@ -84,13 +84,15 @@
                 {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
                 <table class="table table-striped">
                     {{--<thead>--}}
-                    {{--<tr><td><strong>Bank Name:</strong></td><td><strong>{{(is_null($bank_name))? 'All Banks': $bank_name->name}}</strong></td></tr>--}}
-                    {{--<td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
-                    {{--<tr><td><strong>A/C Number:</strong></td><td><strong>{{(is_null($bank_name))? 'All Accounts':$bank->account_number}}</strong></td></tr>--}}
-                    {{--<tr><td><strong>Statement Period</strong></td><td><strong>{{$input['date_from']}}</strong></td><td><strong>To:</strong></td><td><strong>{{$input['date_to']}}</strong></td></tr>--}}
-                    {{--<tr><td>A:</td><td>{{$bank_name->branch}}</td></tr>--}}
+
                     {{--</thead>--}}
                     <thead>
+                    <tr>
+                        <td><strong>Bank Name:</strong></td><td><strong>{{(is_null($bank_name))? 'All Banks': $bank_name->name}}</strong></td></tr>
+{{--                    <td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
+                    <tr><td><strong>A/C Number:</strong></td><td><strong>{{(is_null($bank_name))? 'All Accounts':$bank->account_number}}</strong></td></tr>
+                    <tr><td><strong>Statement Period</strong></td><td><strong>{{$input['date_from']}}</strong></td><td><strong>To:</strong></td><td><strong>{{$input['date_to']}}</strong></td></tr>
+                    {{--<tr><td>A:</td><td>{{$bank_name->branch}}</td></tr>--}}
                         <tr>
                             <th>Name</th>
                             <th>Date Paid</th>
