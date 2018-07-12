@@ -616,41 +616,24 @@ class ReportController extends Controller
 //        dd($input);
 
         if($request->bank =='all'){
-            $bstate = Bank::query()
-                ->select(['banks.name as Bank','banks.branch as Branch','banks.account_number as AccNo','properties.name as pname','payments.amount as Amount','payments.ref_number as Reference No',
-                    'payments.house_number as HouseNo','payments.received_on as Date','masterfiles.full_name as TenantName'])
-                ->leftjoin('payments', 'banks.id', '=', 'payments.bank_id')
-                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
-                ->leftjoin('properties','leases.property_id','=','properties.id')
-                ->leftjoin('masterfiles','leases.tenant_id','=','masterfiles.id')
-                ->whereBetween('payments.received_on',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
 
-//            print_r($bstate->toArray());die;
-
+            $bankStatement = Payment::query()
+                ->where('bank_id','<>',null)
+                ->with(['bank','masterfile','unit.property'])
+                ->whereBetween('received_on',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                ->get();
         }else{
-
-            $bstate = Bank::query()
-                ->select(['banks.name as Bank','banks.branch as Branch','banks.account_number as AccNo','properties.name as pname','payments.amount as Amount','payments.ref_number as Reference No',
-                    'payments.house_number as HouseNo','payments.received_on as Date','masterfiles.full_name as TenantName'])
-                ->leftjoin('payments', 'banks.id', '=', 'payments.bank_id')
-                ->leftjoin('leases','payments.tenant_id','=','leases.tenant_id')
-                ->leftjoin('properties','leases.property_id','=','properties.id')
-                ->leftjoin('masterfiles','leases.tenant_id','=','masterfiles.id')
-                ->where('banks.id','=',$request->bank)
-//            ->where('payments.status',true)
-                ->whereBetween('payments.received_on',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])->get();
-//            print_r($bstate->toArray());die;
-
+            $bankStatement = Payment::query()
+                ->where('bank_id','<>',null)
+                ->where('bank_id',$request->bank)
+                ->whereBetween('received_on',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                ->with(['bank','masterfile','unit.property'])
+                ->get();
         }
-
-//        print_r($bstate->toArray());die;
-
         return view('reports.bank-statement',[
-            'pay'=>collect($bstate),
+            'payments'=>$bankStatement,
             'banks'=>Bank::all(),
             'bank_name' => Bank::find($request->bank),
-//            'date'=>$request->date_from,
-//            'date2'=>$request->date_to
             'input'=>$request->all()
         ]);
     }

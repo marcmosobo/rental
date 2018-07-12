@@ -25,20 +25,13 @@
                             {{ csrf_field() }}
                             <div class="col-md-3">
                                 <label>Status</label>
-                                {{--<select name="bank" id="bank"  class="form-control">--}}
-
-                                    {{--<option value="1">Processed</option>--}}
-                                    {{--<option value="0">Pending</option>--}}
-                                    {{--<option value="all">All</option>--}}
-                                {{--</select>--}}
                                 <select name="bank" class="form-control select2" required>
                                     <option value="">Select Bank</option>
-                                    @if(count($banks))
-                                        @foreach($banks as $bank)
+                                    <option value="all">ALL</option>
+                                @if(count($banks))
+                                    @foreach($banks as $bank)
                                             <option value="{{ $bank->id }}">{{ $bank->name }}</option>
-
                                         @endforeach
-                                            <option value="all">ALL</option>
                                     @endif
                                 </select>
                                 {{--<input type="text" required value="{{ \Carbon\Carbon::today()->startOfMonth()->toDateString() }}" class="form-control" id="date-from" name="date_from">--}}
@@ -60,11 +53,8 @@
             </div>
         </div>
     </section>
-    @if(isset($pay))
+    @if(isset($payments))
     <section class="invoice">
-        <!-- title row -->
-
-        <!-- info row -->
         <div class="row invoice-info">
             <div class="col-sm-4 invoice-col">
 
@@ -93,13 +83,13 @@
                 {{--<p class="">Property: {{ $prop }}</p>--}}
                 {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
                 <table class="table table-striped">
-                    <thead>
-                    <tr><td><strong>Bank Name:</strong></td><td><strong>{{(is_null($bank_name))? 'All Banks': $bank_name->name}}</strong></td></tr>
+                    {{--<thead>--}}
+                    {{--<tr><td><strong>Bank Name:</strong></td><td><strong>{{(is_null($bank_name))? 'All Banks': $bank_name->name}}</strong></td></tr>--}}
                     {{--<td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
-                    <tr><td><strong>A/C Number:</strong></td><td><strong>{{(is_null($bank_name))? 'All Accounts':$bank->account_number}}</strong></td></tr>
-                    <tr><td><strong>Statement Period</strong></td><td><strong>{{$input['date_from']}}</strong></td><td><strong>To:</strong></td><td><strong>{{$input['date_to']}}</strong></td></tr>
+                    {{--<tr><td><strong>A/C Number:</strong></td><td><strong>{{(is_null($bank_name))? 'All Accounts':$bank->account_number}}</strong></td></tr>--}}
+                    {{--<tr><td><strong>Statement Period</strong></td><td><strong>{{$input['date_from']}}</strong></td><td><strong>To:</strong></td><td><strong>{{$input['date_to']}}</strong></td></tr>--}}
                     {{--<tr><td>A:</td><td>{{$bank_name->branch}}</td></tr>--}}
-                    </thead>
+                    {{--</thead>--}}
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -111,23 +101,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @if(count($pay))
-                        <?php $total=0; ?>
-                        @foreach($pay as $pays)
-
-                            @php
-
-                                $total=$total+$pays->amount;
-
-                            @endphp
+                    @if(count($payments))
+                        @foreach($payments as $payment)
                             <tr>
                                 {{--<td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
-                                <td>{{$pays['TenantName']}}</td>
-                                <td>{{\Carbon\Carbon::parse($pays['Date'])->toFormattedDateString() }}</td>
-                                <td>{{$pays['Reference No']}}</td>
-                                <td>{{$pays['pname']}}</td>
-                                <td>{{ $pays['HouseNo'] }}</td>
-                                <td  style="text-align: right;">{{ number_format($pays['Amount'],2) }}</td>
+                                <td>{{ $payment->masterfile->full_name }}</td>
+                                <td>{{\Carbon\Carbon::parse($payment->received_on)->toFormattedDateString() }}</td>
+                                <td>{{$payment->ref_number}}</td>
+                                <td>{{$payment->unit->property->name}}</td>
+                                <td>{{ $payment->unit->unit_number }}</td>
+                                <td  style="text-align: right;">{{ number_format($payment->amount,2) }}</td>
                             </tr>
 
                             @endforeach
@@ -135,15 +118,12 @@
 
 
                         <tr>
-                            <th><h3 class="no-top">#
-
-                                    {{count($pay)}}
-                                </h3></th>
+                            <th><h3 class="no-top">#{{count($payments)}}</h3></th>
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top">Totals</h3></th>
-                            <th style="text-align: right;"><strong><h3 class="no-top">{{ number_format($pay->sum('Amount'),2) }}</strong></h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($payments->sum('amount'),2) }}</h3></th>
                         </tr>
                         @else
                         <tr>
