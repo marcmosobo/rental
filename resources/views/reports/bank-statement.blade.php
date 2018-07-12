@@ -18,8 +18,7 @@
 @section('content')
     <section class="invoice no-print">
         <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-12 col-md-offset-1">
+                <div class="col-md-11 col-md-offset-1">
                     <div class="form-group" id="date-range-div" >
                         <form action="{{ url('getBankStatement') }}" id="plot-form" method="post">
                             {{ csrf_field() }}
@@ -50,7 +49,6 @@
                         </form>
                     </div>
                 </div>
-            </div>
         </div>
     </section>
     @if(isset($payments))
@@ -65,7 +63,7 @@
                     <h3>Marite Enterprises Limited</h3>
                     Lentile House, 2<sup>nd</sup> Floor Rm 213<br>
                     P.O Box 1440 - 10400 Nanyuki<br>
-                    {{--<br>--}}
+                    <br>
                     Phone number: 0700634000<br>
                     Email: info@mariteenterprises.co.ke
                 </address>
@@ -79,20 +77,12 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                {{--<h4 class="">Property statement for: {{ $from }} - {{ $to }}</h4>--}}
-                {{--<p class="">Property: {{ $prop }}</p>--}}
-                {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
                 <table class="table table-striped">
-                    {{--<thead>--}}
-
-                    {{--</thead>--}}
                     <thead>
                     <tr>
                         <td><strong>Bank Name:</strong></td><td><strong>{{(is_null($bank_name))? 'All Banks': $bank_name->name}}</strong></td></tr>
-{{--                    <td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
                     <tr><td><strong>A/C Number:</strong></td><td><strong>{{(is_null($bank_name))? 'All Accounts':$bank->account_number}}</strong></td></tr>
                     <tr><td><strong>Statement Period</strong></td><td><strong>{{$input['date_from']}}</strong></td><td><strong>To:</strong></td><td><strong>{{$input['date_to']}}</strong></td></tr>
-                    {{--<tr><td>A:</td><td>{{$bank_name->branch}}</td></tr>--}}
                         <tr>
                             <th>Name</th>
                             <th>Date Paid</th>
@@ -106,7 +96,7 @@
                     @if(count($payments))
                         @foreach($payments as $payment)
                             <tr>
-                                {{--<td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>--}}
+                                <td>{{ (!is_null($pays['full_name']))? $pays['full_name'] : $pays['FirstName'].' '.$pays['MiddleName'].' '.$pays['LastName'] }}</td>
                                 <td>{{ $payment->masterfile->full_name }}</td>
                                 <td>{{\Carbon\Carbon::parse($payment->received_on)->toFormattedDateString() }}</td>
                                 <td>{{$payment->ref_number}}</td>
@@ -152,11 +142,12 @@
         </div>
     </section>
     @endif
+
+    <div class="clearfix"></div>
 @endsection
 
 @push('js')
     <script>
         $('a#bankStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
-
     </script>
     @endpush
