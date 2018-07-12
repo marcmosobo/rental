@@ -165,3 +165,7 @@ Route::resource('paymentTransfers', 'PaymentTransferController');
 Route::get('crossCheckTrans','PaymentController@crossCheck');
 Route::any('crossCheckPayments','PaymentController@crossCheckPayments');
 Route::post('importTransactions','PaymentController@importPayments');
+
+Route::get('bankStatement','ReportController@bankStatement');
+
+Route::any('getBankStatement','ReportController@getBankStatement');
