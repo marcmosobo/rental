@@ -21,6 +21,11 @@ class RoutesTableSeeder extends Seeder
         \App\Models\RoleRoute::truncate();
         \Illuminate\Support\Facades\DB::table('routes')->delete();
         $admin = Role::where('code', self::SystemAdmin)->first();
+        $frontOffice = Role::where('code','FRONTOFFICE')->first();
+        $manager = Role::where('code','MANAGER')->first();
+        $coreAdmin = Role::where('code','ADMIN')->first();
+        $fofficer = Role::where('code','FIELDOFFICER')->first();
+
 
 
 
@@ -39,6 +44,8 @@ class RoutesTableSeeder extends Seeder
         $analytics_dash->parent_route = $dashboard_id;
         $analytics_dash->save();
         $analytics_dash->roles()->attach($admin);
+        $analytics_dash->roles()->attach($manager);
+        $analytics_dash->roles()->attach($coreAdmin);
 
 
         ####### Configurations
@@ -55,6 +62,8 @@ class RoutesTableSeeder extends Seeder
             'url'=>'serviceOptions'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'Banks',
@@ -62,6 +71,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'banks'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'Event Messages',
@@ -69,6 +81,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'eventMessages'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         ####### crm
 
@@ -84,6 +99,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'customerMessages'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
 
         ####### crm
@@ -100,6 +118,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'landlords'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'All Tenants',
@@ -107,6 +128,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'tenants'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'All Staff',
@@ -129,7 +153,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'properties'
         ]);
         $child->roles()->attach($admin);
-
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
         ####### Lease manager
 
         $parent = Route::create([
@@ -144,6 +170,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'leases'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
 
         $child = Route::create([
@@ -152,6 +181,7 @@ class RoutesTableSeeder extends Seeder
             'url'=>'terminatedLeases'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($coreAdmin);
 
 
         ####### Bills and payments
@@ -167,7 +197,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'billDetails'
         ]);
         $child->roles()->attach($admin);
-
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
 //        $child = Route::create([
 //            'route_name'=>'Pay Bills',
@@ -182,6 +214,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'cashPayments'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'Processed Mpesa Payments',
@@ -189,6 +224,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'payments'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'UnProcessed Mpesa Payments',
@@ -196,6 +234,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'unprocessedPayments'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'Payment Transfers',
@@ -203,6 +244,7 @@ class RoutesTableSeeder extends Seeder
             'url'=>'paymentTransfers'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'CrossCheck Payments',
@@ -210,6 +252,7 @@ class RoutesTableSeeder extends Seeder
             'url'=>'crossCheckTrans'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($coreAdmin);
 
         ####### Reports
         $parent = Route::create([
@@ -224,6 +267,10 @@ class RoutesTableSeeder extends Seeder
             'url'=>'tenantStatement'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+        $child->roles()->attach($fofficer);
 
         $child = Route::create([
             'route_name'=>'Tenant Arrears',
@@ -231,6 +278,10 @@ class RoutesTableSeeder extends Seeder
             'url'=>'tenantArrears'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+        $child->roles()->attach($fofficer);
 
         $child = Route::create([
             'route_name'=>'Property Statement',
@@ -238,6 +289,10 @@ class RoutesTableSeeder extends Seeder
             'url'=>'plotStatement'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+        $child->roles()->attach($fofficer);
 
         $child = Route::create([
             'route_name'=>'Landlord Settlement Report',
@@ -245,12 +300,19 @@ class RoutesTableSeeder extends Seeder
             'url'=>'landlordSettlementStatement'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
         $child = Route::create([
             'route_name'=>'Rent Collection Report',
             'parent_route' => $parent->id,
             'url'=>'rentpay'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
             'route_name'=>'Daily Collection Report',
@@ -258,6 +320,9 @@ class RoutesTableSeeder extends Seeder
             'url'=>'dailyPayments'
         ]);
         $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
 
 
 
@@ -283,6 +348,7 @@ class RoutesTableSeeder extends Seeder
         $roles->parent_route = $user_mngt_id;
         $roles->save();
         $roles->roles()->attach($admin);
+        $roles->roles()->attach($coreAdmin);
 
 //////        #### system
 //        $system = new Route();

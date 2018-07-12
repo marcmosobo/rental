@@ -163,4 +163,5 @@ Route::resource('unprocessedPayments', 'UnprocessedPaymentController');
 Route::resource('paymentTransfers', 'PaymentTransferController');
 
 Route::get('crossCheckTrans','PaymentController@crossCheck');
-Route::post('crossCheckPayments','PaymentController@crossCheckPayments');
+Route::any('crossCheckPayments','PaymentController@crossCheckPayments');
+Route::post('importTransactions','PaymentController@importPayments');

@@ -235,6 +235,10 @@ class PaymentController extends AppBaseController
         if(!$request->isMethod('POST')){
             return redirect('crossCheckTrans');
         }
+
+        $this->validate($request,[
+            'import_file'=>'required'
+        ]);
 //        var_dump($request->file('import_file')->path());die;
         $stream = fopen($request->file('import_file')->path(), 'r');
         $csv = Reader::createFromStream($stream);
@@ -253,7 +257,7 @@ class PaymentController extends AppBaseController
         foreach ($records as $record){
             $payments = Payment::where('ref_number',$record['Receipt No.'])->first();
             if(is_null($payments)){
-                if(!empty($record['Paid In'])){
+                if(!empty($record['Paid In']) && $record['Reason Type'] == 'Pay Utility' && $record['Transaction Status'] == 'Completed'){
                     $record['Paid In'] = floatval($record['Paid In']);
                     $recs[] = $record;
                 }
@@ -264,5 +268,82 @@ class PaymentController extends AppBaseController
         return view('payments.uploads',[
             'payments'=>collect($recs)
         ]);
+    }
+
+    public function importPayments(Request $request){
+        $transactions = json_decode(($request->transactions), True);
+        if(count($transactions)){
+            foreach ($transactions as $trans){
+                if(is_null(Payment::where('ref_number',$trans['Receipt No.'])->first())){
+                        DB::transaction(function()use($trans){
+
+                            $party = explode('-',$trans['Other Party Info']);
+
+                            $payment = Payment::create([
+                                'payment_mode'=>'MPESA',
+                                'account_number'=>$trans['A/C No.'],
+                                'ref_number'=>$trans['Receipt No.'],
+                                'amount'=>$trans['Paid In'],
+//                        'paybill'=>$request->BusinessShortCode,
+                                'phone_number'=>trim($party[0]),
+                                'BillRefNumber'=>$trans['A/C No.'],
+                                'TransID'=>$trans['Receipt No.'],
+                                'TransTime'=>Carbon::parse($trans['Completion Time']),
+                                'FirstName'=>trim($party[1]),
+//                        'MiddleName'=>$request->MiddleName,
+//                        'LastName'=>$request->LastName,
+//                        'client_id' => $input['client_id'],
+                                'received_on'=>Carbon::parse($trans['Completion Time']),
+//                        'mf_id'=>$input['mf_id']
+                            ]);
+
+                            //search for unit number
+                            $propertyUnit = PropertyUnit::where('unit_number',$trans['A/C No.'])->first();
+                            if(!is_null($propertyUnit)) {
+                                //get lease
+                                $lease = Lease::where('unit_id', $propertyUnit->id)
+                                    ->where('status', true)->first();
+                                if (is_null($lease)) {
+                                    $lease = Lease::where('unit_id', $propertyUnit->id)->orderByDesc('id')->first();
+                                }
+
+                                //get tenant
+                                if(!is_null($lease)){
+                                    $tenant = Masterfile::find($lease->tenant_id);
+                                    $input['client_id'] = $tenant->client_id;
+                                    $input['mf_id'] = $tenant->id;
+                                    $userName = explode(' ', $tenant->full_name)[0];
+                                    $acc = CustomerAccount::create([
+                                        'tenant_id' => $tenant->id,
+                                        'lease_id' => $lease->id,
+                                        'unit_id' => $propertyUnit->id,
+                                        'payment_id' => $payment->id,
+                                        'ref_number' => $payment->ref_number,
+                                        'transaction_type' => debit,
+                                        'amount' => $payment->amount,
+                                        'date' => Carbon::parse($trans['Completion Time'])
+                                    ]);
+
+                                    $payment->status = true;
+                                    $payment->house_number = $propertyUnit->unit_number;
+                                    $payment->tenant_id = $tenant->id;
+                                    $payment->client_id = $input['client_id'];
+                                    $payment->save();
+                                }
+
+                            }
+                            Flash::success('Transactions imported successfully.');
+                        });
+
+//                        SendSms::dispatch('Dear '.$userName. ' your payment of '.$request->TransAmount.' Ksh has been received. Regards Marite Enterprises.',$phone,null);
+
+                }
+
+            }
+
+
+        }
+            return redirect('crossCheckPayments');
+
     }
 }

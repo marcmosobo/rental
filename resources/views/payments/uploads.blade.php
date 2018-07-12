@@ -37,27 +37,6 @@
     </section>
     @if(isset($payments))
         <section class="invoice">
-            {{--<div class="row invoice-info">--}}
-                {{--<div class="col-sm-4 invoice-col">--}}
-
-                {{--</div>--}}
-                {{--<!-- /.col -->--}}
-                {{--<div class="col-sm-4 invoice-col text-center">--}}
-                    {{--<address>--}}
-                        {{--<h3>Marite Enterprises Limited</h3>--}}
-                        {{--Lentile House, 2<sup>nd</sup> Floor Rm 213<br>--}}
-                        {{--P.O Box 1440 - 10400 Nanyuki<br>--}}
-                        {{--<br>--}}
-                        {{--Phone number: 0700634000<br>--}}
-                        {{--Email: info@mariteenterprises.co.ke--}}
-                    {{--</address>--}}
-                {{--</div>--}}
-                {{--<!-- /.col -->--}}
-                {{--<div class="col-sm-4 invoice-col">--}}
-
-                {{--</div>--}}
-                {{--<!-- /.col -->--}}
-            {{--</div>--}}
 
             <div class="row">
                 <div class="col-md-12 table-responsive">
@@ -110,7 +89,7 @@
                             </tr>
                         @else
                             <tr>
-                                <td class="text-center" colspan="5">No records found</td>
+                                <td class="text-center" colspan="6">No records found</td>
                             </tr>
                         @endif
                         </tbody>
@@ -124,8 +103,16 @@
             <br>
             <div class="row no-print">
                 <div class="col-xs-12">
+                    <a onclick="window.print()" target="_blank" class="btn btn-success pull-left"><i class="fa fa-print"></i> Print</a>
 
-                    <a onclick="window.print()" target="_blank" class="btn btn-success pull-right"><i class="fa fa-print"></i> Print</a>
+                    @if(count($payments))
+                        <form method="post" action="{{ url('importTransactions') }}">
+                            {{ csrf_field() }}
+                            <input type="hidden" value="{{ $payments }}" name="transactions" required>
+                            <button type="submit" class="btn btn-success pull-right">Import</button>
+                        </form>
+                        @endif
+
                 </div>
             </div>
         </section>
