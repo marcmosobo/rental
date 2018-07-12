@@ -1,9 +1,9 @@
 @extends('layouts.app')
- @section("pageTitle",'Property Statement Report')
+ @section("pageTitle",'Landlord Properties Statement Report')
  {{--@section("pageSubtitle",'create, edit, delete Claims')--}}
   @section("breadcrumbs")
             <li>Reports</li>
-            <li>Property Statement</li>
+            <li>Landlord Properties Statement</li>
          @endsection
 
 @section('css')
@@ -22,15 +22,15 @@
 
                 <div class="col-md-12 col-md-offset-1">
                     <div class="form-group" id="date-range-div" >
-                        <form action="{{ url('getLandlordStatement') }}" id="plot-form" method="post">
+                        <form action="{{ url('getLandlordPSettlements') }}" id="plot-form" method="post">
                             {{ csrf_field() }}
                             <div class="col-md-3">
-                                <label>property</label>
-                                <select class="form-control select2" name="property_id" id="property_id" required>
-                                    <option value="">Select property</option>
-                                    @if(count($properties))
-                                        @foreach($properties as $property)
-                                            <option value="{{ $property->id }}">{{ $property->name }}</option>
+                                <label>Landlord</label>
+                                <select class="form-control select2" name="landlord_id" id="property_id" required>
+                                    <option value="">Select Landlord</option>
+                                    @if(count($landlords))
+                                        @foreach($landlords as $landlord)
+                                            <option value="{{ $landlord->id }}">{{ $landlord->full_name }}</option>
                                             @endforeach
                                         @endif
 
@@ -83,11 +83,12 @@
         <div class="row">
             <div class="col-md-12 table-responsive">
                 <h4 class="">Property statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>
-                <p class="">Property: {{ $prop }}</p>
+                {{--<p class="">Property: {{ $prop }}</p>--}}
                 {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th>Property Name</th>
                             <th>Unit Number</th>
                             <th>Tenant</th>
                             <th>Phone Number</th>
@@ -106,6 +107,7 @@
                     @if(count($reports))
                         @foreach($reports as $statement)
                             <tr>
+                                <td>{{ $statement['property_name'] }}</td>
                                 <td>{{ $statement['house_number'] }}</td>
                                 <td>{{ $statement['tenant'] }}</td>
                                 <td>{{ $statement['phone_number'] }}</td>
@@ -124,6 +126,7 @@
                             <th><h3 class="no-top">{{ count($reports) }} </h3></th>
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top"></h3></th>
+                            <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top">Totals</h3></th>
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('monthly_rent'),2) }}</h3></th>
                             {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bbf'),2) }}</h3></th>--}}
@@ -136,7 +139,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td class="text-center" colspan="8">No records found</td>
+                            <td class="text-center" colspan="9">No records found</td>
                         </tr>
                         @endif
                     </tbody>
@@ -280,7 +283,7 @@
 
 @push('js')
     <script>
-        $('a#landlordSettlementStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
+        $('a#landlordPSettlements').parent('li').addClass('active').parent('ul').parent().addClass('active');
 
     </script>
     @endpush
