@@ -232,7 +232,9 @@ class PaymentController extends AppBaseController
     }
 
     public function crossCheckPayments(Request $request){
-
+        if(!$request->isMethod('POST')){
+            return redirect('crossCheckTrans');
+        }
 //        var_dump($request->file('import_file')->path());die;
         $stream = fopen($request->file('import_file')->path(), 'r');
         $csv = Reader::createFromStream($stream);

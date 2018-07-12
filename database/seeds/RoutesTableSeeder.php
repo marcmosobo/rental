@@ -204,6 +204,13 @@ class RoutesTableSeeder extends Seeder
         ]);
         $child->roles()->attach($admin);
 
+        $child = Route::create([
+            'route_name'=>'CrossCheck Payments',
+            'parent_route' => $parent->id,
+            'url'=>'crossCheckTrans'
+        ]);
+        $child->roles()->attach($admin);
+
         ####### Reports
         $parent = Route::create([
             'route_name'=> 'Reports',
