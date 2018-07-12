@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Payment;
 use App\Models\PaymentTransfer;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
@@ -27,9 +28,9 @@ class PaymentTransferDataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(PaymentTransfer $model)
+    public function query(Payment $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->with(['masterfile','unit'])->where('transfered_by','<>',null);
     }
 
     /**
@@ -68,9 +69,16 @@ class PaymentTransferDataTable extends DataTable
             'ref_number',
 //            'TransID',
             'payment_mode',
-            'house_number',
-            'tenant_id',
+            'transferred_from',
+
+            'unit.unit_number'=>[
+               'title'=> 'Transferred To House'
+            ],
+            'masterfile.full_name'=>[
+                'title'=>'Transferred to Tenant'
+            ],
             'amount',
+            'transfered_by',
 //            'paybill',
 //            'phone_number',
 //            'BillRefNumber',
@@ -82,8 +90,8 @@ class PaymentTransferDataTable extends DataTable
 //            'client_id',
 //            'created_by',
 //            'status',
-            'updated_by',
-            'bank_id'
+//            'updated_by',
+//            'bank_id'
         ];
     }
 

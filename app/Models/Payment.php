@@ -64,7 +64,10 @@ class Payment extends Model
         'created_by',
         'bank_id',
         'status',
-        'updated_by'
+        'updated_by',
+        'transfered_by',
+        'transferred_from',
+        'transferred_to',
     ];
 
     /**

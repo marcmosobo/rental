@@ -6,9 +6,14 @@ use App\DataTables\PaymentTransferDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreatePaymentTransferRequest;
 use App\Http\Requests\UpdatePaymentTransferRequest;
+use App\Models\CustomerAccount;
+use App\Models\Lease;
+use App\Models\Payment;
 use App\Repositories\PaymentTransferRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class PaymentTransferController extends AppBaseController
@@ -30,7 +35,10 @@ class PaymentTransferController extends AppBaseController
      */
     public function index(PaymentTransferDataTable $paymentTransferDataTable)
     {
-        return $paymentTransferDataTable->render('payment_transfers.index');
+        return $paymentTransferDataTable->render('payment_transfers.index',[
+            'payments'=>Payment::where('status',true)->with(['masterfile','unit'])->get(),
+            'accounts'=>Lease::where('status',true)->with(['unit','masterfile'])->get()
+        ]);
     }
 
     /**
@@ -54,7 +62,29 @@ class PaymentTransferController extends AppBaseController
     {
         $input = $request->all();
 
-        $paymentTransfer = $this->paymentTransferRepository->create($input);
+        //get payment
+        $payment =Payment::find($request->payment_id);
+
+        //get lease
+        $lease = Lease::find($request->lease_id);
+        DB::transaction(function()use ($lease,$payment){
+            if(!is_null($payment) && !is_null($lease)){
+                $customerAccount = CustomerAccount::where('payment_id',$payment->id)->first();
+                //updates
+                $tFrom = $payment->house_number;
+                $payment->house_number = $lease->unit_id;
+                $payment->tenant_id = $lease->tenant_id;
+                $payment->transferred_from = $tFrom;
+                $payment->transfered_by = Auth::user()->name;
+                $payment->save();
+
+                $customerAccount->unit_id = $lease->unit_id;
+                $customerAccount->tenant_id = $lease->tenant_id;
+//                $customerAccount->state = 'TRANSFERRED';
+                $customerAccount->save();
+            }
+        });
+
 
         Flash::success('Payment Transfer saved successfully.');
 
