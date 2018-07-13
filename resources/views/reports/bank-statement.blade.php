@@ -96,7 +96,7 @@
                     @if(count($payments))
                         @foreach($payments as $payment)
                             <tr>
-                                <td>{{ (!is_null($payment['full_name']))? $payment['full_name'] : $payment['FirstName'].' '.$payment['MiddleName'].' '.$payment['LastName'] }}</td>
+{{--                                <td>{{ (!is_null($payment['full_name']))? $payment['full_name'] : $payment['FirstName'].' '.$payment['MiddleName'].' '.$payment['LastName'] }}</td>--}}
                                 <td>{{ $payment->masterfile->full_name }}</td>
                                 <td>{{\Carbon\Carbon::parse($payment->received_on)->toFormattedDateString() }}</td>
                                 <td>{{$payment->ref_number}}</td>
@@ -109,7 +109,7 @@
                         <tr>
                             <th><h3 class="no-top">#{{count($payments)}}</h3></th>
                             <th><h3 class="no-top"></h3></th>
-                            <th><h3 class="no-top"></h3></th>
+                            {{--<th><h3 class="no-top"></h3></th>--}}
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top">Totals</h3></th>
