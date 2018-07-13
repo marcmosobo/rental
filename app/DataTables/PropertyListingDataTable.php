@@ -18,7 +18,15 @@ class PropertyListingDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'property_listings.datatables_actions');
+        return $dataTable
+            ->editColumn('status',function ($prop){
+                if(!$prop->status){
+                    return '<label class="label label-success">available</label>';
+                }
+                return '<label class="label label-info">sold</label>';
+            })
+            ->rawColumns(['action','status'])
+            ->addColumn('action', 'property_listings.datatables_actions');
     }
 
     /**

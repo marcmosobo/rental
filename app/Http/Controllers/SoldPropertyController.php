@@ -65,6 +65,8 @@ class SoldPropertyController extends AppBaseController
         $input['less_commission'] = $request->amount_bought * (1 -($listing->sale_commission/100));
 
         $soldProperty = $this->soldPropertyRepository->create($input);
+        $listing->status = true;
+        $listing->save();
 
         Flash::success('Sold Property saved successfully.');
 
