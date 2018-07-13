@@ -168,7 +168,7 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
-            'route_name'=>'All Property Expenditures',
+            'route_name'=>'Property Expenditures',
             'parent_route' => $parent->id,
             'url'=>'propertyExpenditures'
         ]);

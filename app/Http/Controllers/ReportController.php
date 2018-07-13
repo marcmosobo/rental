@@ -566,7 +566,7 @@ class ReportController extends Controller
 //                    var_dump($rent);die;
                     $amPaid = (($bf <0)? - $bf + $paid: $paid );
                     $reports[]=[
-                        'property_name'=>$lease->property->name,
+                        'property_name'=>(!is_null($lease->property))?$lease->property->name: '',
                         'house_number'=>$lease->unit->unit_number,
                         'tenant'=>$lease->masterfile->full_name,
                         'phone_number'=>$lease->masterfile->phone_number,
