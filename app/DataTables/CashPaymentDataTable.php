@@ -90,6 +90,7 @@ class CashPaymentDataTable extends DataTable
                     'title'=>'Unit Number'
                 ],
                 'ref_number',
+                'payment_mode',
                 'amount',
                 'received_on',
                 'paybill'=>[
@@ -105,6 +106,7 @@ class CashPaymentDataTable extends DataTable
                 'unit.unit_number'=>[
                     'title'=>'Unit Number'
                 ],
+                'payment_mode',
                 'ref_number',
                 'amount',
                 'received_on',
