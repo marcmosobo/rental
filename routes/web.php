@@ -177,3 +177,9 @@ Route::resource('expenditures', 'ExpenditureController');
 Route::resource('propertyExpenditures', 'PropertyExpenditureController');
 
 Route::resource('landlordRemittances', 'LandlordRemittanceController');
+
+Route::resource('propertyTypes', 'PropertyTypeController');
+
+Route::resource('propertyListings', 'PropertyListingController');
+
+Route::resource('customers', 'CustomerController');

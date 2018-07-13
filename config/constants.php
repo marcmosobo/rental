@@ -14,3 +14,4 @@ const lease_creation = "LEASECREATION";
 const monthly = 'Monthly';
 const once = 'Once';
 const rent = 'RENT';
+const customer = 'CUSTOMER';
