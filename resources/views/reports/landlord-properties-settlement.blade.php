@@ -82,9 +82,9 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <h4 class="">Property statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>
+                <h4 class="">Landlord statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>
                 {{--<p class="">Property: {{ $prop }}</p>--}}
-                {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
+                <h3 class="">Landlord/lady: {{ (isset($landlord_name))? $landlord_name: '' }}</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -156,17 +156,29 @@
                     @if(isset($expenditures))
                     <table class="table" style="width: 50%" >
                     <tr>
-                        <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('rentPaid',2)) }}</td>
+                        <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('rentPaid'),2) }}</td>
                     </tr>
+                        <tr>
+                            <th style="width:50%">Commission</th><td>{{ number_format($commission,2) }}</td>
+                        </tr>
                     <tr>
                         <th style="width:50%">Total Expenses</th><td>{{ number_format($expenditures,2) }} </td>
                     </tr>
                         <tr>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Less commission & expenses</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('rentPaid') - ($expenditures + $commission),2) }}</td>
+                        </tr>
+                        <tr>
                             <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
                         </tr>
-                    {{--<tr>--}}
-                        {{--<th style="width:50%">Less Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* (1-($commission/100)),2) }}</td>--}}
-                    {{--</tr>--}}
+
+                        <tr>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Net Payable</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('rentPaid') - ($expenditures + $commission))- $withdrawn >= 0)? ($reports->sum('rentPaid') - ($expenditures + $commission))- $withdrawn: 0,2) }}</td>
+                        </tr>
+
+
+                        <tr>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('rentPaid') - ($expenditures + $commission))- $withdrawn < 0)? -(($reports->sum('rentPaid') - ($expenditures + $commission))- $withdrawn) : 0,2) }}</td>
+                        </tr>
                         {{--@if(count($expenditures))--}}
                             {{--<tr style="">--}}
                                 {{--<td rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b">Expenditures</td>--}}
@@ -185,12 +197,12 @@
                         {{--<th style="width:50%">Less Expenditures</th><td>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</td>--}}
                     {{--</tr>--}}
 
-                        <tfoot>
-                        <tr>
-                            <th><h3>Total Payable</h3></th>
+                        {{--<tfoot>--}}
+                        {{--<tr>--}}
+                            {{--<th><h3>Total Payable</h3></th>--}}
                             {{--<th><h3>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</h3></th>--}}
-                        </tr>
-                        </tfoot>
+                        {{--</tr>--}}
+                        {{--</tfoot>--}}
                     </table>
                         @endif
                 </div>
