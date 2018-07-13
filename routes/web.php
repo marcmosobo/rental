@@ -183,3 +183,5 @@ Route::resource('propertyTypes', 'PropertyTypeController');
 Route::resource('propertyListings', 'PropertyListingController');
 
 Route::resource('customers', 'CustomerController');
+
+Route::resource('soldProperties', 'SoldPropertyController');

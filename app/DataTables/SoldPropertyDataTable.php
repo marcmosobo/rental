@@ -2,11 +2,11 @@
 
 namespace App\DataTables;
 
-use App\Models\PropertyListing;
+use App\Models\SoldProperty;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class PropertyListingDataTable extends DataTable
+class SoldPropertyDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -18,7 +18,7 @@ class PropertyListingDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'property_listings.datatables_actions');
+        return $dataTable->addColumn('action', 'sold_properties.datatables_actions');
     }
 
     /**
@@ -27,9 +27,9 @@ class PropertyListingDataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(PropertyListing $model)
+    public function query(SoldProperty $model)
     {
-        return $model->newQuery()->with(['type','masterfile']);
+        return $model->newQuery()->with(['listing.type','listing.masterfile','buyer']);
     }
 
     /**
@@ -42,7 +42,7 @@ class PropertyListingDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['width' => '80px'])
+//            ->addAction(['width' => '80px'])
             ->parameters([
 //                'dom'     => 'Bfrtip',
                 'order'   => [[0, 'desc']],
@@ -64,18 +64,19 @@ class PropertyListingDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'masterfile.full_name'=>[
-                'title'=> 'Customer'
+            'listing.type.name'=>[
+                'title'=>'Listing'
             ],
-            'type.name'=>[
-                'title'=>"Property Type"
+            'listing.masterfile.full_name'=>[
+                'title'=>'Seller'
             ],
-            'location',
-            'description',
-            'price',
-            'sale_commission',
-            'status',
-//            'created_by'
+            'buyer.full_name'=>[
+                'title'=>'Bought by'
+            ],
+            'amount_bought',
+            'commission_percentage',
+            'commission_charged',
+            'less_commission'
         ];
     }
 
@@ -86,6 +87,6 @@ class PropertyListingDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'property_listingsdatatable_' . time();
+        return 'sold_propertiesdatatable_' . time();
     }
 }
