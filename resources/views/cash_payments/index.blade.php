@@ -73,7 +73,29 @@
                                 {!! Form::label('received_on', 'Received On:') !!}
                                 {!! Form::date('received_on', null, ['class' => 'form-control','id'=>'received_on']) !!}
                             </div>
+
+                       <!-- Amount Field -->
+                       <div class="form-group col-sm-12">
+                           {!! Form::label('payment-mode', 'Payment Mode:') !!}
+                           <select class="form-control select2" id="payment-m" name="payment_mode">
+                               <option value="CASH">Cash</option>
+                               <option value="Bank">Bank</option>
+                           </select>
+                       </div>
+                       <div class="form-group col-sm-12" id="bank-d" style="display: none;">
+                           {!! Form::label('bank_id', 'Bank:') !!}
+                           <select name="bank_id"  id="bank-i" class="form-control select2">
+                               <option value="">Select Bank</option>
+                               @if(count($banks))
+                                   @foreach($banks as $bank)
+                                       <option value="{{ $bank->id }}">{{ $bank->name.' - '.$bank->account_number  }}</option>
+                                   @endforeach
+                               @endif
+                           </select>
+                       </div>
+
                         </div>
+
                    </div>
                    <div class="modal-footer">
                        <input type="hidden" id="editDetails" value="{{ url("/cashPayments") }}">
@@ -124,6 +146,17 @@
             }else{
                 $('#bank-id').removeAttr('required');
                 $('#bank-div').hide();
+
+            }
+        })
+        $('#payment-m').on('change',function(){
+            let val = $(this).val();
+            if(val === 'Bank'){
+                $('#bank-d').show();
+                $('#bank-i').attr('required','required')
+            }else{
+                $('#bank-i').removeAttr('required');
+                $('#bank-d').hide();
 
             }
         })
