@@ -6,6 +6,7 @@ use App\Models\Bank;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
+use App\Models\LandlordRemittance;
 use App\Models\Lease;
 use App\Models\Masterfile;
 use App\Models\Payment;
@@ -290,7 +291,7 @@ class ReportController extends Controller
                  $cf = $total -$paid ;
                  if($cf >0){
                      $reports[]=[
-                         'property_name'=>$lease->property->name,
+                         'property_name'=>(!is_null($lease->property)) ? $lease->property->name: '',
                          'house_number'=>$lease->unit->unit_number,
                          'tenant'=>$lease->masterfile->full_name,
                          'phone_number'=>$lease->masterfile->phone_number,
@@ -603,7 +604,9 @@ class ReportController extends Controller
             }
         }
 
-        $expenditures = PropertyExpenditure::where('landlord_id',$request->landlord_id)->with(['expenditure'])->get();
+        $expenditures = PropertyExpenditure::where('landlord_id',$request->landlord_id)
+            ->whereBetween('date',[$from,$to])
+            ->sum('amount');
 
 //        print_r($expenditures->toArray());die;
         return view('reports.landlord-properties-settlement',[
@@ -614,7 +617,8 @@ class ReportController extends Controller
 //            'landlord' =>$property->masterfile,
 //            'prop'=>$property->name,
             'expenditures'=>$expenditures,
-//            'commission'=> $property->commission
+            'withdrawn'=> LandlordRemittance::where('landlord_id',$request->landlord_id)->whereBetween('date',[$from,$to])->sum('amount')
+
         ]);
     }
 

@@ -156,31 +156,31 @@
                     @if(isset($expenditures))
                     <table class="table" style="width: 50%" >
                     <tr>
-                        {{--<th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('rentPaid',2)) }}</td>--}}
+                        <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('rentPaid',2)) }}</td>
                     </tr>
                     <tr>
-                        {{--<th style="width:50%">Commission Percentage</th><td>{{ $commission }} %</td>--}}
+                        <th style="width:50%">Total Expenses</th><td>{{ number_format($expenditures,2) }} </td>
                     </tr>
                         <tr>
-                            {{--<th style="width:50%">Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* $commission/100,2) }}</td>--}}
+                            <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
                         </tr>
                     {{--<tr>--}}
                         {{--<th style="width:50%">Less Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* (1-($commission/100)),2) }}</td>--}}
                     {{--</tr>--}}
-                        @if(count($expenditures))
-                            <tr style="">
-                                <td rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b">Expenditures</td>
-                                <th rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b"></th>
-                            </tr>
-                            @foreach($expenditures as $expenditure)
-                                <tr>
-                                    <th style="width:50%">{{ $expenditure->expenditure->name }}</th><td>{{ number_format($expenditure->amount,2)}}</td>
-                                </tr>
-                                @endforeach
-                                <tr style="">
-                                    <th style="width:50%;border-top: 1px solid #4d4b4b">Total Expenditures</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($expenditures->sum('amount'),2)}}</td>
-                                </tr>
-                            @endif
+                        {{--@if(count($expenditures))--}}
+                            {{--<tr style="">--}}
+                                {{--<td rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b">Expenditures</td>--}}
+                                {{--<th rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b"></th>--}}
+                            {{--</tr>--}}
+                            {{--@foreach($expenditures as $expenditure)--}}
+                                {{--<tr>--}}
+                                    {{--<th style="width:50%">{{ $expenditure->expenditure->name }}</th><td>{{ number_format($expenditure->amount,2)}}</td>--}}
+                                {{--</tr>--}}
+                                {{--@endforeach--}}
+                                {{--<tr style="">--}}
+                                    {{--<th style="width:50%;border-top: 1px solid #4d4b4b">Total Expenditures</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($expenditures->sum('amount'),2)}}</td>--}}
+                                {{--</tr>--}}
+                            {{--@endif--}}
                     {{--<tr>--}}
                         {{--<th style="width:50%">Less Expenditures</th><td>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</td>--}}
                     {{--</tr>--}}
