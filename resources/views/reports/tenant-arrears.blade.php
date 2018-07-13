@@ -159,7 +159,7 @@
 
 @push('js')
     <script>
-        $('a#propertyStatement').parent('li').addClass('active').parent('ul').parent().addClass('active');
+        $('a#tenantArrears').parent('li').addClass('active').parent('ul').parent().addClass('active');
 
     </script>
     @endpush
