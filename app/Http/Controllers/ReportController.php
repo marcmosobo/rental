@@ -757,6 +757,7 @@ class ReportController extends Controller
                 ->where('bank_id','<>',null)
                 ->with(['bank','masterfile','unit.property'])
                 ->whereBetween('received_on',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+                ->orderBy('payments.received_on')
                 ->get();
         }else{
             $bankStatement = Payment::query()
@@ -764,6 +765,7 @@ class ReportController extends Controller
                 ->where('bank_id',$request->bank)
                 ->whereBetween('received_on',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
                 ->with(['bank','masterfile','unit.property'])
+                ->orderBy('payments.received_on')
                 ->get();
         }
         return view('reports.bank-statement',[
