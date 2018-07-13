@@ -414,6 +414,7 @@ class RoutesTableSeeder extends Seeder
 
         $child = Route::create([
             'route_name'=>'Sold Properties',
+
             'parent_route' => $parent->id,
             'url'=>'soldProperties'
         ]);
