@@ -43,7 +43,7 @@
 
 <div class="form-group col-sm-12">
     {!! Form::label('remarks', 'Remarks:') !!}
-    {!! Form::number('remarks', null, ['class' => 'form-control']) !!}
+    {!! Form::text('remarks', null, ['class' => 'form-control']) !!}
 </div>
 <!-- Date Field -->
 <div class="form-group col-sm-12">

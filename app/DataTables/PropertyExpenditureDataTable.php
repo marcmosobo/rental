@@ -72,8 +72,8 @@ class PropertyExpenditureDataTable extends DataTable
             'property.name',
             'expenditure.name',
 //            'landlord_id',
-//            'created_by',
             'amount',
+            'remarks',
             'date'
         ];
     }
