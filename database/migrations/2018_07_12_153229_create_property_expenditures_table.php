@@ -20,6 +20,7 @@ class CreatePropertyExpendituresTable extends Migration
             $table->integer('property_id')->unsigned()->index();
             $table->integer('landlord_id')->unsigned()->index();
             $table->integer('created_by')->index();
+            $table->string('remarks')->nullable();
             $table->double('amount');
             $table->date('date');
             $table->softDeletes();

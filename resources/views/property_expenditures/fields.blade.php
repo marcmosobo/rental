@@ -33,10 +33,7 @@
 {{--</div>--}}
 
 {{--<!-- Created By Field -->--}}
-{{--<div class="form-group col-sm-12">--}}
-    {{--{!! Form::label('created_by', 'Created By:') !!}--}}
-    {{--{!! Form::number('created_by', null, ['class' => 'form-control']) !!}--}}
-{{--</div>--}}
+
 
 <!-- Amount Field -->
 <div class="form-group col-sm-12">
@@ -44,6 +41,10 @@
     {!! Form::number('amount', null, ['class' => 'form-control','required']) !!}
 </div>
 
+<div class="form-group col-sm-12">
+    {!! Form::label('remarks', 'Remarks:') !!}
+    {!! Form::number('remarks', null, ['class' => 'form-control']) !!}
+</div>
 <!-- Date Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('date', 'Date:') !!}

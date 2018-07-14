@@ -42,7 +42,8 @@ class PropertyExpenditure extends Model
         'landlord_id',
         'created_by',
         'amount',
-        'date'
+        'date',
+        'remarks'
     ];
 
     /**
