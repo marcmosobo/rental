@@ -74,6 +74,7 @@ class LandlordRemittanceController extends AppBaseController
      * @return Response
      */
     public function show($id)
+
     {
         $landlordRemittance = $this->landlordRemittanceRepository->findWithoutFail($id);
 
@@ -83,9 +84,8 @@ class LandlordRemittanceController extends AppBaseController
             return redirect(route('landlordRemittances.index'));
         }
 
-        return view('landlord_remittances.show')->with('landlordRemittance', $landlordRemittance);
+        return response()->json($landlordRemittance);
     }
-
     /**
      * Show the form for editing the specified LandlordRemittance.
      *
