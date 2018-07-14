@@ -185,3 +185,5 @@ Route::resource('propertyListings', 'PropertyListingController');
 Route::resource('customers', 'CustomerController');
 
 Route::resource('soldProperties', 'SoldPropertyController');
+
+Route::resource('openingBalances', 'OpeningBalanceController');

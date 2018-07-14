@@ -2,12 +2,11 @@
 
 namespace App\DataTables;
 
-use App\Models\LandlordRemittance;
-use Carbon\Carbon;
+use App\Models\OpeningBalance;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class LandlordRemittanceDataTable extends DataTable
+class OpeningBalanceDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -19,11 +18,7 @@ class LandlordRemittanceDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable
-            ->editColumn('date',function ($expense){
-                return Carbon::parse($expense->date)->toFormattedDateString();
-            })
-            ->addColumn('action', 'landlord_remittances.datatables_actions');
+        return $dataTable->addColumn('action', 'opening_balances.datatables_actions');
     }
 
     /**
@@ -32,9 +27,9 @@ class LandlordRemittanceDataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(LandlordRemittance $model)
+    public function query(OpeningBalance $model)
     {
-        return $model->newQuery()->with(['masterfile']);
+        return $model->newQuery()->with(['landlord']);
     }
 
     /**
@@ -69,12 +64,8 @@ class LandlordRemittanceDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'masterfile.full_name'=>[
-                'title'=>'Landlord'
-            ],
-            'amount',
-            'date'
-//            'remitted_by',
+            'landlord.full_name',
+            'opening_balance'
         ];
     }
 
@@ -85,6 +76,6 @@ class LandlordRemittanceDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'landlord_remittancesdatatable_' . time();
+        return 'opening_balancesdatatable_' . time();
     }
 }
