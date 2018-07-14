@@ -48,6 +48,6 @@
 <!-- Date Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('date', 'Date:') !!}
-    {!! Form::date('date', \Carbon\Carbon::today()->toDateString(), ['class' => 'form-control']) !!}
+    {!! Form::date('date', \Carbon\Carbon::today()->toDateString(), ['class' => 'form-control','required']) !!}
 </div>
 

@@ -476,6 +476,7 @@ class ReportController extends Controller
                 }else{
                     $reports[]=[
                         'house_number'=>$unit->unit_number,
+                        'rentPaid'=>0,
                         'tenant'=>'-',
                         'phone_number'=>'-',
                         'bbf'=>0,

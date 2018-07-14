@@ -155,7 +155,7 @@
                             </tr>
                             @foreach($expenditures as $expenditure)
                                 <tr>
-                                    <th style="width:50%">{{ $expenditure->expenditure->name }}</th><td>{{ number_format($expenditure->amount,2)}}</td>
+                                    <th style="width:50%">{{ $expenditure->expenditure->name }}{{ (!is_null($expenditure->remarks))? ' - '. $expenditure->remarks: '' }} </th><td>{{ number_format($expenditure->amount,2)}}</td>
                                 </tr>
                                 @endforeach
                                 <tr style="">
