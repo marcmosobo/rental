@@ -1,7 +1,9 @@
 <div class="row invoice-info">
     <div class="col-sm-4 invoice-col text-center">
-        <img src="{{ asset('Logo.bmp') }}"
-             class="user-image" alt="logo" style="margin-top: 10px;"/>
+        {{--<img src="{{ asset('Logo.bmp') }}"--}}
+             {{--class="user-image" alt="logo" style="margin-top: 10px;"/>--}}
+        <img src="{{ asset('images.ico') }}" class="user-image" alt="User Image"/>
+
     </div>
     <!-- /.col -->
     <div class="col-sm-4 invoice-col text-center">

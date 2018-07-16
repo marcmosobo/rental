@@ -149,7 +149,7 @@
                         <th style="width:50%">Total Expenses</th><td>{{ number_format($expenditures,2) }} </td>
                     </tr>
                         <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Less commission & expenses</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('rentPaid') - ($expenditures + $commission),2) }}</td>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Total due</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('rentPaid') - ($expenditures + $commission),2) }}</td>
                         </tr>
                         <tr>
                             <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
