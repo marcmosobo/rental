@@ -79,6 +79,7 @@ class PaymentTransferController extends AppBaseController
                 $payment->save();
 
                 $customerAccount->unit_id = $lease->unit_id;
+                $customerAccount->lease_id = $lease->id;
                 $customerAccount->tenant_id = $lease->tenant_id;
 //                $customerAccount->state = 'TRANSFERRED';
                 $customerAccount->save();

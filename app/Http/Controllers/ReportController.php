@@ -356,7 +356,7 @@ class ReportController extends Controller
 //                if($bf <0){
 //                    $paid = $paid -$bf;
 //                }
-                    $monthlyRent =
+                 //   $monthlyRent =
 
                     $cf = $total -$paid ;
 //                    if($cf >0){
