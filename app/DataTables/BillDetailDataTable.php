@@ -37,7 +37,9 @@ class BillDetailDataTable extends DataTable
      */
     public function query(BillDetail $model)
     {
-        return $model->newQuery()->orderByDesc('bill_details.id')->with(['bill.lease.unit','bill.lease.masterfile','service','bill.lease.property']);
+        return $model->newQuery()
+            ->select('bill_details.*')
+            ->orderByDesc('bill_details.id')->with(['bill.lease.unit','bill.lease.masterfile','service','bill.lease.property']);
     }
 
     /**
@@ -50,7 +52,7 @@ class BillDetailDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-//            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px'])
             ->parameters([
 //                'dom'     => 'Bfrtip',
                 'order'   => [[0, 'desc']],

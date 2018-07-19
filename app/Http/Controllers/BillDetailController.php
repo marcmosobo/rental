@@ -181,7 +181,26 @@ class BillDetailController extends AppBaseController
             return redirect(route('billDetails.index'));
         }
 
-        $this->billDetailRepository->delete($id);
+        DB::transaction(function ()use ($id,$billDetail){
+            $cusAccount = CustomerAccount::where('bill_id',$billDetail->bill_id)->first();
+//            print_r($cusAccount);die;
+            if($billDetail->amount == $cusAccount->amount){
+                $cusAccount->ref_number = Auth::user()->name;
+                $cusAccount->save();
+                $cusAccount->delete();
+            }else{
+                $cusAccount->amount = $cusAccount->amount - $billDetail->amount;
+                $cusAccount->balance = $cusAccount->balance - $billDetail->amount;
+                $cusAccount->ref_number = Auth::user()->name;
+                $cusAccount->save();
+            }
+
+//            die;
+            $this->billDetailRepository->delete($id);
+
+
+        });
+
 
         Flash::success('Bill Detail deleted successfully.');
 
