@@ -25,41 +25,9 @@ Route::resource('masterfiles', 'MasterfileController');
 
 Route::resource('clients', 'ClientController');
 
-
-
-
-
-
-
-
-
-
-
 Route::resource('reminders', 'ReminderController');
 
-
-
-
-
-
-
-
-
-
-
 Route::get('getVehicles/{id}','PolicyDetailController@getVehicles');
-
-
-
-
-
-
-
-//Route::resource('getClaimReport', 'ClaimInjuredPersonController');
-//
-
-
-
 
 Route::get('getPolicy/{id}','PaymentController@getPolicy');
 
@@ -187,3 +155,6 @@ Route::resource('customers', 'CustomerController');
 Route::resource('soldProperties', 'SoldPropertyController');
 
 Route::resource('openingBalances', 'OpeningBalanceController');
+
+Route::get('remittance','ReportController@landlordRemittance');
+Route::any('getRemittance','ReportController@getLandlordRemittanceStatement');

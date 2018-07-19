@@ -6,6 +6,7 @@ use App\Models\Bank;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
+use App\Models\Landlord;
 use App\Models\LandlordRemittance;
 use App\Models\Lease;
 use App\Models\Masterfile;
@@ -774,6 +775,40 @@ class ReportController extends Controller
             'banks'=>Bank::all(),
             'bank_name' => Bank::find($request->bank),
             'input'=>$request->all()
+        ]);
+    }
+
+    public function landlordRemittance()
+    {
+//$ddd=Landlord::all();
+//print_r($ddd->toArray());
+        return view ('reports.lanlordremitance-statement',[
+
+            'landlords'=>Landlord::where('b_role',\landlord)->get()
+        ]);
+    }
+    public function getLandlordRemittanceStatement(Request $request)
+    {
+        if (!$request->isMethod('POST')) {
+            return redirect('getRemittance');
+        }
+//$input=$request->all();
+//        dd($input);
+//$input3=Landlord::find($request->landlord);
+//dd($input3);
+        $land=LandlordRemittance::query()
+            ->where('landlord_id','=',$request->landlord)
+            ->whereBetween('date',[Carbon::parse($request->date_from),Carbon::parse($request->date_to)->endOfDay()])
+            ->with('masterfile')->get();
+
+//        print_r($land->toArray());die;
+
+        return view('reports.lanlordremitance-statement',[
+            'landlordsremm'=>$land,
+            'landlords'=>Landlord::where('b_role',\landlord)->get(),
+            'landlords2'=>Landlord::find($request->landlord),
+            'input'=>$request->all()
+
         ]);
     }
 }

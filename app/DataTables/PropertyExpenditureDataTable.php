@@ -34,7 +34,9 @@ class PropertyExpenditureDataTable extends DataTable
      */
     public function query(PropertyExpenditure $model)
     {
-        return $model->newQuery()->with(['property','expenditure']);
+        return $model->newQuery()
+            ->select('property_expenditures.*')
+            ->with(['property','expenditure']);
     }
 
     /**
