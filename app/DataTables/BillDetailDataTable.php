@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Http\Controllers\LoggedUserController;
 use App\Models\BillDetail;
 use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
@@ -49,22 +50,42 @@ class BillDetailDataTable extends DataTable
      */
     public function html()
     {
-        return $this->builder()
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->addAction(['width' => '80px'])
-            ->parameters([
+        if(LoggedUserController::isAllAccessGranted()){
+            return $this->builder()
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                ->addAction(['width' => '80px'])
+                ->parameters([
 //                'dom'     => 'Bfrtip',
-                'order'   => [[0, 'desc']],
-                'scrollX'=>true,
-                'buttons' => [
-                    'create',
-                    'export',
-                    'print',
-                    'reset',
-                    'reload',
-                ],
-            ]);
+                    'order'   => [[0, 'desc']],
+                    'scrollX'=>true,
+                    'buttons' => [
+                        'create',
+                        'export',
+                        'print',
+                        'reset',
+                        'reload',
+                    ],
+                ]);
+        }else{
+            return $this->builder()
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+//                ->addAction(['width' => '80px'])
+                ->parameters([
+//                'dom'     => 'Bfrtip',
+                    'order'   => [[0, 'desc']],
+                    'scrollX'=>true,
+                    'buttons' => [
+                        'create',
+                        'export',
+                        'print',
+                        'reset',
+                        'reload',
+                    ],
+                ]);
+        }
+
     }
 
     /**
