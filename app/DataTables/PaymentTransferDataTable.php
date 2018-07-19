@@ -30,7 +30,7 @@ class PaymentTransferDataTable extends DataTable
      */
     public function query(Payment $model)
     {
-        return $model->newQuery()->with(['masterfile','unit'])->where('transfered_by','<>',null);
+        return $model->newQuery()->with(['masterfile','unit'])->where('transfered_by','<>',null)->orderByDesc('payments.updated_at');
     }
 
     /**
