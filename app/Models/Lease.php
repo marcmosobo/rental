@@ -47,7 +47,6 @@ class Lease extends Model
         'is_reversed',
         'reversed_by',
         'state'
-
     ];
 
     /**

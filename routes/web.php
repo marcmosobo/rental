@@ -158,3 +158,7 @@ Route::resource('openingBalances', 'OpeningBalanceController');
 
 Route::get('remittance','ReportController@landlordRemittance');
 Route::any('getRemittance','ReportController@getLandlordRemittanceStatement');
+
+
+Route::get('landlord-plot-report','ReportController@landlordPlotStatement');
+Route::any('getLandlordPlotStatement','ReportController@getLandlordPlotStatement');

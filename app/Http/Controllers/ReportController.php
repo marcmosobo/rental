@@ -402,6 +402,96 @@ class ReportController extends Controller
         ]);
     }
 
+    public function landlordPlotStatement(){
+        return view('reports.landlord-plot-statement',[
+            'properties'=>Property::all()
+        ]);
+    }
+    public function getLandlordPlotStatement(Request $request){
+        if(!$request->isMethod('POST')){
+            return redirect('landlord-plot-report');
+        }
+        $from = $request->date_from;
+        $to = $request->date_to;
+
+        $plotUnits = PropertyUnit::where('property_id',$request->property_id)->get();
+        $property = Property::find($request->property_id);
+        $reports =[];
+        if(count($plotUnits)){
+            foreach ($plotUnits as $unit){
+                $lease = Lease::where('unit_id',$unit->id)
+                    ->where('status',true)
+                    ->with(['unit','property','masterfile'])
+                    ->first();
+                if(!is_null($lease)){
+                    $customerAccounts = CustomerAccount::where('lease_id',$lease->id)->get();
+
+                    //balance brought forward
+                    $bf = $customerAccounts->where('date','<',$from)->where('transaction_type',credit)->sum('amount') - $customerAccounts->where('date','<',$from)->where('transaction_type',debit)->sum('amount');
+
+                    //current
+                    $current = CustomerAccount::where('lease_id',$lease->id)
+                        ->whereBetween('date',[$from,$to])->get();
+
+                    //current balance
+                    $currentBal = $current->where('transaction_type',credit)->sum('amount');
+
+                    $total = $currentBal +$bf;
+
+                    $paid = $current->where('transaction_type',debit)->sum('amount');
+//                if($bf <0){
+//                    $paid = $paid -$bf;
+//                }
+                 //   $monthlyRent =
+
+                    $cf = $total -$paid ;
+//                    if($cf >0){
+                        $reports[]=[
+                            'house_number'=>$lease->unit->unit_number,
+                            'tenant'=>$lease->masterfile->full_name,
+                            'phone_number'=>$lease->masterfile->phone_number,
+                            'bbf'=>$bf,
+                            'status'=>"OCCUPIED",
+                            'monthly_rent'=> UnitServiceBill::where([['unit_id',$unit->id],['period',monthly]])->sum('amount'),
+                            'current'=>$currentBal,
+                            'total'=>($bf <0)? -$bf + $total: $total,
+                            'paid'=>($bf <0)? - $bf + $paid: $paid,
+                            'bcf'=>($cf <0)? 0: $cf,
+                            'over_payment'=>($cf <0)? -$cf: 0,
+                        ];
+//                    }
+                }else{
+                    $reports[]=[
+                        'house_number'=>$unit->unit_number,
+                        'tenant'=>'-',
+                        'phone_number'=>'-',
+                        'bbf'=>0,
+                        'status'=>"VACANT",
+                        'monthly_rent'=> 0,
+                        'current'=>0,
+                        'total'=>0,
+                        'paid'=>0,
+                        'bcf'=>0,
+                        'over_payment'=> 0,
+                    ];
+                }
+            }
+        }
+        $expenditures = PropertyExpenditure::where('property_id',$request->property_id)->with(['expenditure'])->get();
+//        print_r($expenditures);die;
+
+        return view('reports.landlord-plot-statement',[
+            'reports'=>collect($reports),
+            'from'=>$from,
+            'to'=>$to,
+            'properties'=>Property::all(),
+//            'landlord' =>$property->masterfile,
+            'prop'=>$property->name,
+            'expenditures'=>$expenditures,
+            'commission'=> $property->commission
+        ]);
+    }
+
     public function landlordSettlementStatement(){
         return view('reports.landlord-settlement',[
             'properties'=>Property::all()

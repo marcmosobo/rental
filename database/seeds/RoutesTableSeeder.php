@@ -366,6 +366,16 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
+            'route_name'=>'Landlord Plot Report',
+            'parent_route' => $parent->id,
+            'url'=>'landlord-plot-report'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
+        $child = Route::create([
             'route_name'=>'Rent Collection Report',
             'parent_route' => $parent->id,
             'url'=>'rentpay'
