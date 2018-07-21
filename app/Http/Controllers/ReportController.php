@@ -700,7 +700,129 @@ class ReportController extends Controller
         $commission =0;
         if(count($props)){
             foreach ($props as $prop){
-               $percentage = Property::find($prop)->commission;
+                $percentage = Property::find($prop)->commission;
+                $sum = $reports->where('property_id','=',$prop)->sum('rentPaid');
+                $final = $percentage/100 * $sum;
+
+                $commission = $commission +$final;
+            }
+        }
+
+        $expenditures = PropertyExpenditure::where('landlord_id',$request->landlord_id)
+            ->whereBetween('date',[$from,$to])
+            ->sum('amount');
+
+//        print_r($expenditures->toArray());die;
+        return view('reports.landlord-properties-settlement',[
+            'reports'=>$reports,
+            'from'=>$from,
+            'to'=>$to,
+            'landlords'=>Masterfile::where('b_role',landlord)->get(),
+            'landlord_name' =>Masterfile::find($request->landlord_id)->full_name,
+//            'prop'=>$property->name,
+            'expenditures'=>$expenditures,
+            'withdrawn'=> LandlordRemittance::where('landlord_id',$request->landlord_id)->whereBetween('date',[$from,$to])->sum('amount'),
+            'commission' => $commission
+
+        ]);
+    }
+    public function getLandlordPSettlements2(Request $request){
+        if(!$request->isMethod('POST')){
+            return redirect('landlordPSettlements');
+        }
+        $from = $request->date_from;
+        $to = $request->date_to;
+//        echo $request->landlord_id;die;
+        $plotUnits = PropertyUnit::query()
+            ->select(['property_units.*'])
+            ->leftJoin('properties','properties.id','=','property_units.property_id')
+            ->where('properties.landlord_id',$request->landlord_id)->get();
+//        print_r($plotUnits->toArray());die;
+//        $property = Property::find($request->property_id);
+        $reports =[];
+        $expenses = [];
+        if(count($plotUnits)){
+            foreach ($plotUnits as $unit){
+                $lease = Lease::where('unit_id',$unit->id)
+                    ->where('status',true)
+                    ->with(['unit','property','masterfile'])
+                    ->first();
+                if(!is_null($lease)){
+                    $customerAccounts = CustomerAccount::where('lease_id',$lease->id)->get();
+
+                    //balance brought forward
+                    $bf = $customerAccounts->where('date','<',$from)->where('transaction_type',credit)->sum('amount') - $customerAccounts->where('date','<',$from)->where('transaction_type',debit)->sum('amount');
+
+                    //current
+                    $current = CustomerAccount::where('lease_id',$lease->id)
+                        ->whereBetween('date',[$from,$to])->get();
+
+                    //current balance
+                    $currentBal = $current->where('transaction_type',credit)->sum('amount');
+
+                    $total = $currentBal +$bf;
+
+                    $paid = $current->where('transaction_type',debit)->sum('amount');
+
+                    $cf = $total - $paid ;
+
+                    $rent = UnitServiceBill::query()
+                        ->select('unit_service_bills.amount')
+                        ->leftJoin('service_options','service_options.id','=','unit_service_bills.service_bill_id')
+                        ->where([['unit_id',$unit->id],['period',monthly]])
+                        ->where('service_options.code',rent)->first()
+                    ;
+//                    var_dump($rent);die;
+                    $amPaid = (($bf <0)? - $bf + $paid: $paid );
+                    $reports[]=[
+                        'property_id'=>$unit->property_id,
+                        'property_name'=>(!is_null($lease->property))?$lease->property->name: '',
+                        'house_number'=>$lease->unit->unit_number,
+                        'tenant'=>$lease->masterfile->full_name,
+                        'phone_number'=>$lease->masterfile->phone_number,
+                        'bbf'=>$bf,
+                        'status'=>"OCCUPIED",
+                        'monthly_rent'=> $rent->amount,
+                        'current'=>$currentBal,
+                        'total'=>($bf <0)? -$bf + $total: $total,
+//                        'paid'=>((($bf <0)? - $bf + $paid: $paid ) >)?,
+                        'paid'=>($amPaid),
+                        'rentPaid'=>$rentPaid =($amPaid > $rent->amount)? $rent->amount: $amPaid,
+                        'otherBills'=>($cf <0)? 0: $cf,
+//                        'bcf'=>($cf <0)? 0: $cf,
+                        'bcf'=>$rent->amount - $rentPaid,
+                        'over_payment'=>($cf <0)? -$cf: 0,
+                    ];
+//                    }
+                }else{
+                    $reports[]=[
+                        'property_id'=>$unit->property_id,
+                        'house_number'=>$unit->unit_number,
+                        'property_name'=>Property::find($unit->property_id)->name,
+                        'tenant'=>'-',
+                        'phone_number'=>'-',
+                        'bbf'=>0,
+                        'status'=>"VACANT",
+                        'monthly_rent'=> 0,
+                        'current'=>0,
+                        'total'=>0,
+                        'paid'=>0,
+                        'bcf'=>0,
+                        'over_payment'=> 0,
+                        'rentPaid'=>0
+                    ];
+                }
+            }
+        }
+        //commission
+
+        $reports = collect($reports);
+
+        $props =($reports->unique('property_id')->pluck('property_id'));
+        $commission =0;
+        if(count($props)){
+            foreach ($props as $prop){
+                $percentage = Property::find($prop)->commission;
                 $sum = $reports->where('property_id','=',$prop)->sum('rentPaid');
                 $final = $percentage/100 * $sum;
 

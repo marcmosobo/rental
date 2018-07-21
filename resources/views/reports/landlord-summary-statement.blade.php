@@ -1,9 +1,9 @@
 @extends('layouts.app')
- @section("pageTitle",'Landlord Properties Statement Report')
+ @section("pageTitle",'Property Statement Report')
  {{--@section("pageSubtitle",'create, edit, delete Claims')--}}
   @section("breadcrumbs")
             <li>Reports</li>
-            <li>Landlord Properties Statement</li>
+            <li>Property Statement</li>
          @endsection
 
 @section('css')
@@ -12,10 +12,6 @@
             margin-top: 0;
             margin-bottom: 0;
             font-size: 20px;
-        }
-
-        .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
-            padding: 0;
         }
     </style>
     @endsection
@@ -26,15 +22,15 @@
 
                 <div class="col-md-12 col-md-offset-1">
                     <div class="form-group" id="date-range-div" >
-                        <form action="{{ url('getLandlordPSettlements') }}" id="plot-form" method="post">
+                        <form action="{{ url('getLandlordPlotStatement') }}" id="plot-form" method="post">
                             {{ csrf_field() }}
                             <div class="col-md-3">
-                                <label>Landlord</label>
-                                <select class="form-control select2" name="landlord_id" id="property_id" required>
-                                    <option value="">Select Landlord</option>
-                                    @if(count($landlords))
-                                        @foreach($landlords as $landlord)
-                                            <option value="{{ $landlord->id }}">{{ $landlord->full_name }}</option>
+                                <label>property</label>
+                                <select class="form-control select2" name="property_id" id="property_id" required>
+                                    <option value="">Select property</option>
+                                    @if(count($properties))
+                                        @foreach($properties as $property)
+                                            <option value="{{ $property->id }}">{{ $property->name }}</option>
                                             @endforeach
                                         @endif
 
@@ -66,64 +62,58 @@
 
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <h4 class="">Landlord statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>
-                {{--<p class="">Property: {{ $prop }}</p>--}}
-                <h3 class="">Landlord/lady: {{ (isset($landlord_name))? $landlord_name: '' }}</h3>
+                <h4 class="">Property statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>
+                <p class="">Property: {{ $prop }}</p>
+                {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Property Name</th>
                             <th>Unit Number</th>
                             <th>Tenant</th>
                             <th>Phone Number</th>
                             <th>Status</th>
                             <th style="text-align: right;">Monthly Rent</th>
-                            {{--<th style="text-align: right;">Arrears B/F</th>--}}
-                            {{--<th style="text-align: right;">Current Bal</th>--}}
-                            {{--<th style="text-align: right;">Total Due</th>--}}
-                            {{--<th style="text-align: right;">Total Paid</th>--}}
-                            <th style="text-align: right;">Rent Paid</th>
+                            <th style="text-align: right;">Arrears B/F</th>
+                            <th style="text-align: right;">Current Bal</th>
+                            <th style="text-align: right;">Total Due</th>
+                            <th style="text-align: right;">Amount Paid</th>
                             <th style="text-align: right;">Arrears C/F</th>
-                            {{--<th style="text-align: right;">Over Payment</th>--}}
+                            <th style="text-align: right;">Over Payment</th>
                         </tr>
                     </thead>
                     <tbody>
                     @if(count($reports))
                         @foreach($reports as $statement)
                             <tr>
-                                <td>{{ $statement['property_name'] }}</td>
                                 <td>{{ $statement['house_number'] }}</td>
                                 <td>{{ $statement['tenant'] }}</td>
                                 <td>{{ $statement['phone_number'] }}</td>
                                 <td>{{ $statement['status'] }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['monthly_rent'],2) }}</td>
-{{--                                <td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>--}}
-{{--                                <td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>--}}
-{{--                                <td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>--}}
+                                <td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['paid'],2) }}</td>
-                                {{--<td style="text-align: right;">{{ number_format($statement['rentPaid'],2) }}</td>--}}
                                 <td style="text-align: right;">{{ number_format($statement['bcf'],2) }}</td>
-                                {{--<td style="text-align: right;">{{ number_format($statement['over_payment'],2) }}</td>--}}
+                                <td style="text-align: right;">{{ number_format($statement['over_payment'],2) }}</td>
                             </tr>
                             @endforeach
                         <tr>
                             <th><h3 class="no-top">{{ count($reports) }} </h3></th>
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top"></h3></th>
-                            <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top">Totals</h3></th>
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('monthly_rent'),2) }}</h3></th>
-                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bbf'),2) }}</h3></th>--}}
-                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('current'),2) }}</h3></th>--}}
-                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('total'),2) }}</h3></th>--}}
-                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('paid'),2) }}</h3></th>--}}
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bbf'),2) }}</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('current'),2) }}</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('total'),2) }}</h3></th>
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('paid'),2) }}</h3></th>
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bcf'),2) }}</h3></th>
-{{--                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('over_payment'),2) }}</h3></th>--}}
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('over_payment'),2) }}</h3></th>
                         </tr>
                         @else
                         <tr>
-                            <td class="text-center" colspan="9">No records found</td>
+                            <td class="text-center" colspan="8">No records found</td>
                         </tr>
                         @endif
                     </tbody>
@@ -138,63 +128,50 @@
                 <p class="lead">Summary</p>
                 <div class="table-responsive">
                     @if(isset($expenditures))
-                    <table class="table" style="width: 50%" >
-                    <tr>
-                        <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('paid'),2) }}</td>
-                    </tr>
-                        <tr>
-                            <th style="width:50%">Commission</th><td>{{ number_format($commission,2) }}</td>
-                        </tr>
-                    <tr>
-                        <th style="width:50%">Total Expenses</th><td>{{ number_format($expenditures,2) }} </td>
-                    </tr>
-                        <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Total due</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('paid') - ($expenditures + $commission),2) }}</td>
-                        </tr>
-                        <tr>
-                            <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
-                        </tr>
-
-                        <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Net Payable</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn >= 0)? ($reports->sum('paid') - ($expenditures + $commission))- $withdrawn: 0,2) }}</td>
-                        </tr>
-
-
-                        <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn < 0)? -(($reports->sum('paid') - ($expenditures + $commission))- $withdrawn) : 0,2) }}</td>
-                        </tr>
-                        {{--@if(count($expenditures))--}}
-                            {{--<tr style="">--}}
-                                {{--<td rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b">Expenditures</td>--}}
-                                {{--<th rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b"></th>--}}
+                        <table class="table" style="width: 50%" >
+                            <tr>
+                                <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('paid',2)) }}</td>
+                            </tr>
+                            <tr>
+                                <th style="width:50%">Commission Percentage</th><td>{{ $commission }} %</td>
+                            </tr>
+                            <tr>
+                                <th style="width:50%">Commission Charged</th><td>{{ number_format($reports->sum('paid')* $commission/100,2) }}</td>
+                            </tr>
+                            {{--<tr>--}}
+                            {{--<th style="width:50%">Less Commission Charged</th><td>{{ number_format($reports->sum('rentPaid')* (1-($commission/100)),2) }}</td>--}}
                             {{--</tr>--}}
-                            {{--@foreach($expenditures as $expenditure)--}}
-                                {{--<tr>--}}
-                                    {{--<th style="width:50%">{{ $expenditure->expenditure->name }}</th><td>{{ number_format($expenditure->amount,2)}}</td>--}}
-                                {{--</tr>--}}
-                                {{--@endforeach--}}
-                                {{--<tr style="">--}}
-                                    {{--<th style="width:50%;border-top: 1px solid #4d4b4b">Total Expenditures</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($expenditures->sum('amount'),2)}}</td>--}}
-                                {{--</tr>--}}
-                            {{--@endif--}}
-                    {{--<tr>--}}
-                        {{--<th style="width:50%">Less Expenditures</th><td>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</td>--}}
-                    {{--</tr>--}}
+                            @if(count($expenditures))
+                                <tr style="">
+                                    <td rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b">Expenditures</td>
+                                    <th rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b"></th>
+                                </tr>
+                                @foreach($expenditures as $expenditure)
+                                    <tr>
+                                        <th style="width:50%">{{ $expenditure->expenditure->name }}{{ (!is_null($expenditure->remarks))? ' - '. $expenditure->remarks: '' }} </th><td>{{ number_format($expenditure->amount,2)}}</td>
+                                    </tr>
+                                @endforeach
+                                <tr style="">
+                                    <th style="width:50%;border-top: 1px solid #4d4b4b">Total Expenditures</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($expenditures->sum('amount'),2)}}</td>
+                                </tr>
+                            @endif
+                            {{--<tr>--}}
+                            {{--<th style="width:50%">Less Expenditures</th><td>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</td>--}}
+                            {{--</tr>--}}
 
-                        {{--<tfoot>--}}
-                        {{--<tr>--}}
-                            {{--<th><h3>Total Payable</h3></th>--}}
-                            {{--<th><h3>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</h3></th>--}}
-                        {{--</tr>--}}
-                        {{--</tfoot>--}}
-                    </table>
-                        @endif
+                            <tfoot>
+                            <tr>
+                                <th><h3>Total Payable</h3></th>
+                                <th><h3>{{ number_format((($reports->sum('rentPaid')* (1-($commission/100)))  - $expenditures->sum('amount')),2) }}</h3></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    @endif
                 </div>
-{{----}}
+                {{----}}
                 {{--<button class="btn btn-primary no-print" data-toggle="modal" href="#create-modal">Record settlement</button>--}}
             </div>
         </div>
-        <!-- /.row -->
 
 
         <!-- this row will not appear when printing -->
@@ -279,7 +256,7 @@
 
 @push('js')
     <script>
-        $('a#landlordPSettlements').parent('li').addClass('active').parent('ul').parent().addClass('active');
+        $('a#landlord-plot-report').parent('li').addClass('active').parent('ul').parent().addClass('active');
 
     </script>
     @endpush
