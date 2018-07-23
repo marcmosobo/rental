@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Http\Requests\CreatePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
 use App\Jobs\SendSms;
+use App\Models\Customer;
 use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\Masterfile;
@@ -181,22 +182,25 @@ class PaymentController extends AppBaseController
                     $input['mf_id'] = $tenant->id;
 
                      DB::transaction(function () use ($input, $tenant, $lease, $propertyUnit, $payment) {
-                        $acc = CustomerAccount::create([
-                            'tenant_id' => $tenant->id,
-                            'lease_id' => $lease->id,
-                            'unit_id' => $propertyUnit->id,
-                            'payment_id' => $payment->id,
-                            'ref_number' => $payment->ref_number,
-                            'transaction_type' => debit,
-                            'amount' => $payment->amount,
-                            'date' => Carbon::today()
-                        ]);
+                       if(is_null(Customer::where('ref_number',$payment->ref_number)->first())){
+                           $acc = CustomerAccount::create([
+                               'tenant_id' => $tenant->id,
+                               'lease_id' => $lease->id,
+                               'unit_id' => $propertyUnit->id,
+                               'payment_id' => $payment->id,
+                               'ref_number' => $payment->ref_number,
+                               'transaction_type' => debit,
+                               'amount' => $payment->amount,
+                               'date' => Carbon::today()
+                           ]);
 
-                        $payment->status = true;
-                        $payment->house_number = $propertyUnit->unit_number;
-                        $payment->tenant_id = $tenant->id;
-                        $payment->client_id = $input['client_id'];
-                        $payment->save();
+                           $payment->status = true;
+                           $payment->house_number = $propertyUnit->unit_number;
+                           $payment->tenant_id = $tenant->id;
+                           $payment->client_id = $input['client_id'];
+                           $payment->save();
+                       }
+
 
                     });
                     //send sms
