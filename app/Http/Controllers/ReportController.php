@@ -704,7 +704,7 @@ class ReportController extends Controller
         if(count($props)){
             foreach ($props as $prop){
                 $percentage = Property::find($prop)->commission;
-                $sum = $reports->where('property_id','=',$prop)->sum('rentPaid');
+                $sum = $reports->where('property_id','=',$prop)->sum('paid');
                 $final = $percentage/100 * $sum;
 
                 $commission = $commission +$final;
