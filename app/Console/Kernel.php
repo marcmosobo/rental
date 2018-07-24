@@ -31,20 +31,25 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 //        $schedule->job(new SendReminder())->everyMinute();
-        $schedule->job(new ScheduleReminders())->everyMinute();
-        $schedule->call(function () {
-//            Log::info('executing');
-            $customerMessages = CustomerMessage::where('sent',false)->get();
-            if(count($customerMessages)){
-                foreach ($customerMessages as $message){
-                    SendSms::dispatch($message->message,$message->phone_number);
-                    $message = CustomerMessage::find($message->id);
-                    $message->sent = true;
-                    $message->save();
-                }
-            }
+//        $schedule->job(new ScheduleReminders())->everyMinute();
+//        $schedule->call(function () {
+////            Log::info('executing');
+//            $customerMessages = CustomerMessage::where('sent',false)->get();
+//            if(count($customerMessages)){
+//                foreach ($customerMessages as $message){
+//                    SendSms::dispatch($message->message,$message->phone_number);
+//                    $message = CustomerMessage::find($message->id);
+//                    $message->sent = true;
+//                    $message->save();
+//                }
+//            }
+//
+//        })->everyMinute();
 
-        })->everyMinute();
+        // make database backup
+        $schedule->command('backup:run --only-db')->hourly();
+
+        $schedule->command('backup:clean')->daily();
     }
 
     /**

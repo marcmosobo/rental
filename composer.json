@@ -19,7 +19,9 @@
         "league/csv": "^9.1",
         "owen-it/laravel-auditing": "^6.0",
         "safaricom/mpesa": "^1.0",
-        "yajra/laravel-datatables": "1.0"
+        "yajra/laravel-datatables": "1.0",
+        "spatie/flysystem-dropbox": "^1.0",
+        "spatie/laravel-backup": "^5.8"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
