@@ -182,7 +182,7 @@ class PaymentController extends AppBaseController
                     $input['mf_id'] = $tenant->id;
 
                      DB::transaction(function () use ($input, $tenant, $lease, $propertyUnit, $payment) {
-                       if(is_null(Customer::where('ref_number',$payment->ref_number)->first())){
+                       if(is_null(CustomerAccount::where('ref_number',$payment->ref_number)->first())){
                            $acc = CustomerAccount::create([
                                'tenant_id' => $tenant->id,
                                'lease_id' => $lease->id,
