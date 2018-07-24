@@ -283,6 +283,9 @@ class PaymentController extends AppBaseController
 
                             $party = explode('-',$trans['Other Party Info']);
 
+//                            echo Carbon::parse('22/07/2018 21:06');die;
+//                            echo ;die;
+
                             $payment = Payment::create([
                                 'payment_mode'=>'MPESA',
                                 'account_number'=>$trans['A/C No.'],
@@ -292,12 +295,12 @@ class PaymentController extends AppBaseController
                                 'phone_number'=>trim($party[0]),
                                 'BillRefNumber'=>$trans['A/C No.'],
                                 'TransID'=>$trans['Receipt No.'],
-                                'TransTime'=>Carbon::parse($trans['Completion Time']),
+                                'TransTime'=>Carbon::createFromFormat('d/m/Y H:i', $trans['Completion Time']),
                                 'FirstName'=>trim($party[1]),
 //                        'MiddleName'=>$request->MiddleName,
 //                        'LastName'=>$request->LastName,
 //                        'client_id' => $input['client_id'],
-                                'received_on'=>Carbon::parse($trans['Completion Time']),
+                                'received_on'=>Carbon::createFromFormat('d/m/Y H:i', $trans['Completion Time']),
 //                        'mf_id'=>$input['mf_id']
                             ]);
 
@@ -325,7 +328,7 @@ class PaymentController extends AppBaseController
                                         'ref_number' => $payment->ref_number,
                                         'transaction_type' => debit,
                                         'amount' => $payment->amount,
-                                        'date' => Carbon::parse($trans['Completion Time'])
+                                        'date' => Carbon::createFromFormat('d/m/Y H:i', $trans['Completion Time'])
                                     ]);
 
                                     $payment->status = true;
