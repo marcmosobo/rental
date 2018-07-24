@@ -78,8 +78,8 @@
                             <th>Phone Number</th>
                             <th>Status</th>
                             <th style="text-align: right;">Monthly Rent</th>
-                            {{--<th style="text-align: right;">Arrears B/F</th>--}}
-                            {{--<th style="text-align: right;">Current Bal</th>--}}
+                            <th style="text-align: right;">Arrears B/F</th>
+                            <th style="text-align: right;">Current Bal</th>
                             {{--<th style="text-align: right;">Total Due</th>--}}
                             {{--<th style="text-align: right;">Total Paid</th>--}}
                             <th style="text-align: right;">Rent Paid</th>
@@ -97,8 +97,8 @@
                                 <td>{{ $statement['phone_number'] }}</td>
                                 <td>{{ $statement['status'] }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['monthly_rent'],2) }}</td>
-{{--                                <td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>--}}
-{{--                                <td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>--}}
+                                <td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>
+                                <td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>
 {{--                                <td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>--}}
                                 <td style="text-align: right;">{{ number_format($statement['paid'],2) }}</td>
                                 {{--<td style="text-align: right;">{{ number_format($statement['rentPaid'],2) }}</td>--}}
@@ -113,8 +113,8 @@
                             <th><h3 class="no-top"></h3></th>
                             <th><h3 class="no-top">Totals</h3></th>
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('monthly_rent'),2) }}</h3></th>
-                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bbf'),2) }}</h3></th>--}}
-                            {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('current'),2) }}</h3></th>--}}
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('bbf'),2) }}</h3></th>
+                            <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('current'),2) }}</h3></th>
                             {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('total'),2) }}</h3></th>--}}
                             {{--<th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('paid'),2) }}</h3></th>--}}
                             <th style="text-align: right;"><h3 class="no-top">{{ number_format($reports->sum('paid'),2) }}</h3></th>
@@ -147,6 +147,9 @@
                         @endphp
 
                     <table class="table" style="width: 50%" >
+                        <tr>
+                            <th style="width:50%">Opening Balance </th><td>{{ number_format($oBalance,2) }}</td>
+                        </tr>
                     <tr>
                         <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('paid'),2) }}</td>
                     </tr>
@@ -160,9 +163,7 @@
                             <th style="width:50%;border-top: 1px solid #4d4b4b">Total due</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('paid') - ($expenditures + $commission),2) }}</td>
                         </tr>
 
-                        <tr>
-                            <th style="width:50%">Opening Balance </th><td>{{ number_format($oBalance,2) }}</td>
-                        </tr>
+
 
                         <tr>
                             <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
@@ -176,6 +177,13 @@
                         <tr>
                             <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance < 0)? -(($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance) : 0,2) }}</td>
                         </tr>
+                        {{--<tr>--}}
+                            {{--<th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft Commission</th><td style="border-top: 1px solid #4d4b4b">8%</td>--}}
+                        {{--</tr>--}}
+
+                        {{--<tr>--}}
+                            {{--<th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft commission</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance < 0)? -(($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance) : 0,2) }}</td>--}}
+                        {{--</tr>--}}
                         {{--@if(count($expenditures))--}}
                             {{--<tr style="">--}}
                                 {{--<td rowspan="" style="width:50%;border-bottom: 1px solid #4d4b4b">Expenditures</td>--}}
