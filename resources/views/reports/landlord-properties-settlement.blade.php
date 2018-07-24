@@ -138,6 +138,14 @@
                 <p class="lead">Summary</p>
                 <div class="table-responsive">
                     @if(isset($expenditures))
+                        @php
+                        if(!is_null($opening_balance)){
+                            $oBalance = $opening_balance->opening_balance;
+                        }else{
+                            $oBalance = 0;
+                        }
+                        @endphp
+
                     <table class="table" style="width: 50%" >
                     <tr>
                         <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('paid'),2) }}</td>
@@ -151,17 +159,22 @@
                         <tr>
                             <th style="width:50%;border-top: 1px solid #4d4b4b">Total due</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('paid') - ($expenditures + $commission),2) }}</td>
                         </tr>
+
+                        <tr>
+                            <th style="width:50%">Opening Balance </th><td>{{ number_format($oBalance,2) }}</td>
+                        </tr>
+
                         <tr>
                             <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
                         </tr>
 
                         <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Net Payable</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn >= 0)? ($reports->sum('paid') - ($expenditures + $commission))- $withdrawn: 0,2) }}</td>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Net Payable</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance >= 0)? ($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance: 0,2) }}</td>
                         </tr>
 
 
                         <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn < 0)? -(($reports->sum('paid') - ($expenditures + $commission))- $withdrawn) : 0,2) }}</td>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance < 0)? -(($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance) : 0,2) }}</td>
                         </tr>
                         {{--@if(count($expenditures))--}}
                             {{--<tr style="">--}}

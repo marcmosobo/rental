@@ -10,6 +10,7 @@ use App\Models\Landlord;
 use App\Models\LandlordRemittance;
 use App\Models\Lease;
 use App\Models\Masterfile;
+use App\Models\OpeningBalance;
 use App\Models\Payment;
 use App\Models\Property;
 use App\Models\PropertyExpenditure;
@@ -695,6 +696,8 @@ class ReportController extends Controller
         //commission
 
         $reports = collect($reports);
+        $openingBalance = OpeningBalance::where('landlord_id',$request->landlord_id)->first();
+//        print_r($openingBalance);die;
 
         $props =($reports->unique('property_id')->pluck('property_id'));
         $commission =0;
@@ -722,7 +725,8 @@ class ReportController extends Controller
 //            'prop'=>$property->name,
             'expenditures'=>$expenditures,
             'withdrawn'=> LandlordRemittance::where('landlord_id',$request->landlord_id)->whereBetween('date',[$from,$to])->sum('amount'),
-            'commission' => $commission
+            'commission' => $commission,
+            'opening_balance' => $openingBalance
 
         ]);
     }
