@@ -499,7 +499,7 @@ class ReportController extends Controller
                         'current'=>$curBal,
                         'total'=>($bf <0)? -$bf + $total : $total,
 //                        'total'=>($totalBf <0)? -$totalBf + $total : $total,
-                        'paid'=>($totalBf < 0)? - $totalBf + $paid: $paid,
+                        'paid'=>($totalBf < 0)? - $totalBf + $paid : $paid,
                         'bcf'=>($cf <0)? 0: $cf,
                         'over_payment'=>($cf <0)? -$cf: 0,
                     ];

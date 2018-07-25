@@ -123,9 +123,9 @@ class TerminatedLeaseDataTable extends DataTable
             'reversed_by'=>[
                 'title'=>'Reversed/terminated By'
             ],
-            'client_id'=>[
-                'title'=>'Reverse'
-            ]
+//            'client_id'=>[
+//                'title'=>'Reverse'
+//            ]
         ];
     }
 
