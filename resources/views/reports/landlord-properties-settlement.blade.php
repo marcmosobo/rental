@@ -146,7 +146,7 @@
                         @if(count($expenditures))
                             @foreach($expenditures as $expense)
                                 <tr>
-                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th><td>{{ $expense->expenditure->amount }}</td>
+                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th><td>{{ $expense->amount }}</td>
                                 </tr>
                                 <tr>
                                     <th>Total</th><th>{{ $expenditures->sum('amount') }}</th>
