@@ -133,8 +133,35 @@
             <!-- /.col -->
         </div>
         <div class="row">
-            <div class="col-md-6"><hr></div>
-            <div class="col-md-12" >
+            <div class="col-md-12"><hr></div>
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="2">Expenses summary</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(count($expenditures))
+                            @foreach($expenditures as $expense)
+                                <tr>
+                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th><td>{{ $expense->expenditure->amount }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total</th><th>{{ $expenditures->sum('amount') }}</th>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="2"style="text-align: center">No expenses</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <p class="lead">Summary</p>
                 <div class="table-responsive">
                     @if(isset($expenditures))
@@ -146,7 +173,7 @@
                         }
                         @endphp
 
-                    <table class="table" style="width: 50%" >
+                    <table class="table"  >
                         <tr>
                             <th style="width:50%">Opening Balance </th><td>{{ number_format($oBalance,2) }}</td>
                         </tr>
@@ -154,28 +181,25 @@
                         <th style="width:50%">Gross Rent Collected</th><td>{{ number_format($reports->sum('paid'),2) }}</td>
                     </tr>
                         <tr>
-                            <th style="width:50%">Commission</th><td>{{ number_format($commission,2) }}</td>
+                            <th style="width:50%">Commission</th><td>{{ number_format($commissions->sum('commissionCharged'),2) }}</td>
                         </tr>
                     <tr>
-                        <th style="width:50%">Total Expenses</th><td>{{ number_format($expenditures,2) }} </td>
+                        <th style="width:50%">Total Expenses</th><td>{{ number_format($expenditures->sum('amount'),2) }} </td>
                     </tr>
                         <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Total due</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('paid') - ($expenditures + $commission),2) }}</td>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Total due</th><td style="border-top: 1px solid #4d4b4b">{{ number_format($reports->sum('paid') - ($expenditures->sum('amount') + $commissions->sum('commissionCharged')),2) }}</td>
                         </tr>
-
-
-
                         <tr>
                             <th style="width:50%">Total withdrawn</th><td>{{ number_format($withdrawn,2) }}</td>
                         </tr>
 
                         <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Net Payable</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance >= 0)? ($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance: 0,2) }}</td>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Net Payable</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures->sum('amount') + $commissions->sum('commissionCharged')))- $withdrawn + $oBalance >= 0)? ($reports->sum('paid') - ($expenditures->sum('amount') + $commissions->sum('commissionCharged')))- $withdrawn + $oBalance: 0,2) }}</td>
                         </tr>
 
 
                         <tr>
-                            <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance < 0)? -(($reports->sum('paid') - ($expenditures + $commission))- $withdrawn + $oBalance) : 0,2) }}</td>
+                            <th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft</th><td style="border-top: 1px solid #4d4b4b">{{ number_format((($reports->sum('paid') - ($expenditures->sum('amount') + $commissions->sum('commissionCharged')))- $withdrawn + $oBalance < 0)? -(($reports->sum('paid') - ($expenditures->sum('amount') + $commissions->sum('commissionCharged')))- $withdrawn + $oBalance) : 0,2) }}</td>
                         </tr>
                         {{--<tr>--}}
                             {{--<th style="width:50%;border-top: 1px solid #4d4b4b">Overdraft Commission</th><td style="border-top: 1px solid #4d4b4b">8%</td>--}}
@@ -211,9 +235,8 @@
                     </table>
                         @endif
                 </div>
-{{----}}
-                {{--<button class="btn btn-primary no-print" data-toggle="modal" href="#create-modal">Record settlement</button>--}}
             </div>
+
         </div>
         <!-- /.row -->
 

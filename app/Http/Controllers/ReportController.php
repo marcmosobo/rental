@@ -612,6 +612,8 @@ class ReportController extends Controller
 //                    if($cf >0){
                     $reports[]=[
                         'house_number'=>$lease->unit->unit_number,
+                        'property_id'=>$unit->property_id,
+                        'property_name'=>(!is_null($lease->property))?$lease->property->name: '',
                         'tenant'=>$lease->masterfile->full_name,
                         'phone_number'=>$lease->masterfile->phone_number,
                         'bbf'=>$bf,
@@ -628,6 +630,8 @@ class ReportController extends Controller
                 }else{
                     $reports[]=[
                         'house_number'=>$unit->unit_number,
+                        'property_id'=>$unit->property_id,
+                        'property_name'=>Property::find($unit->property_id)->name,
                         'tenant'=>'-',
                         'phone_number'=>'-',
                         'bbf'=>0,
@@ -645,24 +649,33 @@ class ReportController extends Controller
         //commission
 
         $reports = collect($reports);
+//        print_r($reports);die;
         $openingBalance = OpeningBalance::where('landlord_id',$request->landlord_id)->first();
 //        print_r($openingBalance);die;
 
         $props =($reports->unique('property_id')->pluck('property_id'));
-        $commission =0;
+        $commissions =[];
         if(count($props)){
             foreach ($props as $prop){
-                $percentage = Property::find($prop)->commission;
+                $property = Property::find($prop);
                 $sum = $reports->where('property_id','=',$prop)->sum('paid');
-                $final = $percentage/100 * $sum;
+                $final = $property->commission/100 * $sum;
 
-                $commission = $commission +$final;
+                $commissions[] = [
+                    'property'=>$property->name,
+                    'total_paid'=>$sum,
+                    'percentage'=> $property->commission,
+                    'commissionCharged' =>$final
+                ];
             }
         }
 
-        $expenditures = PropertyExpenditure::where('landlord_id',$request->landlord_id)
+        $expenditures = PropertyExpenditure::query()
+            ->whereIn('property_id',$props)
             ->whereBetween('date',[$from,$to])
-            ->sum('amount');
+            ->with(['expenditure','property'])
+            ->get();
+//        print_r($props);die;
 
 //        print_r($expenditures->toArray());die;
         return view('reports.landlord-properties-settlement',[
@@ -674,8 +687,9 @@ class ReportController extends Controller
 //            'prop'=>$property->name,
             'expenditures'=>$expenditures,
             'withdrawn'=> LandlordRemittance::where('landlord_id',$request->landlord_id)->whereBetween('date',[$from,$to])->sum('amount'),
-            'commission' => $commission,
-            'opening_balance' => $openingBalance
+            'commissions' => collect($commissions),
+            'opening_balance' => $openingBalance,
+            'oBalance'=> OpeningBalance::where('landlord_id',$request->landlord_id)->first()
 
         ]);
     }
