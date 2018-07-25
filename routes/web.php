@@ -162,3 +162,7 @@ Route::any('getRemittance','ReportController@getLandlordRemittanceStatement');
 
 Route::get('landlord-plot-report','ReportController@landlordPlotStatement');
 Route::any('getLandlordPlotStatement','ReportController@getLandlordPlotStatement');
+
+
+Route::get('rent-property-statement','ReportController@rentPropertyStatement');
+Route::any('getRentPropertyStatement','ReportController@getRentPropertyStatement');

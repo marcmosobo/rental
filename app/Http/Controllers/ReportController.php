@@ -120,7 +120,7 @@ class ReportController extends Controller
         }
         $statements = CustomerAccount::query()
             ->where('tenant_id',$request->tenant)
-            ->orderBy('id')
+            ->orderBy('date')
             ->get();
 //        print_r($statement->toArray());die;
         $tenantStatements =[];
@@ -142,6 +142,7 @@ class ReportController extends Controller
                         ->select("property_units.unit_number as house_number")
                         ->leftJoin('leases','leases.id','=','bills.lease_id')
                         ->leftJoin('property_units','property_units.id','=','leases.unit_id')
+//                        ->orderBy('')
                         ->where('bills.id',$statement->bill_id)->first();
                     if(count($billDetails)){
                         foreach ($billDetails as $billDetail){
@@ -408,6 +409,132 @@ class ReportController extends Controller
             'properties'=>Property::all()
         ]);
     }
+    public function rentPropertyStatement(){
+        return view('reports.rent-property-statement',[
+            'properties'=>Property::all()
+        ]);
+    }
+
+
+
+    public function getRentPropertyStatement(Request $request){
+        if(!$request->isMethod('POST')){
+            return redirect('rent-property-statement');
+        }
+        $from = Carbon::parse($request->date_from)->startOfDay();
+        $to = Carbon::parse($request->date_to)->endOfDay();
+        $propertyId = $request->property_id;
+
+        //get the id where bill equals to opening balance
+        $oBalance = ServiceOption::where('code',\openingBalance)->first();
+
+        //get id for rent
+        $rent = ServiceOption::where('code',rent)->first();
+
+        $plotUnits = PropertyUnit::where('property_id',$request->property_id)->get();
+        $property = Property::find($request->property_id);
+        $reports =[];
+        if(count($plotUnits)){
+            foreach ($plotUnits as $unit){
+                $lease = Lease::where('unit_id',$unit->id)
+                    ->where('status',true)
+                    ->with(['unit','property','masterfile'])
+                    ->first();
+                if(!is_null($lease)){
+
+                    $customerAccounts = CustomerAccount::where('lease_id',$lease->id)->get();
+
+                    $balBF = CustomerAccount::query()
+                        ->select('bill_details.*')
+                        ->leftJoin('bill_details','bill_details.bill_id','=','customer_accounts.bill_id')
+                        ->where('customer_accounts.lease_id',$lease->id)
+                        ->where('customer_accounts.bill_id','<>',null)
+                        ->where('customer_accounts.date','<',$from)
+                        ->whereIn('bill_details.service_bill_id',[$oBalance->id,$rent->id])
+                        ->where('transaction_type',credit)
+                        ->where('bill_details.deleted_at',null)
+                        ->sum('bill_details.amount');
+
+                    $amountP = $customerAccounts->where('date','<',$from)->where('transaction_type',debit)->sum('amount');
+                    $bf = ($balBF - $amountP < 0)? 0 : $balBF - $amountP;
+
+                    $totalBf = $customerAccounts->where('date','<',$from)->where('transaction_type',credit)->sum('amount') - $customerAccounts->where('date','<',$from)->where('transaction_type',debit)->sum('amount');
+
+                    //current
+                    $current = CustomerAccount::where('lease_id',$lease->id)
+                        ->whereBetween('date',[$from,$to])->get();
+
+                     $curBal =  CustomerAccount::query()
+                        ->select('bill_details.*')
+                        ->leftJoin('bill_details','bill_details.bill_id','=','customer_accounts.bill_id')
+                        ->where('customer_accounts.lease_id',$lease->id)
+                        ->where('customer_accounts.bill_id','<>',null)
+                        ->whereBetween('customer_accounts.date',[$from,$to])
+                        ->whereIn('bill_details.service_bill_id',[$oBalance->id,$rent->id])
+                        ->where('transaction_type',credit)
+                         ->where('bill_details.deleted_at',null)
+                        ->sum('bill_details.amount');
+//                    die;
+
+                    //current balance
+//                    $currentBal = $current->where('transaction_type',credit)->sum('amount');
+
+                    $total = $curBal + $bf;
+
+                    $paid = $current->where('transaction_type',debit)->sum('amount');
+
+                    $paid = ($paid > $total)? $total : $paid;
+
+
+
+                    $cf = $total - $paid ;
+//                    if($cf >0){
+                    $reports[]=[
+                        'house_number'=>$lease->unit->unit_number,
+                        'tenant'=>$lease->masterfile->full_name,
+                        'phone_number'=>$lease->masterfile->phone_number,
+                        'bbf'=>$bf,
+                        'status'=>"OCCUPIED",
+                        'monthly_rent'=> UnitServiceBill::where([['unit_id',$unit->id],['period',monthly]])->sum('amount'),
+                        'current'=>$curBal,
+                        'total'=>($bf <0)? -$bf + $total : $total,
+//                        'total'=>($totalBf <0)? -$totalBf + $total : $total,
+                        'paid'=>($totalBf < 0)? - $totalBf + $paid: $paid,
+                        'bcf'=>($cf <0)? 0: $cf,
+                        'over_payment'=>($cf <0)? -$cf: 0,
+                    ];
+//                    }
+                }else{
+                    $reports[]=[
+                        'house_number'=>$unit->unit_number,
+                        'tenant'=>'-',
+                        'phone_number'=>'-',
+                        'bbf'=>0,
+                        'status'=>"VACANT",
+                        'monthly_rent'=> 0,
+                        'current'=>0,
+                        'total'=>0,
+                        'paid'=>0,
+                        'bcf'=>0,
+                        'over_payment'=> 0,
+                    ];
+                }
+            }
+        }
+        $expenditures = PropertyExpenditure::where('property_id',$request->property_id)->with(['expenditure'])->get();
+        return view('reports.rent-property-statement',[
+            'properties'=>Property::all(),
+            'reports'=>collect($reports),
+            'from'=>$from,
+            'to'=>$to,
+            'landlord' =>$property->masterfile,
+            'prop'=>$property->name,
+            'expenditures'=>$expenditures,
+            'commission'=> $property->commission
+        ]);
+
+    }
+
     public function getLandlordPlotStatement(Request $request){
         if(!$request->isMethod('POST')){
             return redirect('landlord-plot-report');
@@ -437,13 +564,11 @@ class ReportController extends Controller
                     //current balance
                     $currentBal = $current->where('transaction_type',credit)->sum('amount');
 
-                    $total = $currentBal +$bf;
+                    $total = $currentBal + $bf;
 
                     $paid = $current->where('transaction_type',debit)->sum('amount');
-//                if($bf <0){
-//                    $paid = $paid -$bf;
-//                }
-                 //   $monthlyRent =
+
+
 
                     $cf = $total -$paid ;
 //                    if($cf >0){
@@ -497,6 +622,7 @@ class ReportController extends Controller
         return view('reports.landlord-settlement',[
             'properties'=>Property::all()
         ]);
+
     }
 
     public function getLandlordStatement(Request $request){

@@ -15,3 +15,4 @@ const monthly = 'Monthly';
 const once = 'Once';
 const rent = 'RENT';
 const customer = 'CUSTOMER';
+const openingBalance = 'OPENINGBALANCE';
