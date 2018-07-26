@@ -135,6 +135,43 @@
         <div class="row">
             <div class="col-md-12"><hr></div>
             <div class="col-md-6">
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="3">Commission breakdown</th>
+                        </tr>
+                        <tr>
+                            <th>Property</th>
+                            <th>Total Collected</th>
+                            <th>Percentage</th>
+                            <th style="text-align: right;">Commission Charged</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(count($commissions))
+                            @foreach($commissions as $commission)
+                                <tr>
+                                    <th>{{ $commission['property']}}</th>
+                                    <td>{{ number_format($commission['total_paid'],2) }}</td>
+                                    <td>{{ $commission['percentage'] }}</td>
+                                    <th style="text-align: right;">{{ number_format($commission['commissionCharged'],2)}}</th>
+                                </tr>
+
+                            @endforeach
+                            <tr>
+                                <th colspan="3" style="border-top: 1px solid #4d4b4b">Total</th>
+                                <th style="border-top: 1px solid #4d4b4b;text-align: right;">{{ number_format($commissions->sum('commissionCharged'),2) }}</th>
+                            </tr>
+                        @else
+                            <tr>
+                                <td colspan="2">No expenses</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -146,15 +183,15 @@
                         @if(count($expenditures))
                             @foreach($expenditures as $expense)
                                 <tr>
-                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th><td>{{ $expense->amount }}</td>
+                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th><td>{{ number_format($expense->amount,2) }}</td>
                                 </tr>
                                 <tr>
-                                    <th>Total</th><th>{{ $expenditures->sum('amount') }}</th>
+                                    <th>Total</th><th>{{ number_format($expenditures->sum('amount'),2) }}</th>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="2"style="text-align: center">No expenses</td>
+                                <td colspan="2">No expenses</td>
                             </tr>
                         @endif
                         </tbody>

@@ -673,11 +673,7 @@ class ReportController extends Controller
         $expenditures = PropertyExpenditure::query()
             ->whereIn('property_id',$props)
             ->whereBetween('date',[$from,$to])
-            ->with(['expenditure','property'])
-            ->get();
-//        print_r($props);die;
-
-//        print_r($expenditures->toArray());die;
+            ->with(['expenditure','property'])->get();
         return view('reports.landlord-properties-settlement',[
             'reports'=>$reports,
             'from'=>$from,
