@@ -608,7 +608,7 @@ class ReportController extends Controller
 
 
 
-                    $cf = $total - $paid ;
+                    $cf = $curBal - $paid ;
 //                    if($cf >0){
                     $reports[]=[
                         'house_number'=>$lease->unit->unit_number,
@@ -623,7 +623,8 @@ class ReportController extends Controller
                         'total'=>($bf <0)? -$bf + $total : $total,
 //                        'total'=>($totalBf <0)? -$totalBf + $total : $total,
                         'paid'=>($totalBf < 0)? - $totalBf + $paid : $paid,
-                        'bcf'=>($cf <0)? 0: $cf,
+//                        'bcf'=>($cf <0)? 0: $cf,
+                        'bcf'=>($totalBf <0)? 0: $cf,
                         'over_payment'=>($cf <0)? -$cf: 0,
                     ];
 //                    }
