@@ -164,10 +164,6 @@
                                 <th colspan="3" style="border-top: 1px solid #4d4b4b">Total</th>
                                 <th style="border-top: 1px solid #4d4b4b;text-align: right;">{{ number_format($commissions->sum('commissionCharged'),2) }}</th>
                             </tr>
-                        @else
-                            <tr>
-                                <td colspan="2">No expenses</td>
-                            </tr>
                         @endif
                         </tbody>
                     </table>
@@ -183,12 +179,15 @@
                         @if(count($expenditures))
                             @foreach($expenditures as $expense)
                                 <tr>
-                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th><td>{{ number_format($expense->amount,2) }}</td>
+                                    <th>{{ $expense->expenditure->name }} - {{ $expense->property->name }}</th>
+                                    <td style="text-align: right">{{ number_format($expense->amount,2) }}</td>
                                 </tr>
-                                <tr>
-                                    <th>Total</th><th>{{ number_format($expenditures->sum('amount'),2) }}</th>
-                                </tr>
+
                             @endforeach
+                            <tr>
+                                <th style="text-align: right;border-top: 1px solid #4d4b4b">Total</th>
+                                <th style="text-align: right;border-top: 1px solid #4d4b4b">{{ number_format($expenditures->sum('amount'),2) }}</th>
+                            </tr>
                         @else
                             <tr>
                                 <td colspan="2">No expenses</td>
