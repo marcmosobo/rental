@@ -6,6 +6,10 @@ use App\DataTables\DepositRefundDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateDepositRefundRequest;
 use App\Http\Requests\UpdateDepositRefundRequest;
+use App\Models\BillDetail;
+use App\Models\DepositRefund;
+use App\Models\Lease;
+use App\Models\ServiceOption;
 use App\Repositories\DepositRefundRepository;
 use Flash;
 use App\Http\Controllers\AppBaseController;
@@ -30,7 +34,31 @@ class DepositRefundController extends AppBaseController
      */
     public function index(DepositRefundDataTable $depositRefundDataTable)
     {
-        return $depositRefundDataTable->render('deposit_refunds.index');
+        $refundedDepos = DepositRefund::query()->get()->pluck('lease_id');
+        $serviceBill = ServiceOption::where('code',deposit)->first();
+
+        $bills = BillDetail::query()
+            ->select('bills.lease_id')
+            ->leftJoin('bills','bills.id','=','bill_details.bill_id')
+            ->where('bill_details.service_bill_id',$serviceBill->id)->get()->pluck('lease_id');
+
+//        $interest = array_unique($bills->toArray(),$refundedDepos->toArray());
+
+//        $leases = Lease::where('status',false)
+//            ->select('leases.*')
+////                ->leftJoin()
+////                ->whereIn('leases.id',$bills->toArray())
+////                ->whereNotIn('leases.id',$refundedDepos->toArray())
+//            ->with(['masterfile','unit'])->get();
+//        print_r($leases->toArray());die;
+        return $depositRefundDataTable->render('deposit_refunds.index',[
+            'leases'=> Lease::where('status',false)
+                ->select('leases.*')
+//                ->leftJoin()
+//                ->whereIn('leases.id',$bills->toArray())
+//                ->whereNotIn('leases.id',$refundedDepos->toArray())
+                ->with(['masterfile','unit'])->get()
+        ]);
     }
 
     /**
@@ -53,6 +81,7 @@ class DepositRefundController extends AppBaseController
     public function store(CreateDepositRefundRequest $request)
     {
         $input = $request->all();
+
 
         $depositRefund = $this->depositRefundRepository->create($input);
 

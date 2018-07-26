@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class DepositRefund extends Model
 {
-    use SoftDeletes;
+//    use SoftDeletes;
 
     public $table = 'deposit_refunds';
     
