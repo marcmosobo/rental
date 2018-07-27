@@ -62,5 +62,9 @@ class DepositRefund extends Model
         
     ];
 
+    public function lease(){
+        return $this->belongsTo(Lease::class,'lease_id');
+    }
+
     
 }
