@@ -81,7 +81,7 @@
                         </tr>
                         @else
                         <tr>
-                            <td class="text-center" colspan="3">No records found</td>
+                            <td class="text-center" colspan="4">No records found</td>
                         </tr>
                         @endif
 
