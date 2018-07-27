@@ -426,6 +426,16 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($manager);
         $child->roles()->attach($coreAdmin);
 
+        $child = Route::create([
+            'route_name'=>'Deposit Refunds Report',
+            'parent_route' => $parent->id,
+            'url'=>'depositRefunds'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
 ####### Property sales
         $parent = Route::create([
             'route_name'=> 'Property Sales',

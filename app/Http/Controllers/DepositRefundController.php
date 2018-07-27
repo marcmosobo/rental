@@ -40,23 +40,13 @@ class DepositRefundController extends AppBaseController
         $bills = BillDetail::query()
             ->select('bills.lease_id')
             ->leftJoin('bills','bills.id','=','bill_details.bill_id')
-            ->where('bill_details.service_bill_id',$serviceBill->id)->get()->pluck('lease_id');
-
-//        $interest = array_unique($bills->toArray(),$refundedDepos->toArray());
-
-//        $leases = Lease::where('status',false)
-//            ->select('leases.*')
-////                ->leftJoin()
-////                ->whereIn('leases.id',$bills->toArray())
-////                ->whereNotIn('leases.id',$refundedDepos->toArray())
-//            ->with(['masterfile','unit'])->get();
-//        print_r($leases->toArray());die;
+            ->where('bill_details.service_bill_id',$serviceBill->id)
+            ->get()->pluck('lease_id')->toArray();
         return $depositRefundDataTable->render('deposit_refunds.index',[
             'leases'=> Lease::where('status',false)
                 ->select('leases.*')
-//                ->leftJoin()
-//                ->whereIn('leases.id',$bills->toArray())
-//                ->whereNotIn('leases.id',$refundedDepos->toArray())
+                ->whereIn('leases.id',$bills)
+                ->whereNotIn('leases.id',$refundedDepos->toArray())
                 ->with(['masterfile','unit'])->get()
         ]);
     }
@@ -81,6 +71,9 @@ class DepositRefundController extends AppBaseController
     public function store(CreateDepositRefundRequest $request)
     {
         $input = $request->all();
+        $this->validate($request,[
+           'lease_id'=>'required|unique:deposit_refunds,lease_id'
+        ]);
 
 
         $depositRefund = $this->depositRefundRepository->create($input);

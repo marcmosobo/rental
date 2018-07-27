@@ -78,4 +78,6 @@ class BillDetail extends Model
     public function service(){
         return $this->belongsTo(ServiceOption::class,'service_bill_id');
     }
+
+
 }

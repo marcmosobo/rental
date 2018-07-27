@@ -6,6 +6,7 @@ use App\Models\Bank;
 use App\Models\Bill;
 use App\Models\BillDetail;
 use App\Models\CustomerAccount;
+use App\Models\DepositRefund;
 use App\Models\Landlord;
 use App\Models\LandlordRemittance;
 use App\Models\Lease;
@@ -1182,6 +1183,47 @@ class ReportController extends Controller
             'landlords2'=>Landlord::find($request->landlord),
             'input'=>$request->all()
 
+        ]);
+    }
+
+    public function depositReport(){
+
+        return view('reports.deposit-report');
+    }
+
+    public function getDepositReport(Request $request){
+        if(!$request->isMethod('POST')){
+            return redirect('depositReport');
+        }
+        $deposit = ServiceOption::where('code',deposit)->first();
+
+
+        $billDetails = BillDetail::where('service_bill_id',$deposit->id)
+            ->leftJoin('bills','bills.id','=','bill_details.bill_id')
+            ->get()
+//        print_r($billDetails);die;
+        ;
+        $refunded = DepositRefund::all()->pluck('lease_id')->toArray();
+        if($request->filter_by == 'refunded'){
+            $billDetails = BillDetail::where('service_bill_id',$deposit->id)
+                ->select(['bill_details.*','deposit_refunds.amount as refunded'])
+                ->leftJoin('bills','bills.id','=','bill_details.bill_id')
+                ->leftJoin('deposit_refunds','deposit_refunds.lease_id','=','bills.lease_id')
+                ->whereIn('bills.lease_id',$refunded)
+                ->with(['bill.lease.unit','bill.lease.masterfile'])
+                ->get();
+        }else{
+            $billDetails = BillDetail::where('service_bill_id',$deposit->id)
+                ->select(['bill_details.*','bill_details.amount as depoAmount'])
+                ->leftJoin('bills','bills.id','=','bill_details.bill_id')
+                ->whereNotIn('bills.lease_id',$refunded)
+                ->with(['bill.lease.unit','bill.lease.masterfile'])
+                ->get();
+        }
+//        print_r($billDetails->toArray());die;
+
+        return view('reports.deposit-report',[
+            'deposits'=>$billDetails
         ]);
     }
 }

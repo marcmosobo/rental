@@ -169,5 +169,8 @@ Route::any('getRentPropertyStatement','ReportController@getRentPropertyStatement
 
 
 Route::resource('depositRefunds', 'DepositRefundController');
-
 Route::resource('depositRefunds', 'DepositRefundController');
+
+Route::get('depositReport','ReportController@depositReport');
+Route::any('getDepositReport','ReportController@getDepositReport');
+
