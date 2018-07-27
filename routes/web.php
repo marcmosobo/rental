@@ -174,3 +174,8 @@ Route::resource('depositRefunds', 'DepositRefundController');
 Route::get('depositReport','ReportController@depositReport');
 Route::any('getDepositReport','ReportController@getDepositReport');
 
+
+
+Route::resource('officeExpenditures', 'OfficeExpenditureController');
+
+Route::resource('officeRevenues', 'OfficeRevenueController');

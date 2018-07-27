@@ -472,6 +472,33 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($manager);
         $child->roles()->attach($coreAdmin);
 
+        ####### Property sales
+        $parent = Route::create([
+            'route_name'=> 'Office Management',
+            'icon'=> 'fa-shopping-cart',
+            'sequence'=>5,
+        ]);
+
+        $child = Route::create([
+            'route_name'=>'Office Expenditures',
+            'parent_route' => $parent->id,
+            'url'=>'officeExpenditures'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
+        $child = Route::create([
+            'route_name'=>'Office Revenue',
+            'parent_route' => $parent->id,
+            'url'=>'officeRevenues'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
 
         #### user management
         $user_mngt = new Route();
