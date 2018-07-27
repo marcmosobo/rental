@@ -1,8 +1,8 @@
 @extends('layouts.app')
- @section("pageTitle",'Office Expenditures')
- @section("pageSubtitle",'create, edit, delete OfficeExpenditures')
+ @section("pageTitle",'Expenditure Accounts')
+ {{--@section("pageSubtitle",'create, edit, delete OfficeExpenditures')--}}
   @section("breadcrumbs")
-         <li>Home</li> <li>OfficeExpenditures</li>
+         <li>Home</li> <li>Expenditure Accounts</li>
          @endsection
 @section('content')
     <section class="content-header">
@@ -36,7 +36,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Create Office Expenditure</h4>
+                        <h4 class="modal-title">Create Expenditure Accounts</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -64,7 +64,7 @@
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                            <span aria-hidden="true">&times;</span>
                        </button>
-                       <h4 class="modal-title">Edit Office Expenditure</h4>
+                       <h4 class="modal-title">Edit Expenditure Accounts</h4>
                    </div>
                    <div class="modal-body">
                         <div class="row">
@@ -93,10 +93,10 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title">Delete Office Expenditure</h4>
+                            <h4 class="modal-title">Expenditure Account</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete this Office Expenditure?</p>
+                            <p>Are you sure you want to delete this Expenditure Account</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>

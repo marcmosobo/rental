@@ -480,7 +480,7 @@ class RoutesTableSeeder extends Seeder
         ]);
 
         $child = Route::create([
-            'route_name'=>'Office Expenditures',
+            'route_name'=>'Expenditure Accounts',
             'parent_route' => $parent->id,
             'url'=>'officeExpenditures'
         ]);
@@ -490,7 +490,7 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
-            'route_name'=>'Office Revenue',
+            'route_name'=>'Office Expenditures',
             'parent_route' => $parent->id,
             'url'=>'officeRevenues'
         ]);
