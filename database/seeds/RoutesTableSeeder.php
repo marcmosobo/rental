@@ -472,7 +472,7 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($manager);
         $child->roles()->attach($coreAdmin);
 
-        ####### Property sales
+        ####### office management
         $parent = Route::create([
             'route_name'=> 'Office Management',
             'icon'=> 'fa-shopping-cart',
@@ -493,6 +493,23 @@ class RoutesTableSeeder extends Seeder
             'route_name'=>'Office Expenditures',
             'parent_route' => $parent->id,
             'url'=>'officeRevenues'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
+        ####### Loan management
+        $parent = Route::create([
+            'route_name'=> 'Loan Management',
+            'icon'=> 'fa-money',
+            'sequence'=>5,
+        ]);
+
+        $child = Route::create([
+            'route_name'=>'Loans',
+            'parent_route' => $parent->id,
+            'url'=>'loans'
         ]);
         $child->roles()->attach($admin);
         $child->roles()->attach($frontOffice);

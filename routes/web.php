@@ -179,3 +179,7 @@ Route::any('getDepositReport','ReportController@getDepositReport');
 Route::resource('officeExpenditures', 'OfficeExpenditureController');
 
 Route::resource('officeRevenues', 'OfficeRevenueController');
+
+Route::resource('loans', 'LoanController');
+
+Route::resource('landlordAccounts', 'LandlordAccountController');
