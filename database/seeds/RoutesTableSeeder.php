@@ -516,6 +516,16 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($manager);
         $child->roles()->attach($coreAdmin);
 
+        $child = Route::create([
+            'route_name'=>'Loan Payments',
+            'parent_route' => $parent->id,
+            'url'=>'loanPayments'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
 
         #### user management
         $user_mngt = new Route();

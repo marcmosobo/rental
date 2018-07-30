@@ -183,3 +183,6 @@ Route::resource('officeRevenues', 'OfficeRevenueController');
 Route::resource('loans', 'LoanController');
 
 Route::resource('landlordAccounts', 'LandlordAccountController');
+
+Route::resource('loanPayments', 'LoanPaymentController');
+Route::get('lDetails/{id}','LoanController@details');

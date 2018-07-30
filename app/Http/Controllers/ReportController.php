@@ -604,6 +604,7 @@ class ReportController extends Controller
                     $total = $curBal + $bf;
 
                     $paid = $current->where('transaction_type',debit)->sum('amount');
+                    $paid = ($totalBf < 0)? -$totalBf + $paid : $paid;
 
                     $paid = ($paid > $total)? $total : $paid;
 
@@ -623,7 +624,7 @@ class ReportController extends Controller
                         'current'=>$curBal,
                         'total'=>($bf <0)? -$bf + $total : $total,
 //                        'total'=>($totalBf <0)? -$totalBf + $total : $total,
-                        'paid'=>($totalBf < 0)? - $totalBf + $paid : $paid,
+                        'paid'=>$paid,
 //                        'bcf'=>($cf <0)? 0: $cf,
                         'bcf'=>($totalBf <0)? 0: $cf,
                         'over_payment'=>($cf <0)? -$cf: 0,

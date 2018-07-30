@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Http\Controllers\LoggedUserController;
 use App\Models\Loan;
+use Carbon\Carbon;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
@@ -19,7 +20,21 @@ class LoanDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'loans.datatables_actions');
+        return $dataTable
+            ->editColumn('created_by',function($loan){
+                return '<a data-toggle="modal" href="#details-modal" hint="'.url('lDetails/'.$loan->id).'" class="btn btn-success btn-xs loan-details">View Details</a>';
+            })
+            ->editColumn('loan_date',function($date){
+                return Carbon::parse($date->loan_date)->toDateString();
+            })
+            ->editColumn('status',function($status){
+                if($status->status){
+                    return '<label class="label label-success">Fully Paid</label>';
+                }
+                return '<label class="label label-warning">Active</label>';
+            })
+            ->rawColumns(['action','created_by','status'])
+            ->addColumn('action', 'loans.datatables_actions');
     }
 
     /**
@@ -30,7 +45,10 @@ class LoanDataTable extends DataTable
      */
     public function query(Loan $model)
     {
-        return $model->newQuery()->with(['masterfile']);
+        return $model->newQuery()
+            ->select('loans.*')
+            ->orderByDesc('loans.id')
+            ->with(['masterfile']);
     }
 
     /**
@@ -89,7 +107,10 @@ class LoanDataTable extends DataTable
             'principle',
             'rate',
             'loan_date',
-//            'created_by',
+            'status',
+            'created_by'=>[
+                'title'=>'View Details'
+            ],
 //            'status'
         ];
     }

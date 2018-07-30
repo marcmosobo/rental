@@ -107,4 +107,80 @@
             </form>
         </div>
 
+        <div class="modal fade" id="details-modal" role="dialog">
+            <form id="" method="post">
+                <input name="_method" type="hidden" value="DELETE">
+            {{ csrf_field() }}
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Reverse Loan</h4>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Ref</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody id="loan-details">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-right" data-dismiss="modal">Ok</button>
+                            {{--<button type="submit" class="btn btn-primary">Save</button>--}}
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     @endsection
+
+@push('js')
+    <script>
+        $("body").on('click','.loan-details',function(){
+            var url = $(this).attr('hint');
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                type: 'GET',
+                success: function(data){
+                    let html = '';
+                    if(data.length > 0){
+                        let total = 0;
+                        for (let i =0; i< data.length; i++){
+                            let date = new Date(data[i].date);
+                            if(data[i].transaction_type === 'CREDIT'){
+                                total = total + data[i].amount;
+                            }else{
+                                total = total - data[i].amount;
+                            }
+                            html += '<tr>' +
+                                '<td>'+ date.toDateString()+'</td>' +
+                                '<td>'+ data[i].reference+'</td>' +
+                                '<td>'+ data[i].transaction_type+'</td>' +
+                                '<td>'+ data[i].amount+'</td>' +
+                                '</tr>';
+                        }
+                        html += '<tr>' +
+                            '<th>Balance</th>' +
+                            '<th></th>' +
+                            '<th></th>' +
+                            '<th>'+ total+'</th>' +
+                            '</tr>';
+                    }
+                    $('#loan-details').html(html);
+                }
+            })
+        });
+    </script>
+    @endpush

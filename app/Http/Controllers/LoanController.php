@@ -167,4 +167,10 @@ class LoanController extends AppBaseController
 
         return redirect(route('loans.index'));
     }
+
+    public function details($id){
+        $details = LandlordAccount::where('loan_id',$id)->get();
+
+        return response()->json($details);
+    }
 }
