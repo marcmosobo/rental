@@ -21,7 +21,12 @@
 <div class="form-group col-sm-12">
     {!! Form::label('rate', 'Rate:') !!}
     <select name="rate" class="select2 form-control">
-        <option value="8">8%</option>
+        @if(count($rates))
+            @foreach($rates as $rate)
+                <option value="{{ $rate->rate }}">{{ $rate->rate }} %</option>
+                @endforeach
+            @endif
+
     </select>
 </div>
 

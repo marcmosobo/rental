@@ -6,6 +6,7 @@ use App\DataTables\LoanDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateLoanRequest;
 use App\Http\Requests\UpdateLoanRequest;
+use App\Models\InterestRate;
 use App\Models\LandlordAccount;
 use App\Models\Masterfile;
 use App\Repositories\LoanRepository;
@@ -35,7 +36,8 @@ class LoanController extends AppBaseController
     public function index(LoanDataTable $loanDataTable)
     {
         return $loanDataTable->render('loans.index',[
-            'landlords' => Masterfile::where('b_role',landlord)->get()
+            'landlords' => Masterfile::where('b_role',landlord)->get(),
+            'rates'=>InterestRate::all()
         ]);
     }
 

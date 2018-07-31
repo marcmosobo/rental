@@ -188,3 +188,5 @@ Route::resource('loanPayments', 'LoanPaymentController');
 Route::get('lDetails/{id}','LoanController@details');
 
 Route::resource('landlordBanks', 'LandlordBankController');
+
+Route::resource('interestRates', 'InterestRateController');
