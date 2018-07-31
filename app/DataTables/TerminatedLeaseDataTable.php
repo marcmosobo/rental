@@ -32,11 +32,11 @@ class TerminatedLeaseDataTable extends DataTable
                 }
                 return '<label class="label label-danger">Terminated</label>';
             })
-            ->editColumn('reversed_by',function($lease){
-                if(!is_null($lease->reversed_by)){
-                    return User::find($lease->reversed_by)->name;
-                }
-            })
+//            ->editColumn('reversed_by',function($lease){
+//                if(!is_null($lease->reversed_by)){
+//                    return User::find($lease->reversed_by)->name;
+//                }
+//            })
             ->addColumn('action', function($lease){
                 if($lease->status){
                     return '<a href="#delete-modal" data-toggle="modal" action="'.url('leases/'.$lease->id).'" class="btn btn-danger btn-xs delete-common"><i class="fa fa-close"></i> terminate</a>';

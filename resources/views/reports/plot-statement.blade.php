@@ -64,7 +64,7 @@
             <div class="col-md-12 table-responsive">
                 <h4 class="">Property statement for: {{ \Carbon\Carbon::parse($from)->toFormattedDateString() }} - {{ \Carbon\Carbon::parse($to)->toFormattedDateString() }}</h4>
                 <p class="">Property: {{ $prop }}</p>
-                {{--<p class="">Landlord/lady: {{ $landlord->full_name }}</p>--}}
+                <p class="">Landlord/lady: {{ $landlord->full_name }}</p>
                 <table class="table table-striped">
                     <thead>
                         <tr>

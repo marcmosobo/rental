@@ -42,7 +42,8 @@ class Bill extends Model
         'property_id',
         'description',
         'ref_number',
-        'total'
+        'total',
+        'bill_month'
     ];
 
     /**

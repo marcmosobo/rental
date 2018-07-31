@@ -7,6 +7,7 @@ use App\Models\BillDetail;
 use App\Models\CustomerAccount;
 use App\Models\Lease;
 use App\Models\UnitServiceBill;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -55,18 +56,18 @@ class GenerateRentBills implements ShouldQueue
                             'amount'=>$bill->amount,
                             'balance'=>$bill->amount,
                             'status'=>false,
-                            'bill_date'=>$input['start_date']
+                            'bill_date'=> Carbon::today()->midDay()
                         ]);
                     }
                     $customerAccount = CustomerAccount::create([
-                        'tenant_id'=>$input['tenant_id'],
+                        'tenant_id'=>$lease->tenant_id,
                         'lease_id'=>$lease->id,
-                        'unit_id'=> $input['unit_id'],
-                        'bill_id'=>$bill->id,
+                        'unit_id'=> $lease->unit_id,
+                        'bill_id'=>$monthlyBill->id,
                         'transaction_type'=>credit,
                         'amount'=>$bills->sum('amount'),
                         'balance'=>$bills->sum('amount'),
-                        'date'=>$input['start_date']
+                        'date'=>Carbon::today()->midDay()
                     ]);
 
                 }

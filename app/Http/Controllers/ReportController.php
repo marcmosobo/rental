@@ -400,7 +400,7 @@ class ReportController extends Controller
             'from'=>$from,
             'to'=>$to,
             'properties'=>Property::all(),
-//            'landlord' =>$property->masterfile,
+            'landlord' =>$property->masterfile,
             'prop'=>$property->name
         ]);
     }
