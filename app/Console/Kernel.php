@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\GenerateRentBills;
 use App\Jobs\ScheduleReminders;
 use App\Jobs\SendReminder;
 use App\Jobs\SendSms;
@@ -30,7 +31,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-//        $schedule->job(new SendReminder())->everyMinute();
+        $schedule->job(new GenerateRentBills())->everyMinute();
 //        $schedule->job(new ScheduleReminders())->everyMinute();
 //        $schedule->call(function () {
 ////            Log::info('executing');

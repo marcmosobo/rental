@@ -42,33 +42,37 @@ class GenerateRentBills implements ShouldQueue
             foreach ($leases as $lease){
                 $bills = UnitServiceBill::where('unit_id',$lease->unit_id)->where('period',monthly)->get();
                 if(count($bills)){
-                    $monthlyBill = Bill::create([
-                        'lease_id'=>$lease->id,
-                        'tenant_id'=>$lease->tenant_id,
-                        'property_id'=> $lease->property_id,
-                        'description'=> 'Monthly Rent Bill',
-                        'total'=>$bills->sum('amount')
-                    ]);
-                    foreach ($bills as $bill){
-                        $billDetail = BillDetail::create([
-                            'bill_id'=> $monthlyBill->id,
-                            'service_bill_id'=> $bill->service_bill_id,
-                            'amount'=>$bill->amount,
-                            'balance'=>$bill->amount,
-                            'status'=>false,
-                            'bill_date'=> Carbon::today()->midDay()
+                    if(is_null(Bill::where('lease_id',$lease->id)->where('bill_month',Carbon::now()->firstOfMonth()->midDay())->first())){
+                        $monthlyBill = Bill::create([
+                            'lease_id'=>$lease->id,
+                            'tenant_id'=>$lease->tenant_id,
+                            'property_id'=> $lease->property_id,
+                            'description'=> 'Monthly Rent Bill',
+                            'total'=>$bills->sum('amount'),
+                            'bill_month'=> Carbon::now()->firstOfMonth()->midDay()
+                        ]);
+                        foreach ($bills as $bill){
+                            $billDetail = BillDetail::create([
+                                'bill_id'=> $monthlyBill->id,
+                                'service_bill_id'=> $bill->service_bill_id,
+                                'amount'=>$bill->amount,
+                                'balance'=>$bill->amount,
+                                'status'=>false,
+                                'bill_date'=> Carbon::now()->firstOfMonth()->midDay()
+                            ]);
+                        }
+                        $customerAccount = CustomerAccount::create([
+                            'tenant_id'=>$lease->tenant_id,
+                            'lease_id'=>$lease->id,
+                            'unit_id'=> $lease->unit_id,
+                            'bill_id'=>$monthlyBill->id,
+                            'transaction_type'=>credit,
+                            'amount'=>$bills->sum('amount'),
+                            'balance'=>$bills->sum('amount'),
+                            'date'=>Carbon::now()->firstOfMonth()->midDay()
                         ]);
                     }
-                    $customerAccount = CustomerAccount::create([
-                        'tenant_id'=>$lease->tenant_id,
-                        'lease_id'=>$lease->id,
-                        'unit_id'=> $lease->unit_id,
-                        'bill_id'=>$monthlyBill->id,
-                        'transaction_type'=>credit,
-                        'amount'=>$bills->sum('amount'),
-                        'balance'=>$bills->sum('amount'),
-                        'date'=>Carbon::today()->midDay()
-                    ]);
+
 
                 }
             }
