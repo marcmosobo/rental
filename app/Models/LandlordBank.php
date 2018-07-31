@@ -6,26 +6,26 @@ use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class LandlordRemittance
+ * Class LandlordBank
  * @package App\Models
- * @version July 12, 2018, 7:02 pm EAT
+ * @version July 31, 2018, 8:21 am EAT
  *
- * @property \App\Models\Masterfile masterfile
+ * @property \Illuminate\Database\Eloquent\Collection landlordAccounts
  * @property \Illuminate\Database\Eloquent\Collection leases
+ * @property \Illuminate\Database\Eloquent\Collection propertyListings
  * @property \Illuminate\Database\Eloquent\Collection roleRoute
  * @property \Illuminate\Database\Eloquent\Collection roleUser
  * @property \Illuminate\Database\Eloquent\Collection roles
  * @property \Illuminate\Database\Eloquent\Collection users
+ * @property string name
  * @property bigInteger landlord_id
- * @property float amount
- * @property integer remitted_by
- * @property string|\Carbon\Carbon date
+ * @property string account_number
  */
-class LandlordRemittance extends Model
+class LandlordBank extends Model
 {
     use SoftDeletes;
 
-    public $table = 'landlord_remittances';
+    public $table = 'landlord_bank_accounts';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
@@ -35,13 +35,9 @@ class LandlordRemittance extends Model
 
 
     public $fillable = [
+        'name',
         'landlord_id',
-        'amount',
-        'remitted_by',
-        'date',
-        'payment_mode',
-        'bank_id',
-        'ref_number'
+        'account_number'
     ];
 
     /**
@@ -51,8 +47,8 @@ class LandlordRemittance extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'amount' => 'float',
-        'remitted_by' => 'integer'
+        'name' => 'string',
+        'account_number' => 'string'
     ];
 
     /**
@@ -64,11 +60,9 @@ class LandlordRemittance extends Model
         
     ];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function masterfile()
-    {
-        return $this->belongsTo(\App\Models\Masterfile::class,'landlord_id');
+    public function landlord(){
+        return $this->belongsTo(Masterfile::class,'landlord_id');
     }
+
+    
 }

@@ -86,6 +86,16 @@ class RoutesTableSeeder extends Seeder
         $child->roles()->attach($coreAdmin);
 
         $child = Route::create([
+            'route_name'=>'Landlord Bank Accs',
+            'parent_route' => $parent->id,
+            'url'=>'landlordBanks'
+        ]);
+        $child->roles()->attach($admin);
+        $child->roles()->attach($frontOffice);
+        $child->roles()->attach($manager);
+        $child->roles()->attach($coreAdmin);
+
+        $child = Route::create([
             'route_name'=>'Event Messages',
             'parent_route' => $parent->id,
             'url'=>'eventMessages'

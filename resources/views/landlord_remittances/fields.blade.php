@@ -11,15 +11,25 @@
     </select>
 </div>
 
-{{--<div class="form-group col-sm-12">--}}
-    {{--{!! Form::label('amount', 'Amount:') !!}--}}
-    {{--<select name=""--}}
-{{--</div>--}}
+<div class="form-group col-sm-12">
+    {!! Form::label('payment_mode', 'Payment Mode:') !!}
+    <select name="payment_mode" class="form-control select2" id="payment_mode">
+        <option value="CASH">Cash</option>
+        <option value="Bank">Bank</option>
+        <option value="MPESA">MPESA</option>
+    </select>
+</div>
 <!-- Amount Field -->
+<div class="form-group col-sm-12">
+    {!! Form::label('ref_number', 'Reference Number:') !!}
+    {!! Form::number('ref_number', null, ['class' => 'form-control']) !!}
+</div>
 <div class="form-group col-sm-12">
     {!! Form::label('amount', 'Amount:') !!}
     {!! Form::number('amount', null, ['class' => 'form-control','required']) !!}
 </div>
+
+
 
 {{--<!-- Remitted By Field -->--}}
 {{--<div class="form-group col-sm-12">--}}

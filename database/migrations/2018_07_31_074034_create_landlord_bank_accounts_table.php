@@ -16,6 +16,7 @@ class CreateLandlordBankAccountsTable extends Migration
         Schema::create('landlord_bank_accounts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->bigInteger('landlord_id')->unsigned()->index();
             $table->string('account_number');
             $table->softDeletes();
             $table->timestamps();
