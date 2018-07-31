@@ -34,7 +34,11 @@ class LoanDataTable extends DataTable
                 return '<label class="label label-warning">Active</label>';
             })
             ->rawColumns(['action','created_by','status'])
-            ->addColumn('action', 'loans.datatables_actions');
+            ->addColumn('action', 'loans.datatables_actions')
+            ->addColumn('interest',function($loan){
+                return $loan->rate/100 * $loan->principle;
+            })
+            ;
     }
 
     /**
@@ -111,7 +115,7 @@ class LoanDataTable extends DataTable
             'created_by'=>[
                 'title'=>'View Details'
             ],
-//            'status'
+            'interest'
         ];
     }
 
