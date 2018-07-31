@@ -1,6 +1,7 @@
 <!-- Landlord Id Field -->
 <div class="form-group col-sm-12">
-    {!! Form::label('landlord_id', 'Landlord Id:') !!}
+    {{--{!! Form::label('landlord_id', 'Landlord :') !!}--}}
+    <label>Landlord</label>
     <select name="landlord_id" class="select2 form-control" id="landlord_id" required>
         <option value="">select Landlord</option>
         @if(count($landlords))
@@ -17,6 +18,13 @@
         <option value="CASH">Cash</option>
         <option value="Bank">Bank</option>
         <option value="MPESA">MPESA</option>
+    </select>
+</div>
+
+<div class="form-group col-sm-12" id="bank-div" style="display: none">
+    <label >Bank</label>
+        <select name="bank_id" class="form-control select2" id="bank_id">
+
     </select>
 </div>
 <!-- Amount Field -->
@@ -40,6 +48,6 @@
 <!-- Date Field -->
 <div class="form-group col-sm-12">
     {!! Form::label('date', 'Date:') !!}
-    {!! Form::date('date', \Carbon\Carbon::today()->toDateString(), ['class' => 'form-control']) !!}
+    {!! Form::date('date', \Carbon\Carbon::today()->toDateString(), ['class' => 'form-control','required']) !!}
 </div>
 

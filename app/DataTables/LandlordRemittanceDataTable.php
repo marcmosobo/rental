@@ -95,6 +95,7 @@ class LandlordRemittanceDataTable extends DataTable
             'masterfile.full_name'=>[
                 'title'=>'Landlord'
             ],
+            'payment_mode',
             'amount',
             'date'
 //            'remitted_by',

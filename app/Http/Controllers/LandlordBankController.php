@@ -6,6 +6,7 @@ use App\DataTables\LandlordBankDataTable;
 use App\Http\Requests;
 use App\Http\Requests\CreateLandlordBankRequest;
 use App\Http\Requests\UpdateLandlordBankRequest;
+use App\Models\LandlordBank;
 use App\Models\Masterfile;
 use App\Repositories\LandlordBankRepository;
 use Flash;
@@ -151,5 +152,9 @@ class LandlordBankController extends AppBaseController
         Flash::success('Landlord Bank deleted successfully.');
 
         return redirect(route('landlordBanks.index'));
+    }
+
+    public function getLandBanks($id){
+        return response()->json(LandlordBank::where('landlord_id',$id)->get());
     }
 }

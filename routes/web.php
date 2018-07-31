@@ -190,3 +190,5 @@ Route::get('lDetails/{id}','LoanController@details');
 Route::resource('landlordBanks', 'LandlordBankController');
 
 Route::resource('interestRates', 'InterestRateController');
+
+Route::get('getLandBanks/{id}','LandlordBankController@getLandBanks');

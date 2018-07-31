@@ -108,3 +108,82 @@
         </div>
 
     @endsection
+
+@push('js')
+    <script>
+        $('#payment_mode').on('change',function(){
+            let mode = $(this).val();
+            if(mode === 'Bank'){
+                let landlord_id = $('#landlord_id').val();
+                if(landlord_id!== ''){
+                    $('#bank-div').show();
+                    $('#bank_id').attr('required','required');
+
+                    $.ajax({
+                        url: '{{ url('getLandBanks') }}'+'/'+landlord_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data.length >0){
+                                let html = '<option value="">Choose Bank Account</option>';
+                                for(var i=0; i<data.length; i++){
+                                    html += '<option value="'+data[i].id+'">'+data[i].account_number+'</option>';
+                                }
+                                $('#bank_id').html(html);
+                            }else{
+                                let html = '<option value="">This landlord has no bank account defined</option>';
+                                $('#bank_id').html(html);
+                            }
+
+                            // $('#bank_id').html(html);
+                        }
+                    });
+                }else{
+                    $('#payment_mode').val('CASH').change();
+                    alert('you must choose a landlord first');
+                }
+            }else{
+                $('#bank-div').hide();
+                $('#bank_id').removeAttr('required');
+            }
+        });
+
+        $('#landlord_id').on('change',function(){
+            let mode = $('#payment_mode').val();
+            // alert(mode);
+            if(mode === 'Bank'){
+                let landlord_id = $('#landlord_id').val();
+                if(landlord_id!== ''){
+                    $('#bank-div').show();
+                    $('#bank_id').attr('required','required');
+
+                    $.ajax({
+                        url: '{{ url('getLandBanks') }}'+'/'+landlord_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function (data) {
+                            if(data.length >0){
+                                let html = '<option value="">Choose Bank Account</option>';
+                                for(var i=0; i<data.length; i++){
+                                    html += '<option value="'+data[i].id+'">'+data[i].account_number+'</option>';
+                                }
+                                $('#bank_id').html(html);
+                            }else{
+                                let html = '<option value="">This landlord has no bank account defined</option>';
+                                $('#bank_id').html(html);
+                            }
+
+                            // $('#bank_id').html(html);
+                        }
+                    });
+                }else{
+                    $('#payment_mode').val('CASH').change();
+                    alert('you must choose a landlord first');
+                }
+            }else{
+                $('#bank-div').hide();
+                $('#bank_id').removeAttr('required');
+            }
+        });
+    </script>
+    @endpush
