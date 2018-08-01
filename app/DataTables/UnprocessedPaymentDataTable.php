@@ -35,13 +35,17 @@ class UnprocessedPaymentDataTable extends DataTable
                 }
                 return '';
             })
-            ->rawColumns(['status','created_by','action'])
+            ->rawColumns(['status','created_by','action','split_payment'])
             ->addColumn('action', function($payment){
                 if(!$payment->status){
                     return '<a href="#delete-modal" data-toggle="modal" action="'.url('processPayment/'.$payment->id).'" class="btn btn-success btn-xs delete-common"><i class=""></i> process payment</a>';
                 }
                 return '';
-            });
+            })
+            ->addColumn('split_payment',function($payment){
+                return '<a href="#split-payment" data-toggle="modal" action="'.url('processPayment/'.$payment->id).'" class="btn btn-primary btn-xs">split payment</a>';
+            })
+            ;
     }
 
     /**
@@ -113,7 +117,8 @@ class UnprocessedPaymentDataTable extends DataTable
 //            'client_id',
             'created_by'=>[
                 'title'=>'Update / Updated by'
-            ]
+            ],
+            'split_payment'
         ];
     }
 
