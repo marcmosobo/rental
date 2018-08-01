@@ -626,7 +626,7 @@ class ReportController extends Controller
 //                        'total'=>($totalBf <0)? -$totalBf + $total : $total,
                         'paid'=>$paid,
 //                        'bcf'=>($cf <0)? 0: $cf,
-                        'bcf'=>($totalBf <0)? 0: $cf,
+                        'bcf'=>($cf <0)? 0: $cf,
                         'over_payment'=>($cf <0)? -$cf: 0,
                     ];
 //                    }
