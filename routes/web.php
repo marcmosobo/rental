@@ -192,3 +192,5 @@ Route::resource('landlordBanks', 'LandlordBankController');
 Route::resource('interestRates', 'InterestRateController');
 
 Route::get('getLandBanks/{id}','LandlordBankController@getLandBanks');
+
+Route::resource('splitPayments', 'SplitPaymentsController');

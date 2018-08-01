@@ -80,7 +80,7 @@
                             <th style="text-align: right;">Monthly Rent</th>
                             <th style="text-align: right;">Arrears B/F</th>
                             <th style="text-align: right;">Current Bal</th>
-                            {{--<th style="text-align: right;">Total Due</th>--}}
+                            <th style="text-align: right;">Total Due</th>
                             {{--<th style="text-align: right;">Total Paid</th>--}}
                             <th style="text-align: right;">Rent Paid</th>
                             <th style="text-align: right;">Arrears C/F</th>
@@ -99,7 +99,7 @@
                                 <td style="text-align: right;">{{ number_format($statement['monthly_rent'],2) }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['bbf'],2) }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['current'],2) }}</td>
-{{--                                <td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>--}}
+                                <td style="text-align: right;">{{ number_format($statement['total'],2) }}</td>
                                 <td style="text-align: right;">{{ number_format($statement['paid'],2) }}</td>
                                 {{--<td style="text-align: right;">{{ number_format($statement['rentPaid'],2) }}</td>--}}
                                 <td style="text-align: right;">{{ number_format($statement['bcf'],2) }}</td>
