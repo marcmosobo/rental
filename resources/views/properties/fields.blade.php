@@ -47,7 +47,7 @@
 {{--<!-- Created By Field -->--}}
 <div class="form-group col-sm-12">
     {!! Form::label('commission', 'Revenue Collection Commission Percentage:') !!}
-    {!! Form::number('commission', null, ['class' => 'form-control','required']) !!}
+    {!! Form::text('commission', null, ['class' => 'form-control','required']) !!}
 </div>
 
 {{--<!-- Client Id Field -->--}}
