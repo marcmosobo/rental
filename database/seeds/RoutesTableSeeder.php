@@ -563,6 +563,14 @@ class RoutesTableSeeder extends Seeder
         $all_user->save();
         $all_user->roles()->attach($admin);
 
+        ####notices
+        $all_user = new Route();
+        $all_user->route_name = 'Notices';
+        $all_user->url = 'notices';
+        $all_user->parent_route = $user_mngt_id;
+        $all_user->save();
+        $all_user->roles()->attach($admin);
+
         $roles = new Route();
         $roles->route_name = 'Manage User Roles';
         $roles->url = 'roles';

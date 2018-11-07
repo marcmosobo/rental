@@ -1,13 +1,13 @@
 @extends('layouts.app')
- @section("pageTitle",'Split Payments')
- {{--@section("pageSubtitle",'create, edit, delete SplitPayments')--}}
+ @section("pageTitle",'Notices')
+ @section("pageSubtitle",'create, edit, delete Notices')
   @section("breadcrumbs")
-         <li>Home</li> <li>SplitPayments</li>
+         <li>Home</li> <li>Notices</li>
          @endsection
 @section('content')
     <section class="content-header">
         <h1 class="pull-right">
-           {{--<a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>--}}
+           <a class="btn btn-primary pull-right btn-sm" data-toggle="modal" style="margin-top: -10px;margin-bottom: 5px" href="#create-modal">Add New</a>
         </h1>
     </section>
     <div class="content">
@@ -18,7 +18,7 @@
         <div class="clearfix"></div>
         <div class="box box-primary">
             <div class="box-body">
-                    @include('split_payments.table')
+                    @include('notices.table')
             </div>
         </div>
         <div class="text-center">
@@ -29,18 +29,18 @@
 
 @section('modals')
     <div class="modal fade" id="create-modal" role="dialog">
-            {!! Form::open(['route' => 'splitPayments.store']) !!}
+            {!! Form::open(['route' => 'notices.store']) !!}
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 class="modal-title">Create Split Payments</h4>
+                        <h4 class="modal-title">Create Notice</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            @include('split_payments.fields')
+                            @include('notices.fields')
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -64,15 +64,15 @@
                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                            <span aria-hidden="true">&times;</span>
                        </button>
-                       <h4 class="modal-title">Edit Split Payments</h4>
+                       <h4 class="modal-title">Edit Notice</h4>
                    </div>
                    <div class="modal-body">
                         <div class="row">
-                           @include('split_payments.fields')
+                           @include('notices.fields')
                         </div>
                    </div>
                    <div class="modal-footer">
-                       <input type="hidden" id="editDetails" value="{{ url("/splitPayments") }}">
+                       <input type="hidden" id="editDetails" value="{{ url("/notices") }}">
                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
                        <button type="submit" class="btn btn-primary">Save</button>
                    </div>
@@ -93,10 +93,10 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h4 class="modal-title">Delete Split Payments</h4>
+                            <h4 class="modal-title">Delete Notice</h4>
                         </div>
                         <div class="modal-body">
-                            <p>Are you sure you want to delete this Split Payments?</p>
+                            <p>Are you sure you want to delete this Notice?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>

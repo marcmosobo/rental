@@ -43,7 +43,7 @@ class UnprocessedPaymentDataTable extends DataTable
                 return '';
             })
             ->addColumn('split_payment',function($payment){
-                return '<a href="#split-payment" data-toggle="modal" action="'.url('processPayment/'.$payment->id).'" class="btn btn-primary btn-xs">split payment</a>';
+                return '<a href="#split-payment" data-toggle="modal" payment-id="'.$payment->id .'" class="btn btn-primary btn-xs split-payment">split payment</a>';
             })
             ;
     }

@@ -109,8 +109,8 @@
 
     {{--delete modal--}}
     <div class="modal fade" id="split-payment" role="dialog">
-        <form id="split-p-form" method="post">
-            <input name="_method" type="hidden" value="PATCH">
+        <form id="split-p-form" method="post" action="{{ url('splitPayments') }}">
+            {{--<input name="_method" type="hidden" value="PATCH">--}}
             {{ csrf_field() }}
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -135,14 +135,20 @@
                             </div>
 
                             <div class="form-group col-sm-12">
+                                <label>Reference</label>
+                                <input type="text" class="form-control" required name="ref_number">
+                            </div>
+
+                            <div class="form-group col-sm-12">
                                 <label>Amount</label>
                                 <input name="amount" class="form-control" type="number" required>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">No</button>
-                        <button type="submit" class="btn btn-primary">Yes</button>
+                        <input type="hidden" name="payment_id" id="payment_id">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
@@ -150,3 +156,13 @@
     </div>
 
 @endsection
+
+@push('js')
+    <script>
+        $('body').on('click','.split-payment',function(){
+            let id = $(this).attr('payment-id');
+            // alert(id);
+            $('#payment_id').val(id);
+        })
+    </script>
+    @endpush

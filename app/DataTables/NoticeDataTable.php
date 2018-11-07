@@ -2,11 +2,11 @@
 
 namespace App\DataTables;
 
-use App\Models\SplitPayments;
+use App\Models\Notice;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
-class SplitPaymentsDataTable extends DataTable
+class NoticeDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -18,7 +18,7 @@ class SplitPaymentsDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'split_payments.datatables_actions');
+        return $dataTable->addColumn('action', 'notices.datatables_actions');
     }
 
     /**
@@ -27,9 +27,9 @@ class SplitPaymentsDataTable extends DataTable
      * @param \App\Models\Post $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(SplitPayments $model)
+    public function query(Notice $model)
     {
-        return $model->newQuery()->where('TransID','SPLIT');
+        return $model->newQuery();
     }
 
     /**
@@ -42,9 +42,9 @@ class SplitPaymentsDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-//            ->addAction(['width' => '80px'])
+            ->addAction(['width' => '80px'])
             ->parameters([
-//                'dom'     => 'Bfrtip',
+                'dom'     => 'Bfrtip',
                 'order'   => [[0, 'desc']],
                 'buttons' => [
                     'create',
@@ -64,30 +64,9 @@ class SplitPaymentsDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'ref_number',
-            'BillRefNumber'=>[
-                'title'=>'Account'
-            ],
-            'house_number',
-//            'phone_number',
-//            'FirstName',
-//            'LastName',
-            'received_on',
-//            'payment_mode',
-//            'house_number',
-//            'tenant_id',
-//
-            'amount',
-//            'status',
-////            'TransID',
-////            'TransTime',
-////            'middleName',
-//
-////            'client_id',
-//            'created_by'=>[
-//                'title'=>'Update / Updated by'
-//            ]
-            ];
+            'title',
+            'body'
+        ];
     }
 
     /**
@@ -97,6 +76,6 @@ class SplitPaymentsDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'split_paymentsdatatable_' . time();
+        return 'noticesdatatable_' . time();
     }
 }
